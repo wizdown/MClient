@@ -16,6 +16,7 @@
 		0FB5C2511F555135005708AA /* WMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C2501F555135005708AA /* WMovie.swift */; };
 		0FB5C29A1F5686B0005708AA /* WRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C2991F5686B0005708AA /* WRequest.swift */; };
 		0FB5C29C1F56873E005708AA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C29B1F56873E005708AA /* Constants.swift */; };
+		0FB5C2C61F59416B005708AA /* WMRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C2C51F59416B005708AA /* WMRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		0FB5C2501F555135005708AA /* WMovie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMovie.swift; sourceTree = "<group>"; };
 		0FB5C2991F5686B0005708AA /* WRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WRequest.swift; sourceTree = "<group>"; };
 		0FB5C29B1F56873E005708AA /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		0FB5C2C51F59416B005708AA /* WMRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 				0FB5C2501F555135005708AA /* WMovie.swift */,
 				0FB5C2991F5686B0005708AA /* WRequest.swift */,
 				0FB5C29B1F56873E005708AA /* Constants.swift */,
+				0FB5C2C51F59416B005708AA /* WMRequest.swift */,
 			);
 			name = Wrapper;
 			sourceTree = "<group>";
@@ -170,6 +173,7 @@
 				0FB5C2511F555135005708AA /* WMovie.swift in Sources */,
 				0FB5C29A1F5686B0005708AA /* WRequest.swift in Sources */,
 				0FB5C2141F554729005708AA /* AppDelegate.swift in Sources */,
+				0FB5C2C61F59416B005708AA /* WMRequest.swift in Sources */,
 				0FB5C29C1F56873E005708AA /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -26,12 +26,9 @@ struct WMovie {
     
     
     
-    static func performMovieSearchRequest(forMovie keyword: String, page : Int, completion: @escaping ([WMovie]) -> Void ) {
-        var queryURL : String = Constants.base_url
-        queryURL.append("\(Constants.searchMovie)")
-        queryURL.append("?api_key=\(Constants.api_key)&language=en-US&query=\(keyword)&page=\(page)&include_adult=false")
+    static func performMovieSearchRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ) {
         
-        let url: URL = URL(string: queryURL)!
+        let url: URL = request.url!
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
             if error != nil {
                 print(error!.localizedDescription)
@@ -40,8 +37,9 @@ struct WMovie {
                 var movies: [WMovie] = []
                 var count = 1
                 if let data = data ,
-                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] ,
-                    let jsonArr = json!["results"] as? [[String: Any]] {
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                
+                    if let jsonArr = json!["results"] as? [[String: Any]] {
                         for case let result in jsonArr {
 //                            print("Movie \(count)")
 //                            print(result)
@@ -50,7 +48,14 @@ struct WMovie {
                                 movies.append(movie)
                             }
                         }
+                    }
+                    
+                    if let page_count = json!["total_pages"] as? Int {
+                        print("Number of pages : \(page_count)")
+                        request.setMaxPageNumber(to: page_count)
+                    }
                 }
+                
                 completion(movies)
             }
         }

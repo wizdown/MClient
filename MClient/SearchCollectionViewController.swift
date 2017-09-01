@@ -24,13 +24,20 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         }
     }
     
+//    private var previousSearchString: String?
+    
+    private var lastMovieSearchRequest: WMRequest?
+    
     var searchText: String? {
         didSet{
             searchTextField?.text = searchText
             searchTextField?.resignFirstResponder()
             searchResults.removeAll()
+            
+            lastMovieSearchRequest = nil
+            
 //            collectionView?.reloadData() // testing
-            searchForMovie(name: searchText!, pageNumber: 1)
+            searchForMovie(name: searchText!)
 
             // check if the request got the current request wala data or is it a new request wala data
         }
@@ -66,20 +73,28 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
     }
     
     private func insertMovies( matchingMovies movies: [WMovie] ) {
-        searchResults.insert(movies, at: 0)
-        DispatchQueue.main.async { [weak self] in
-            self?.collectionView?.reloadData()
+        self.searchResults.insert(movies, at: 0)
+        self.collectionView?.reloadData()
 //            self?.collectionView?.insertSections([0])
-        }
 
         print("Movies Found : \(movies.count)")
 //        print("Movies Found : \(searchResults[0].count)")
     }
     
-    private func searchForMovie(name: String , pageNumber : Int){
-        WMovie.performMovieSearchRequest(forMovie: name, page: pageNumber) { [weak self] movies in
-            self?.insertMovies(matchingMovies: movies)
+    private func searchForMovie(name: String ){
+        if  let request = lastMovieSearchRequest?.newer ?? WMRequest.movieSearchRequest(forMovie: name) {
+            lastMovieSearchRequest = request
+            
+            WMovie.performMovieSearchRequest(request: request) { [weak self] movies in
+                DispatchQueue.main.async{
+                    if request == self?.lastMovieSearchRequest {
+                        self?.insertMovies(matchingMovies: movies)
+                    }
+                }
+                
+            }
         }
+        
         
     }
     
