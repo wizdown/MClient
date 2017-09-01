@@ -10,9 +10,9 @@ import Foundation
 
 class Constants {
     
-    static let base_url: String = "https://api.themoviedb.org/3"
+    static let base_url: String = "api.themoviedb.org"
+    static let url_scheme="https"
     static let api_key: String = "71c4e026a81c526c33013f530de0d158"
-    static let searchMovie="/search/movie"
     static let genre = [
     28 : "Action",
     12: "Adventure",
@@ -35,4 +35,8 @@ class Constants {
     37: "Western"
     ]
     
+    static let requestType = [
+        "movieSearch" : "/3/search/movie"
+    ]
+        
 }

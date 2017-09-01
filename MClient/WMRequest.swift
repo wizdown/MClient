@@ -15,8 +15,8 @@ class WMRequest : NSObject {
     private var maxPageNumber: Int = 1 // This value will be updated with each subsequent request made
    
     
-    init(urlString: String) {
-        self.urlString = urlString
+    init( urlComponents: URLComponents ) {
+        self._urlComponents = urlComponents
     }
     
     var newer: WMRequest? {
@@ -24,7 +24,7 @@ class WMRequest : NSObject {
             if currentPageNumber < maxPageNumber {
                 currentPageNumber = currentPageNumber + 1
                 return self
-            }else{
+            } else {
                 return nil
             }
         }
@@ -34,26 +34,59 @@ class WMRequest : NSObject {
     func setMaxPageNumber(to pageNo: Int) {
         maxPageNumber = pageNo
     }
+    
+    private var _urlComponents: URLComponents?
 
     var url: URL? {
         get {
-            urlString.append("&page=\(currentPageNumber)")
-            return URL(string: urlString)
+            if _urlComponents == nil {
+                return nil
+            } else {
+                var urlComponents = URLComponents()
+                urlComponents.scheme = _urlComponents!.scheme
+                urlComponents.host = _urlComponents!.host
+                urlComponents.path = _urlComponents!.path
+                var queryItems = _urlComponents!.queryItems!
+                queryItems.append(URLQueryItem(name: "page", value: String(currentPageNumber)))
+                urlComponents.queryItems = queryItems
+                print(urlComponents.url as Any)
+                return urlComponents.url
+            }
         }
     }
-    
-    private var urlString: String
-    
   
+//    static func movieSearchRequest(forMovie keyword: String) -> WMRequest? {
+//        if keyword.characters.count == 0 {
+//            return nil
+//        }
+//        var queryString : String = Constants.base_url
+//        queryString.append("\(Constants.searchMovie)")
+//        queryString.append("?api_key=\(Constants.api_key)&language=en-US&query=\(keyword)&include_adult=false")
+//        let request: WMRequest = WMRequest(urlString: queryString)
+//        return request
+//    }
     static func movieSearchRequest(forMovie keyword: String) -> WMRequest? {
+        
         if keyword.characters.count == 0 {
             return nil
         }
-        var queryString : String = Constants.base_url
-        queryString.append("\(Constants.searchMovie)")
-        queryString.append("?api_key=\(Constants.api_key)&language=en-US&query=\(keyword)&include_adult=false")
-        let request: WMRequest = WMRequest(urlString: queryString)
+        
+        var urlComponents = URLComponents()
+        urlComponents.scheme = Constants.url_scheme
+        urlComponents.host = Constants.base_url
+        urlComponents.path = Constants.requestType["movieSearch"]!
+        
+        
+        let api_key = URLQueryItem(name: "api_key", value: Constants.api_key)
+        let language = URLQueryItem(name: "language", value: "en-US")
+        let keyword = URLQueryItem(name: "query", value: keyword)
+        let adult_content = URLQueryItem(name: "include_adult", value: "false")
+
+        urlComponents.queryItems = [ api_key , language , keyword , adult_content ]
+        
+        let request: WMRequest = WMRequest(urlComponents: urlComponents)
         return request
     }
+    
     
 }
