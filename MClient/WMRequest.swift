@@ -47,7 +47,7 @@ class WMRequest : NSObject {
                 urlComponents.host = _urlComponents!.host
                 urlComponents.path = _urlComponents!.path
                 var queryItems = _urlComponents!.queryItems!
-                queryItems.append(URLQueryItem(name: "page", value: String(currentPageNumber)))
+                queryItems.append(URLQueryItem(name: Constants.queryParameter.page.rawValue, value: String(currentPageNumber)))
                 urlComponents.queryItems = queryItems
                 print(urlComponents.url as Any)
                 return urlComponents.url
@@ -74,13 +74,13 @@ class WMRequest : NSObject {
         var urlComponents = URLComponents()
         urlComponents.scheme = Constants.url_scheme
         urlComponents.host = Constants.base_url
-        urlComponents.path = Constants.requestType["movieSearch"]!
+        urlComponents.path = Constants.requestType.movieSearch.rawValue
         
         
-        let api_key = URLQueryItem(name: "api_key", value: Constants.api_key)
-        let language = URLQueryItem(name: "language", value: "en-US")
-        let keyword = URLQueryItem(name: "query", value: keyword)
-        let adult_content = URLQueryItem(name: "include_adult", value: "false")
+        let api_key = URLQueryItem(name: Constants.queryParameter.api_key.rawValue , value: Constants.api_key)
+        let language = URLQueryItem(name: Constants.queryParameter.language.rawValue, value: "en-US")
+        let keyword = URLQueryItem(name: Constants.queryParameter.query.rawValue, value: keyword)
+        let adult_content = URLQueryItem(name: Constants.queryParameter.include_adult.rawValue, value: "false")
 
         urlComponents.queryItems = [ api_key , language , keyword , adult_content ]
         

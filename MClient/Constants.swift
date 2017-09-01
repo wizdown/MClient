@@ -35,8 +35,19 @@ class Constants {
     37: "Western"
     ]
     
-    static let requestType = [
-        "movieSearch" : "/3/search/movie"
-    ]
-        
+//    static let requestType = [
+//        "movieSearch" : "/3/search/movie"
+//    ]
+    
+    enum requestType : String {
+        case movieSearch = "/3/search/movie"
+    }
+    enum queryParameter : String {
+        case api_key = "api_key"
+        case language = "language"
+        case query = "query"
+        case include_adult = "include_adult"
+        case page = "page"
+    }
+    
 }
