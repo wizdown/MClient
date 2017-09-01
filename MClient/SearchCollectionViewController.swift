@@ -15,6 +15,8 @@ fileprivate let sectionInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0
 
 
 class SearchCollectionViewController: UICollectionViewController , UITextFieldDelegate {
+    
+//    var refreshControl: UIRefreshControl!
 
     private var searchResults = [[WMovie]]()
     
@@ -33,13 +35,9 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
             searchTextField?.text = searchText
             searchTextField?.resignFirstResponder()
             searchResults.removeAll()
-            
             lastMovieSearchRequest = nil
-            
-//            collectionView?.reloadData() // testing
             searchForMovie(name: searchText!)
 
-            // check if the request got the current request wala data or is it a new request wala data
         }
     }
     
@@ -48,17 +46,11 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         super.willTransition(to: newCollection, with: coordinator)
         
         if UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) {
-            //here you can do the logic for the cell size if phone is in landscape
-//            print("LandScape")
             itemsPerRow = 2
         } else {
-            //logic if not landscape
             itemsPerRow = 3
-//            print("Vertical")
         }
 
-//        print("Horizontal Size class :)")
-//        print(coordinator)
         collectionView?.collectionViewLayout.invalidateLayout()
     }
     
@@ -75,10 +67,7 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
     private func insertMovies( matchingMovies movies: [WMovie] ) {
         self.searchResults.insert(movies, at: 0)
         self.collectionView?.reloadData()
-//            self?.collectionView?.insertSections([0])
-
         print("Movies Found : \(movies.count)")
-//        print("Movies Found : \(searchResults[0].count)")
     }
     
     private func searchForMovie(name: String ){
@@ -94,24 +83,30 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
                 
             }
         }
-        
-        
+    
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        self.refreshControl = UIRefreshControl()
+//        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+//        self.refreshControl.addTarget(self, action: #selector(refresh), for: UIControlEvents.valueChanged)
+//        collectionView!.addSubview(refreshControl)
+//        
        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
-        // Register cell classes
-//        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         // Do any additional setup after loading the view.
 //        WRequest.performMovieSearchRequest(forMovie: "game", page: 1)
        
     }
+//    
+//    func refresh ( sender: AnyObject) {
+//        print("Refresh karo")
+//        self.refreshControl?.endRefreshing()
+//    }
 
     /*
     // MARK: - Navigation
@@ -145,6 +140,10 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         }
         return cell
     }
+    
+//    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        print("Displaying cell : \(indexPath.row)")
+//    }
     
     // MARK: UICollectionViewDelegate
 

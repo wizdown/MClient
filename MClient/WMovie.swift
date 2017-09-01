@@ -1,3 +1,4 @@
+
 //
 //  WMovie.swift
 //  MClient
@@ -93,13 +94,15 @@ extension WMovie {
         
 //        print("GUARD CLEARED")
         
-        if let backdrop_path = json["backdrop_path"] as? String {
+        if let backdrop_path = json["backdrop_path"] as? String ,
+            backdrop_path.characters.count > 0 {
             self.backdrop_path = backdrop_path
         } else {
             self.backdrop_path = nil
         }
         
-        if let poster_path = json["poster_path"] as? String {
+        if let poster_path = json["poster_path"] as? String ,
+            poster_path.characters.count > 0 {
             self.poster_path = poster_path
         }
         else {
@@ -118,7 +121,10 @@ extension WMovie {
 
         //Release Date Initialization
 //        print(json["releaseDate"])
-        if let release_date_string = json["release_date"] as? String {
+        if let release_date_string = json["release_date"] as? String ,
+            release_date_string.characters.count > 0 {
+            print("Release date string : \(release_date_string)")
+            print("id : \(id)")
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
             self.release_date = dateFormatter.date(from:release_date_string)!
