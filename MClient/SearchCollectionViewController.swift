@@ -36,7 +36,8 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
             searchTextField?.resignFirstResponder()
             searchResults.removeAll()
             lastMovieSearchRequest = nil
-            searchForMovie(name: searchText!)
+            searchForMovie()
+//            collectionView?.reloadData()
 
         }
     }
@@ -65,26 +66,66 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
     }
     
     private func insertMovies( matchingMovies movies: [WMovie] ) {
-        self.searchResults.insert(movies, at: 0)
+        self.searchResults.append(movies)
         self.collectionView?.reloadData()
         print("Movies Found : \(movies.count)")
     }
+//
+//    private func insertMovies( matchingMovies movies: [WMovie] ) {
+//        if self.searchResults.count == 0 {
+//            self.searchResults.append([WMovie]())
+//        }
+//        for movie in movies {
+//            self.searchResults[0].append(movie)
+//            self.collectionView?.insertItems(at: [IndexPath(row: searchResults[0].count-1, section: 0 )])
+//
+//        }
+//
+////        self.searchResults.append(movies)
+////        self.collectionView?.reloadData()
+//        print("Movies Found : \(movies.count)")
+//    }
     
-    private func searchForMovie(name: String ){
-        if  let request = lastMovieSearchRequest?.newer ?? WMRequest.movieSearchRequest(forMovie: name) {
+    private func searchForMovie(){
+//        let name: String = searchText!
+        var request: WMRequest?
+        if lastMovieSearchRequest != nil {
+            request = lastMovieSearchRequest!.newer
+        }
+        else {
+            request = WMRequest.movieSearchRequest(forMovie: searchText!)
+
+        }
+
+        if  request != nil {
             lastMovieSearchRequest = request
             
-            WMovie.performMovieSearchRequest(request: request) { [weak self] movies in
+            WMovie.performMovieSearchRequest(request: request!) { [weak self] movies in
                 DispatchQueue.main.async{
                     if request == self?.lastMovieSearchRequest {
                         self?.insertMovies(matchingMovies: movies)
                     }
                 }
-                
             }
         }
-    
     }
+    
+//    private func loadMore(){
+//        print("Loading More")
+//    }
+//    
+//    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        if searchResults.count > 0{
+//            if indexPath.row == searchResults[0].count - 1 {
+//                self.loadMore()
+//            }
+//        }
+//        
+//    }
+    
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()

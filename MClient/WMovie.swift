@@ -123,8 +123,6 @@ extension WMovie {
 //        print(json["releaseDate"])
         if let release_date_string = json["release_date"] as? String ,
             release_date_string.characters.count > 0 {
-            print("Release date string : \(release_date_string)")
-            print("id : \(id)")
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
             self.release_date = dateFormatter.date(from:release_date_string)!
