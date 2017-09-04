@@ -14,7 +14,7 @@ fileprivate var itemsPerRow: CGFloat = 2
 fileprivate let sectionInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
 
 
-class SearchCollectionViewController: UICollectionViewController , UITextFieldDelegate {
+class SearchCollectionViewController: UICollectionViewController , UITextFieldDelegate  {
     
 //    var refreshControl: UIRefreshControl!
 
@@ -37,9 +37,60 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
             searchResults.removeAll()
             lastMovieSearchRequest = nil
             searchForMovie()
-//            collectionView?.reloadData()
+          collectionView?.reloadData() //1
+        }
+    }
+    
+    private var timeSinceLastMovieResultsFetch : Date = Date()
+    private let reloadTimeLag : Double = 2.0 // seconds
+
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentDate = Date()
+//        print("Diff : \(currentDate.timeIntervalSince1970 - timeSinceLastMovieResultsFetch.timeIntervalSince1970)")
+       
+        if lastMovieSearchRequest != nil ,
+            currentDate.timeIntervalSince1970 - timeSinceLastMovieResultsFetch.timeIntervalSince1970 > reloadTimeLag ,
+            scrollView.contentOffset.y - scrollView.frame.size.height > 50 {
+            loadMore()
+            timeSinceLastMovieResultsFetch = currentDate
+        }
+    }
+    
+    private var count = 1
+    private func loadMore(){
+        print("Loading More(\(count))")
+        count = count + 1
+        searchForMovie()
+//        print("Time : \(Date().timeIntervalSince1970)" )
+       
+    }
+    
+    
+    private func insertMovies( matchingMovies movies: [WMovie] ) {
+        if searchResults.count == 0 {
+            self.searchResults.insert(movies,at : 0) //2
+            self.collectionView?.insertSections([0]) // 3
+            print("Load ==> Movies Found : \(movies.count)")
 
         }
+        else
+        {
+            if(movies.count > 0) {
+                let oldCount = searchResults[0].count
+                self.searchResults[0].append(contentsOf: movies)
+                let newCount = searchResults[0].count
+                self.collectionView?.performBatchUpdates({
+                    var currentItem = oldCount
+                    while currentItem < newCount {
+                        self.collectionView?.insertItems(at: [IndexPath(row: currentItem ,section: 0)])
+                        currentItem = currentItem + 1
+                    }
+                }, completion: { animationDidComplete  in
+                    print("New items added!")
+                })
+            }
+        }
+        print("Reload ==> Movies Found : \(movies.count)")
     }
     
     
@@ -64,12 +115,16 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         }
         return true
     }
-    
-    private func insertMovies( matchingMovies movies: [WMovie] ) {
-        self.searchResults.append(movies)
-        self.collectionView?.reloadData()
-        print("Movies Found : \(movies.count)")
-    }
+
+//    private func insertMovies( matchingMovies movies: [WMovie] ) {
+//        //        self.searchResults.append(movies)
+//        self.searchResults.insert(movies,at : 0) //2
+//        self.collectionView?.insertSections([0]) // 3
+//        //        self.collectionView?.reloadData()
+//        print("Movies Found : \(movies.count)")
+//    }
+
+
 //
 //    private func insertMovies( matchingMovies movies: [WMovie] ) {
 //        if self.searchResults.count == 0 {
@@ -110,10 +165,8 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         }
     }
     
-//    private func loadMore(){
-//        print("Loading More")
-//    }
-//    
+    
+    
 //    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
 //        if searchResults.count > 0{
 //            if indexPath.row == searchResults[0].count - 1 {
@@ -129,6 +182,7 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
 //        self.refreshControl = UIRefreshControl()
 //        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
