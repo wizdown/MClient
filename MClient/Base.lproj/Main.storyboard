@@ -20,13 +20,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="76A-CS-1cp">
                             <size key="itemSize" width="175" height="220"/>
-                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="headerReferenceSize" width="50" height="50"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="searchMovieItem" id="4KL-cq-i5Z" customClass="SearchCollectionViewCell" customModule="MClient" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="175" height="220"/>
+                                <rect key="frame" x="0.0" y="50" width="175" height="220"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="175" height="220"/>
@@ -60,6 +60,26 @@
                                 </connections>
                             </collectionViewCell>
                         </cells>
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="searchHeader" id="TJl-E5-O19" customClass="SearchHeaderCell" customModule="MClient" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3vF-jO-Orm">
+                                    <rect key="frame" x="24" y="15" width="326" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="3vF-jO-Orm" firstAttribute="leading" secondItem="TJl-E5-O19" secondAttribute="leadingMargin" constant="16" id="Fvx-T7-lxL"/>
+                                <constraint firstItem="3vF-jO-Orm" firstAttribute="centerX" secondItem="TJl-E5-O19" secondAttribute="centerX" id="ecm-K1-BDx"/>
+                                <constraint firstItem="3vF-jO-Orm" firstAttribute="centerY" secondItem="TJl-E5-O19" secondAttribute="centerY" id="jsA-NB-Q7E"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="label" destination="3vF-jO-Orm" id="rMZ-cs-hf4"/>
+                            </connections>
+                        </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="Nls-tB-w2q" id="UE8-OQ-gYH"/>
                             <outlet property="delegate" destination="Nls-tB-w2q" id="YUf-mL-ydS"/>

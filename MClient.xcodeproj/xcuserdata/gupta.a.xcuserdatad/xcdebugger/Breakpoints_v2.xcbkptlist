@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/SearchCollectionViewController.swift"
-            timestampString = "526203168.777084"
+            timestampString = "526207295.738867"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
             landmarkName = "insertMovies(matchingMovies:)"
             landmarkType = "7">
          </BreakpointContent>

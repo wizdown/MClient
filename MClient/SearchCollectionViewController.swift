@@ -9,6 +9,7 @@
 import UIKit
 
 private let reuseIdentifier = "searchMovieItem"
+private let reuseSupplimentaryViewIdentifier = "searchHeader"
 
 fileprivate var itemsPerRow: CGFloat = 2
 fileprivate let sectionInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
@@ -19,6 +20,8 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
 //    var refreshControl: UIRefreshControl!
 
     private var searchResults = [[WMovie]]()
+    
+    private var didSearchReturnNoResults : Bool = false
     
     @IBOutlet weak var searchTextField: UITextField! {
         didSet {
@@ -36,6 +39,7 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
             searchTextField?.resignFirstResponder()
             searchResults.removeAll()
             lastMovieSearchRequest = nil
+            didSearchReturnNoResults = false
             searchForMovie()
           collectionView?.reloadData() //1
         }
@@ -43,18 +47,34 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
     
     private var timeSinceLastMovieResultsFetch : Date = Date()
     private let reloadTimeLag : Double = 2.0 // seconds
+    
 
+//    private var debug = true
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentDate = Date()
 //        print("Diff : \(currentDate.timeIntervalSince1970 - timeSinceLastMovieResultsFetch.timeIntervalSince1970)")
        
         if lastMovieSearchRequest != nil ,
             currentDate.timeIntervalSince1970 - timeSinceLastMovieResultsFetch.timeIntervalSince1970 > reloadTimeLag ,
-            scrollView.contentOffset.y - scrollView.frame.size.height > 50 {
+            scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
             loadMore()
             timeSinceLastMovieResultsFetch = currentDate
         }
+//        print("Difference : \(  scrollView.contentOffset.y  + scrollView.frame.size.height - scrollView.contentSize.height)")
+//        print("ScrollView content Offset : \(scrollView.contentOffset.y)")
+//        print("ScrollView frame size height : \(scrollView.frame.size.height)")
+//        print("ScrollView content Size : \(scrollView.contentSize.height)")
+//
+//        print("CollectionView content Offset : \((collectionView?.contentOffset.y)!)")
+//        print("Total Size : \(collectionView?.collectionViewLayout.collectionViewContentSize.height)")
+//        //        if debug {
+////            loadMore()
+////            debug = false
+////        }
+
     }
+    
+    
     
     private var count = 1
     private func loadMore(){
@@ -68,6 +88,9 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
     
     private func insertMovies( matchingMovies movies: [WMovie] ) {
         if searchResults.count == 0 {
+            if movies.count == 0 {
+                didSearchReturnNoResults = true
+            }
             self.searchResults.insert(movies,at : 0) //2
             self.collectionView?.insertSections([0]) // 3
             print("Load ==> Movies Found : \(movies.count)")
@@ -89,8 +112,9 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
                     print("New items added!")
                 })
             }
+            print("Reload ==> Movies Found : \(movies.count)")
+
         }
-        print("Reload ==> Movies Found : \(movies.count)")
     }
     
     
@@ -116,33 +140,7 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         return true
     }
 
-//    private func insertMovies( matchingMovies movies: [WMovie] ) {
-//        //        self.searchResults.append(movies)
-//        self.searchResults.insert(movies,at : 0) //2
-//        self.collectionView?.insertSections([0]) // 3
-//        //        self.collectionView?.reloadData()
-//        print("Movies Found : \(movies.count)")
-//    }
-
-
-//
-//    private func insertMovies( matchingMovies movies: [WMovie] ) {
-//        if self.searchResults.count == 0 {
-//            self.searchResults.append([WMovie]())
-//        }
-//        for movie in movies {
-//            self.searchResults[0].append(movie)
-//            self.collectionView?.insertItems(at: [IndexPath(row: searchResults[0].count-1, section: 0 )])
-//
-//        }
-//
-////        self.searchResults.append(movies)
-////        self.collectionView?.reloadData()
-//        print("Movies Found : \(movies.count)")
-//    }
-    
     private func searchForMovie(){
-//        let name: String = searchText!
         var request: WMRequest?
         if lastMovieSearchRequest != nil {
             request = lastMovieSearchRequest!.newer
@@ -232,6 +230,19 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         if let cell = cell as? SearchCollectionViewCell {
             cell.movie = movie
 //            cell.title.text = "Hoila"
+        }
+        return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: reuseSupplimentaryViewIdentifier, for: indexPath)
+        if let cell = cell as? SearchHeaderCell {
+            if didSearchReturnNoResults {
+                cell.message = "No Results Found"
+            } else {
+                cell.message = "Search Results"
+            }
+            
         }
         return cell
     }

@@ -24,12 +24,16 @@ class SearchCollectionViewCell: UICollectionViewCell {
     private func updateUI(){
         titleLabel.text = movie?.title
         self.posterImage.image = nil
-        DispatchQueue.main.async {
-            if let posterImageURL = self.movie?.getFullPosterImageURL() ,
+        DispatchQueue.global(qos: .userInteractive ).async { [weak self] in
+            if let posterImageURL = self?.movie?.getFullPosterImageURL() ,
                 let imageData = try? Data(contentsOf: posterImageURL) {
-                self.posterImage.image = UIImage(data: imageData)
+                DispatchQueue.main.async {
+                    self?.posterImage.image = UIImage(data: imageData)
+                }
             }
+           
         }
+       
         
     }
     
