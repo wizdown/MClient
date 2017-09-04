@@ -285,6 +285,18 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
 }
 
 extension SearchCollectionViewController : UICollectionViewDelegateFlowLayout {
+    
+//    func collectionView(_ collectionView: UICollectionView,
+//                        layout collectionViewLayout: UICollectionViewLayout,
+//                        referenceSizeForHeaderInSection section: Int) -> CGSize {
+//        let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
+//        let width = view.frame.width - paddingSpace*2
+//        
+//        return CGSize(width: width, height: width/6)
+//
+//    }
+
+    
     //1
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,

@@ -2,6 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "imageNotFound.jpg",
       "scale" : "1x"
     },
     {
