@@ -1,49 +1,46 @@
 //
-//  SearchCollectionViewCell.swift
+//  newMovieCell.swift
 //  MClient
 //
-//  Created by gupta.a on 29/08/17.
+//  Created by gupta.a on 05/09/17.
 //  Copyright © 2017 gupta.a. All rights reserved.
 //
 
 import UIKit
 
-class SearchCollectionViewCell: UICollectionViewCell {
-  
-    @IBOutlet weak var posterImage: UIImageView!
+class newMovieCell: UICollectionViewCell {
+
+    @IBOutlet weak var poster: UIImageView!
     
-   
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var title: UILabel!
     
     var movie: WMovie? {
-        didSet{
+        didSet {
             updateUI()
         }
     }
     
-    private func updateUI(){
-        titleLabel.text = movie?.title
-        self.posterImage.image = UIImage(named: "darkLoading")
-//        self.posterImage.image = nil
+    private func updateUI() {
+        title.text = movie?.title
+        poster.image = UIImage(named: "loading")
         let movieId = movie?.id
-
+        
         DispatchQueue.global(qos: .userInteractive ).async { [weak self] in
             if let posterImageURL = self?.movie?.getFullPosterImageURL() ,
                 let imageData = try? Data(contentsOf: posterImageURL) {
                 DispatchQueue.main.async { [weak self ] in
                     if movieId == self?.movie?.id {
-                        self?.posterImage.image = UIImage(data: imageData)
+                        self?.poster.image = UIImage(data: imageData)
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    self?.posterImage.image = UIImage(named: "imageNotFound")
+                    self?.poster.image = UIImage(named: "imageNotFound")
                 }
             }
-           
+            
         }
-       
         
     }
-    
+
 }

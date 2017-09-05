@@ -25,10 +25,12 @@ struct WMovie {
     // To be used in Details
     let runtime: Int?
     
-    
+    private func performRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ){
+       
+        
+    }
     
     static func performMovieSearchRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ) {
-        
         let url: URL = request.url!
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
             if error != nil {
@@ -39,11 +41,48 @@ struct WMovie {
                 var count = 1
                 if let data = data ,
                     let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                
+                    
                     if let jsonArr = json!["results"] as? [[String: Any]] {
                         for case let result in jsonArr {
-//                            print("Movie \(count)")
-//                            print(result)
+                            //                            print("Movie \(count)")
+                            //                            print(result)
+                            count = count + 1
+                            if let movie = WMovie(json: result) {
+                                movies.append(movie)
+                            }
+                        }
+                    }
+                    
+                    if let page_count = json!["total_pages"] as? Int {
+                        print("Number of pages : \(page_count)")
+                        request.setMaxPageNumber(to: page_count)
+                    }
+                }
+                
+                completion(movies)
+            }
+        }
+        
+        // put handler here
+        task.resume()
+    }
+    
+    static func performNowPlayingMoviesRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ) {
+        let url: URL = request.url!
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+            } else {
+                
+                var movies: [WMovie] = []
+                var count = 1
+                if let data = data ,
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    
+                    if let jsonArr = json!["results"] as? [[String: Any]] {
+                        for case let result in jsonArr {
+                            //                            print("Movie \(count)")
+                            //                            print(result)
                             count = count + 1
                             if let movie = WMovie(json: result) {
                                 movies.append(movie)

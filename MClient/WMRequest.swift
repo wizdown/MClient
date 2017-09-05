@@ -88,5 +88,21 @@ class WMRequest : NSObject {
         return request
     }
     
+    static func nowPlayingMoviesRequest() -> WMRequest {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = Constants.url_scheme
+        urlComponents.host = Constants.base_url
+        urlComponents.path = Constants.requestType.nowPlaying.rawValue
+        
+        
+        let api_key = URLQueryItem(name: Constants.queryParameter.api_key.rawValue , value: Constants.api_key)
+        let language = URLQueryItem(name: Constants.queryParameter.language.rawValue, value: "en-US")
+        
+        urlComponents.queryItems = [ api_key , language ]
+        let request: WMRequest = WMRequest(urlComponents: urlComponents)
+        
+        return request
+    }
+    
     
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-private let reuseIdentifier = "searchMovieItem"
+private let reuseIdentifier = "movieCell"
 private let reuseSupplimentaryViewIdentifier = "searchHeader"
 
 fileprivate var itemsPerRow: CGFloat = 2
@@ -41,7 +41,7 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
             lastMovieSearchRequest = nil
             didSearchReturnNoResults = false
             searchForMovie()
-          collectionView?.reloadData() //1
+            collectionView?.reloadData() //1
         }
     }
     
@@ -49,39 +49,22 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
     private let reloadTimeLag : Double = 2.0 // seconds
     
 
-//    private var debug = true
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentDate = Date()
-//        print("Diff : \(currentDate.timeIntervalSince1970 - timeSinceLastMovieResultsFetch.timeIntervalSince1970)")
-       
+        
         if lastMovieSearchRequest != nil ,
             currentDate.timeIntervalSince1970 - timeSinceLastMovieResultsFetch.timeIntervalSince1970 > reloadTimeLag ,
             scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
             loadMore()
             timeSinceLastMovieResultsFetch = currentDate
         }
-//        print("Difference : \(  scrollView.contentOffset.y  + scrollView.frame.size.height - scrollView.contentSize.height)")
-//        print("ScrollView content Offset : \(scrollView.contentOffset.y)")
-//        print("ScrollView frame size height : \(scrollView.frame.size.height)")
-//        print("ScrollView content Size : \(scrollView.contentSize.height)")
-//
-//        print("CollectionView content Offset : \((collectionView?.contentOffset.y)!)")
-//        print("Total Size : \(collectionView?.collectionViewLayout.collectionViewContentSize.height)")
-//        //        if debug {
-////            loadMore()
-////            debug = false
-////        }
-
     }
-    
-    
     
     private var count = 1
     private func loadMore(){
         print("Loading More(\(count))")
         count = count + 1
         searchForMovie()
-//        print("Time : \(Date().timeIntervalSince1970)" )
        
     }
     
@@ -126,7 +109,6 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         } else {
             itemsPerRow = 3
         }
-
         collectionView?.collectionViewLayout.invalidateLayout()
     }
     
@@ -171,18 +153,9 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let nib = UINib(nibName: "newMovieCell", bundle: nil)
+        self.collectionView?.register(nib, forCellWithReuseIdentifier: reuseIdentifier)
     }
-/*
-     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-    // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -196,9 +169,10 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+//        print("row : \(indexPath.row)")
         let movie: WMovie = searchResults[indexPath.section][indexPath.row]
         // Configure the cell
-        if let cell = cell as? SearchCollectionViewCell {
+        if let cell = cell as? newMovieCell {
             cell.movie = movie
 //            cell.title.text = "Hoila"
         }
@@ -217,55 +191,10 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         }
         return cell
     }
-    
-//    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//        print("Displaying cell : \(indexPath.row)")
-//    }
-    
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
 
 }
 
 extension SearchCollectionViewController : UICollectionViewDelegateFlowLayout {
-    
-//    func collectionView(_ collectionView: UICollectionView,
-//                        layout collectionViewLayout: UICollectionViewLayout,
-//                        referenceSizeForHeaderInSection section: Int) -> CGSize {
-//        let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
-//        let width = view.frame.width - paddingSpace*2
-//        
-//        return CGSize(width: width, height: width/6)
-//
-//    }
 
     
     //1

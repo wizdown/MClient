@@ -14,10 +14,12 @@
 		0FB5C24A1F554B41005708AA /* SearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C2491F554B41005708AA /* SearchCollectionViewCell.swift */; };
 		0FB5C24C1F554CAF005708AA /* SearchCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C24B1F554CAF005708AA /* SearchCollectionViewController.swift */; };
 		0FB5C2511F555135005708AA /* WMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C2501F555135005708AA /* WMovie.swift */; };
-		0FB5C29A1F5686B0005708AA /* WRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C2991F5686B0005708AA /* WRequest.swift */; };
 		0FB5C29C1F56873E005708AA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C29B1F56873E005708AA /* Constants.swift */; };
 		0FB5C2C61F59416B005708AA /* WMRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C2C51F59416B005708AA /* WMRequest.swift */; };
 		0FB5C2CC1F5D3FBE005708AA /* SearchHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C2CB1F5D3FBE005708AA /* SearchHeaderCell.swift */; };
+		0FB5C2D11F5E6E7C005708AA /* newMovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C2CF1F5E6E7C005708AA /* newMovieCell.swift */; };
+		0FB5C2D21F5E6E7C005708AA /* newMovieCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FB5C2D01F5E6E7C005708AA /* newMovieCell.xib */; };
+		0FB5C2D41F5E894B005708AA /* NowPlayingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C2D31F5E894B005708AA /* NowPlayingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,10 +32,12 @@
 		0FB5C2491F554B41005708AA /* SearchCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCollectionViewCell.swift; sourceTree = "<group>"; };
 		0FB5C24B1F554CAF005708AA /* SearchCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCollectionViewController.swift; sourceTree = "<group>"; };
 		0FB5C2501F555135005708AA /* WMovie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMovie.swift; sourceTree = "<group>"; };
-		0FB5C2991F5686B0005708AA /* WRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WRequest.swift; sourceTree = "<group>"; };
 		0FB5C29B1F56873E005708AA /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		0FB5C2C51F59416B005708AA /* WMRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMRequest.swift; sourceTree = "<group>"; };
 		0FB5C2CB1F5D3FBE005708AA /* SearchHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchHeaderCell.swift; sourceTree = "<group>"; };
+		0FB5C2CF1F5E6E7C005708AA /* newMovieCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = newMovieCell.swift; sourceTree = "<group>"; };
+		0FB5C2D01F5E6E7C005708AA /* newMovieCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = newMovieCell.xib; sourceTree = "<group>"; };
+		0FB5C2D31F5E894B005708AA /* NowPlayingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowPlayingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,12 +70,14 @@
 		0FB5C2121F554729005708AA /* MClient */ = {
 			isa = PBXGroup;
 			children = (
+				0FB5C2171F55472A005708AA /* Main.storyboard */,
 				0FB5C24F1F555128005708AA /* Wrapper */,
-				0FB5C2251F554734005708AA /* Supporting Files */,
 				0FB5C2491F554B41005708AA /* SearchCollectionViewCell.swift */,
 				0FB5C2CB1F5D3FBE005708AA /* SearchHeaderCell.swift */,
 				0FB5C24B1F554CAF005708AA /* SearchCollectionViewController.swift */,
-				0FB5C2171F55472A005708AA /* Main.storyboard */,
+				0FB5C2CF1F5E6E7C005708AA /* newMovieCell.swift */,
+				0FB5C2D01F5E6E7C005708AA /* newMovieCell.xib */,
+				0FB5C2D31F5E894B005708AA /* NowPlayingViewController.swift */,
 			);
 			path = MClient;
 			sourceTree = "<group>";
@@ -90,8 +96,8 @@
 		0FB5C24F1F555128005708AA /* Wrapper */ = {
 			isa = PBXGroup;
 			children = (
+				0FB5C2251F554734005708AA /* Supporting Files */,
 				0FB5C2501F555135005708AA /* WMovie.swift */,
-				0FB5C2991F5686B0005708AA /* WRequest.swift */,
 				0FB5C29B1F56873E005708AA /* Constants.swift */,
 				0FB5C2C51F59416B005708AA /* WMRequest.swift */,
 			);
@@ -159,6 +165,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0FB5C21E1F55472A005708AA /* LaunchScreen.storyboard in Resources */,
+				0FB5C2D21F5E6E7C005708AA /* newMovieCell.xib in Resources */,
 				0FB5C21B1F55472A005708AA /* Assets.xcassets in Resources */,
 				0FB5C2191F55472A005708AA /* Main.storyboard in Resources */,
 			);
@@ -175,10 +182,11 @@
 				0FB5C24A1F554B41005708AA /* SearchCollectionViewCell.swift in Sources */,
 				0FB5C24C1F554CAF005708AA /* SearchCollectionViewController.swift in Sources */,
 				0FB5C2511F555135005708AA /* WMovie.swift in Sources */,
-				0FB5C29A1F5686B0005708AA /* WRequest.swift in Sources */,
 				0FB5C2141F554729005708AA /* AppDelegate.swift in Sources */,
+				0FB5C2D41F5E894B005708AA /* NowPlayingViewController.swift in Sources */,
 				0FB5C2C61F59416B005708AA /* WMRequest.swift in Sources */,
 				0FB5C29C1F56873E005708AA /* Constants.swift in Sources */,
+				0FB5C2D11F5E6E7C005708AA /* newMovieCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

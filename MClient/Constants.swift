@@ -41,6 +41,7 @@ class Constants {
     
     enum requestType : String {
         case movieSearch = "/3/search/movie"
+        case nowPlaying =  "/3/movie/now_playing"
     }
     enum queryParameter : String {
         case api_key = "api_key"
