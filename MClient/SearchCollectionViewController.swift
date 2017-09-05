@@ -163,46 +163,17 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         }
     }
     
-    
-    
-//    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//        if searchResults.count > 0{
-//            if indexPath.row == searchResults[0].count - 1 {
-//                self.loadMore()
-//            }
-//        }
-//        
-//    }
-    
-    
-    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
+        performSegue(withIdentifier: "movieDetailSegue", sender: nil )
+    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-//        self.refreshControl = UIRefreshControl()
-//        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-//        self.refreshControl.addTarget(self, action: #selector(refresh), for: UIControlEvents.valueChanged)
-//        collectionView!.addSubview(refreshControl)
-//        
-       
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Do any additional setup after loading the view.
-//        WRequest.performMovieSearchRequest(forMovie: "game", page: 1)
-       
     }
-//    
-//    func refresh ( sender: AnyObject) {
-//        print("Refresh karo")
-//        self.refreshControl?.endRefreshing()
-//    }
-
-    /*
-    // MARK: - Navigation
+/*
+     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
