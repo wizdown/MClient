@@ -54,6 +54,9 @@ class Constants {
         case query = "query"
         case include_adult = "include_adult"
         case page = "page"
+        case include_video = "include_video"
+        case primary_release_date_gte = "primary_release_date.gte"
+        case sort_by = "sort_by"
     }
     
 }
