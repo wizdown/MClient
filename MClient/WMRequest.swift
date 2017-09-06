@@ -49,7 +49,9 @@ class WMRequest : NSObject {
                 var queryItems = _urlComponents!.queryItems!
                 queryItems.append(URLQueryItem(name: Constants.queryParameter.page.rawValue, value: String(currentPageNumber)))
                 urlComponents.queryItems = queryItems
-                print(urlComponents.url as Any)
+                if let debug_url = urlComponents.url {
+                    print(debug_url)
+                }
                 return urlComponents.url
             }
         }

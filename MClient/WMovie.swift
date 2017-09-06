@@ -25,83 +25,50 @@ struct WMovie {
     // To be used in Details
     let runtime: Int?
     
-    private func performRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ){
-       
+    fileprivate static func performRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ){
+        let url: URL = request.url!
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+            } else {
+                
+                var movies: [WMovie] = []
+                var count = 1
+                if let data = data ,
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    
+                    if let jsonArr = json!["results"] as? [[String: Any]] {
+                        for case let result in jsonArr {
+                            //                            print("Movie \(count)")
+                            //                            print(result)
+                            count = count + 1
+                            if let movie = WMovie(json: result) {
+                                movies.append(movie)
+                            }
+                        }
+                    }
+                    
+                    if let page_count = json!["total_pages"] as? Int {
+                        print("Number of pages : \(page_count)")
+                        request.setMaxPageNumber(to: page_count)
+                    }
+                }
+                
+                completion(movies)
+            }
+        }
         
+        // put handler here
+        task.resume()
     }
     
     static func performMovieSearchRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ) {
-        let url: URL = request.url!
-        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
-            if error != nil {
-                print(error!.localizedDescription)
-            } else {
-                
-                var movies: [WMovie] = []
-                var count = 1
-                if let data = data ,
-                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                    
-                    if let jsonArr = json!["results"] as? [[String: Any]] {
-                        for case let result in jsonArr {
-                            //                            print("Movie \(count)")
-                            //                            print(result)
-                            count = count + 1
-                            if let movie = WMovie(json: result) {
-                                movies.append(movie)
-                            }
-                        }
-                    }
-                    
-                    if let page_count = json!["total_pages"] as? Int {
-                        print("Number of pages : \(page_count)")
-                        request.setMaxPageNumber(to: page_count)
-                    }
-                }
-                
-                completion(movies)
-            }
-        }
-        
-        // put handler here
-        task.resume()
+        performRequest(request: request, completion: completion)
     }
     
     static func performNowPlayingMoviesRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ) {
-        let url: URL = request.url!
-        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
-            if error != nil {
-                print(error!.localizedDescription)
-            } else {
-                
-                var movies: [WMovie] = []
-                var count = 1
-                if let data = data ,
-                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                    
-                    if let jsonArr = json!["results"] as? [[String: Any]] {
-                        for case let result in jsonArr {
-                            //                            print("Movie \(count)")
-                            //                            print(result)
-                            count = count + 1
-                            if let movie = WMovie(json: result) {
-                                movies.append(movie)
-                            }
-                        }
-                    }
-                    
-                    if let page_count = json!["total_pages"] as? Int {
-                        print("Number of pages : \(page_count)")
-                        request.setMaxPageNumber(to: page_count)
-                    }
-                }
-                
-                completion(movies)
-            }
-        }
-        
-        // put handler here
-        task.resume()
+        performRequest(request: request, completion: completion)
+
     }
     
     func getFullPosterImageURL() -> URL? {
@@ -112,10 +79,6 @@ struct WMovie {
         }
         return nil
     }
-    
-
-    
-    
 }
 
 extension WMovie {
@@ -154,7 +117,6 @@ extension WMovie {
             if let current_genre = Constants.genre[current_genre_id] {
                 temp_genre.append(current_genre)
             }
-            
         }
         self.genre = temp_genre
 
@@ -170,13 +132,11 @@ extension WMovie {
             return nil
         }
         
-        
         if let time = json["runtime"] as? Int {
             self.runtime = time
         } else {
             self.runtime = nil
         }
-        
         
         self.overview = overview
         self.original_title = original_title
