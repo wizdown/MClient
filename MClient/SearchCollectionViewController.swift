@@ -18,6 +18,8 @@ fileprivate let sectionInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0
 class SearchCollectionViewController: UICollectionViewController , UITextFieldDelegate  {
     
 //    var refreshControl: UIRefreshControl!
+    
+    private var previousQueryPending: Bool = false
 
     var searchResults = [[WMovie]]()
     
@@ -35,6 +37,7 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
     
     var searchText: String? {
         didSet{
+            previousQueryPending = false
             searchTextField?.text = searchText
             searchTextField?.resignFirstResponder()
             searchResults.removeAll()
@@ -62,10 +65,12 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
     
     private var count = 1
     private func loadMore(){
-        print("Loading More(\(count))")
-        count = count + 1
-        searchForMovie()
-       
+        if previousQueryPending == false {
+            previousQueryPending = true
+            print("Loading More(\(count))")
+            count = count + 1
+            searchForMovie()
+        }
     }
     
     
@@ -98,6 +103,7 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
             print("Reload ==> Movies Found : \(movies.count)")
 
         }
+        previousQueryPending = false
     }
     
     
@@ -129,7 +135,6 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         }
         else {
             request = WMRequest.movieSearchRequest(forMovie: searchText!)
-
         }
 
         if  request != nil {

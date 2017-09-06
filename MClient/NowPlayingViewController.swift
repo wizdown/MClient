@@ -18,6 +18,9 @@ class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UIC
     
     private var nowPlayingMovies = [[WMovie]]()
     
+    private var previousQueryPending: Bool = false
+
+    
     private var nowPlayingMoviesRequest: WMRequest? {
         didSet{
             getNowPlayingMovies()
@@ -29,7 +32,8 @@ class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UIC
 //        self.automaticallyAdjustsScrollViewInsets = false      // This has been done is storyboard. Thats why its been commented here
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
-        
+        previousQueryPending = false
+
         let nib = UINib(nibName: "newMovieCell", bundle: nil )
         collectionView.register(nib, forCellWithReuseIdentifier: Constants.cellResuseIdentifier )
         
@@ -55,10 +59,13 @@ class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UIC
     
     private var count: Int = 1
     private func loadMore(){
-        print("Loading More(\(count))")
-        count = count + 1
-        getNowPlayingMovies()
-        
+        if previousQueryPending == false {
+            previousQueryPending = true
+            print("Loading More(\(count))")
+            count = count + 1
+            getNowPlayingMovies()
+            
+        }
     }
     
     private func getNowPlayingMovies() {
@@ -104,6 +111,7 @@ class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UIC
             print("Reload ==> Movies Found : \(movies.count)")
             
         }
+        previousQueryPending = false
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {

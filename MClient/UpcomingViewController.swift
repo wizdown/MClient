@@ -17,6 +17,8 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     private var upcomingMovies = [[WMovie]]()
     private var count: Int = 1
+    private var previousQueryPending: Bool = false
+
 
     private var upcomingMoviesRequest :WMRequest? {
         didSet{
@@ -28,6 +30,7 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
         super.viewDidLoad()
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
+        previousQueryPending = false
         //        self.collectionView.setCollectionViewLayout(self, animated: true)
         
         let nib = UINib(nibName: "newMovieCell", bundle: nil )
@@ -54,9 +57,12 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     private func loadMore(){
-        print("Loading More(\(count))")
-        count = count + 1
-        getUpcomingMovies()
+        if previousQueryPending == false {
+            previousQueryPending = true
+            print("Loading More(\(count))")
+            count = count + 1
+            getUpcomingMovies()
+        }
         
     }
     
@@ -103,6 +109,7 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
             print("Reload ==> Movies Found : \(movies.count)")
             
         }
+        previousQueryPending = false
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
