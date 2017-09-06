@@ -7,15 +7,16 @@
 //
 
 import UIKit
+
 fileprivate var itemsPerRow : CGFloat = 2
 fileprivate let sectionInsets = UIEdgeInsets(top: 10.0 , left: 10.0 , bottom: 10.0 , right: 10.0 )
 
 class MoviesCollectionViewController: UIViewController , UICollectionViewDelegate, UICollectionViewDataSource  , UIScrollViewDelegate {
 
     // --------------------------------------------------------------------------------------
-    // The following variables and methods need to be set/defined by the subclass
+    // The following variables and methods may need to be set/defined by the subclass
+    
     var _collectionView: UICollectionView?
-    var _results = [[WMovie]]()
     var _navigationViewControllerTitle: String?
     var _segueIdentifierForMovieDetails: String?
     var _movieRequest: WMRequest?{
@@ -23,6 +24,7 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
             getResults()
         }
     }
+
     
     func getResults() { // need to override this in subclass
         fatalError("Subclass did not implement getNewMovies()")
@@ -30,12 +32,17 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
         //put insertMovies in completion handler for movie request
     }
     
+    func initialize() { // need to override this in subclass
+        fatalError("Subclass did not implement initalize()")
+        
+    }
+    
     // ---------------------------------------------------------------------------------------
     
     // Following code contains common methods and variables
     
-    
-    private var _count: Int = 1
+    var _results = [[WMovie]]()
+    var _count: Int = 1
     private var _previousQueryPending: Bool = false
     private var _timeSinceLastMovieResultsFetch: Date = Date()
     private let _reloadTimeLag : Double = 2.0 // seconds
@@ -44,12 +51,15 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self._collectionView?.delegate = self
-        self._collectionView?.dataSource = self
         _previousQueryPending = false
+        _count = 1
+
+        initialize()
+        
         _collectionView?.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.cellResuseIdentifier)
         title = _navigationViewControllerTitle
-        _count = 1
+        self._collectionView?.delegate = self
+        self._collectionView?.dataSource = self
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
