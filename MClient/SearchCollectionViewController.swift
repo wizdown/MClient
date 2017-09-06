@@ -19,7 +19,7 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
     
 //    var refreshControl: UIRefreshControl!
 
-    private var searchResults = [[WMovie]]()
+    var searchResults = [[WMovie]]()
     
     private var didSearchReturnNoResults : Bool = false
     
@@ -49,7 +49,7 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
     private let reloadTimeLag : Double = 2.0 // seconds
     
 
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentDate = Date()
         
         if lastMovieSearchRequest != nil ,
@@ -150,9 +150,18 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         performSegue(withIdentifier: "movieDetailSegue", sender: nil )
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+            searchResults.removeAll()
+            self.collectionView?.reloadData()
+            searchTextField.text = ""
+            searchTextField?.resignFirstResponder()
+
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         let nib = UINib(nibName: "newMovieCell", bundle: nil)
         self.collectionView?.register(nib, forCellWithReuseIdentifier: reuseIdentifier)
     }

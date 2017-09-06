@@ -13,7 +13,7 @@ let cellResuseIdentifier = "movieCell"
 fileprivate var itemsPerRow: CGFloat = 2
 fileprivate let sectionInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
 
-class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UICollectionViewDataSource {
+class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UICollectionViewDataSource  , UIScrollViewDelegate{
 
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -35,6 +35,7 @@ class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UIC
         let nib = UINib(nibName: "newMovieCell", bundle: nil )
         collectionView.register(nib, forCellWithReuseIdentifier: cellResuseIdentifier )
         
+        title = "Now Playing"
         nowPlayingMoviesRequest = WMRequest.nowPlayingMoviesRequest()
         count = 1
     }
@@ -43,16 +44,16 @@ class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UIC
     private let reloadTimeLag : Double = 2.0 // seconds
     
     
-//    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        let currentDate = Date()
-//        
-//        if nowPlayingMoviesRequest != nil ,
-//            currentDate.timeIntervalSince1970 - timeSinceLastMovieResultsFetch.timeIntervalSince1970 > reloadTimeLag ,
-//            scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
-//            loadMore()
-//            timeSinceLastMovieResultsFetch = currentDate
-//        }
-//    }
+     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentDate = Date()
+        
+        if nowPlayingMoviesRequest != nil ,
+            currentDate.timeIntervalSince1970 - timeSinceLastMovieResultsFetch.timeIntervalSince1970 > reloadTimeLag ,
+            scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
+            loadMore()
+            timeSinceLastMovieResultsFetch = currentDate
+        }
+    }
     
     private var count: Int = 1
     private func loadMore(){
@@ -138,15 +139,6 @@ class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UIC
         }
         return cell
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-////        let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
-////        let availableWidth = view.frame.width - paddingSpace
-////        let widthPerItem = availableWidth / itemsPerRow
-//        
-//        return CGFloat(sectionInsets.left)
-//    }
-
 }
 
 extension NowPlayingViewController : UICollectionViewDelegateFlowLayout {

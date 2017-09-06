@@ -159,10 +159,10 @@
             </objects>
             <point key="canvasLocation" x="2400.8000000000002" y="846.9265367316342"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Tab Bar View Controller-->
         <scene sceneID="gu3-oL-4ef">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="VaN-C5-fdb" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="VaN-C5-fdb" customClass="UITabBarViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="JUZ-cI-c5A">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
