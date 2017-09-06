@@ -152,16 +152,15 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
-        performSegue(withIdentifier: "movieDetailSegue", sender: nil )
+        performSegue(withIdentifier: "SearchToMovieDetailSegue", sender: nil )
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-            searchResults.removeAll()
-            self.collectionView?.reloadData()
-            searchTextField.text = ""
-            searchTextField?.resignFirstResponder()
-
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//            searchResults.removeAll()
+//            self.collectionView?.reloadData()
+//            searchTextField.text = ""
+//            searchTextField?.resignFirstResponder()
+//    }
     
     
     override func viewDidLoad() {

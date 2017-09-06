@@ -145,6 +145,11 @@ class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UIC
         }
         return cell
     }
+       
+     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
+        performSegue(withIdentifier: "NowPlayingToMovieDetailSegue", sender: nil )
+    }
 }
 
 extension NowPlayingViewController : UICollectionViewDelegateFlowLayout {

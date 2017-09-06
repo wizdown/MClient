@@ -143,6 +143,12 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
+        performSegue(withIdentifier: "UpcomingToMovieDetailSegue", sender: nil )
+    }
+    
 }
 
 extension UpcomingViewController : UICollectionViewDelegateFlowLayout {
@@ -157,7 +163,7 @@ extension UpcomingViewController : UICollectionViewDelegateFlowLayout {
         let availableWidth = view.frame.width - paddingSpace
         let widthPerItem = availableWidth / itemsPerRow
         
-        return CGSize(width: widthPerItem, height: widthPerItem)
+        return CGSize(width: widthPerItem, height: widthPerItem )
     }
     
     //3
