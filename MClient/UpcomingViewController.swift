@@ -146,8 +146,20 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
-        performSegue(withIdentifier: "UpcomingToMovieDetailSegue", sender: nil )
+        performSegue(withIdentifier: "UpcomingToMovieDetailSegue", sender: indexPath )
     }
+    
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        print(segue.destination.contents)
+        if let movieViewController = segue.destination.contents as? MovieDetailsViewController ,
+            let indexPath = sender as? IndexPath {
+            movieViewController.movie = upcomingMovies[indexPath.section][indexPath.row]
+            print("Setting movie")
+        }
+    }
+    
+
     
 }
 

@@ -150,10 +150,7 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         }
     }
     
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
-        performSegue(withIdentifier: "SearchToMovieDetailSegue", sender: nil )
-    }
+
     
 //    override func viewWillAppear(_ animated: Bool) {
 //            searchResults.removeAll()
@@ -204,6 +201,23 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         }
         return cell
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
+        performSegue(withIdentifier: "SearchToMovieDetailSegue", sender: indexPath )
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        print(segue.destination.contents)
+        if let movieViewController = segue.destination.contents as? MovieDetailsViewController ,
+            let indexPath = sender as? IndexPath {
+            movieViewController.movie = searchResults[indexPath.section][indexPath.row]
+            print("Setting movie")
+        }
+    }
+    
+    
 
 }
 
