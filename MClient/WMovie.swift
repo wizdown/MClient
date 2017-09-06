@@ -70,6 +70,10 @@ struct WMovie {
         performRequest(request: request, completion: completion)
 
     }
+    static func performUpcomingMoviesRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ) {
+        performRequest(request: request, completion: completion)
+        
+    }
     
     func getFullPosterImageURL() -> URL? {
         var baseImageURL: String = "https://image.tmdb.org/t/p/w300"

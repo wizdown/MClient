@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0F38FD3A1F5FAC2E00F12834 /* UITabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F38FD391F5FAC2E00F12834 /* UITabBarViewController.swift */; };
+		0F38FD3C1F5FC2EE00F12834 /* UpcomingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F38FD3B1F5FC2EE00F12834 /* UpcomingViewController.swift */; };
 		0FB5C2141F554729005708AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C2131F554729005708AA /* AppDelegate.swift */; };
 		0FB5C2191F55472A005708AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FB5C2171F55472A005708AA /* Main.storyboard */; };
 		0FB5C21B1F55472A005708AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FB5C21A1F55472A005708AA /* Assets.xcassets */; };
@@ -24,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		0F38FD391F5FAC2E00F12834 /* UITabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITabBarViewController.swift; sourceTree = "<group>"; };
+		0F38FD3B1F5FC2EE00F12834 /* UpcomingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpcomingViewController.swift; sourceTree = "<group>"; };
 		0FB5C2101F554729005708AA /* MClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FB5C2131F554729005708AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0FB5C2181F55472A005708AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -76,8 +78,9 @@
 				0FB5C24B1F554CAF005708AA /* SearchCollectionViewController.swift */,
 				0FB5C2CF1F5E6E7C005708AA /* newMovieCell.swift */,
 				0FB5C2D01F5E6E7C005708AA /* newMovieCell.xib */,
-				0FB5C2D31F5E894B005708AA /* NowPlayingViewController.swift */,
 				0F38FD391F5FAC2E00F12834 /* UITabBarViewController.swift */,
+				0FB5C2D31F5E894B005708AA /* NowPlayingViewController.swift */,
+				0F38FD3B1F5FC2EE00F12834 /* UpcomingViewController.swift */,
 			);
 			path = MClient;
 			sourceTree = "<group>";
@@ -186,6 +189,7 @@
 				0F38FD3A1F5FAC2E00F12834 /* UITabBarViewController.swift in Sources */,
 				0FB5C2C61F59416B005708AA /* WMRequest.swift in Sources */,
 				0FB5C29C1F56873E005708AA /* Constants.swift in Sources */,
+				0F38FD3C1F5FC2EE00F12834 /* UpcomingViewController.swift in Sources */,
 				0FB5C2D11F5E6E7C005708AA /* newMovieCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

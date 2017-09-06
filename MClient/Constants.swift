@@ -13,6 +13,9 @@ class Constants {
     static let base_url: String = "api.themoviedb.org"
     static let url_scheme="https"
     static let api_key: String = "71c4e026a81c526c33013f530de0d158"
+    
+    static let cellResuseIdentifier = "movieCell"
+
     static let genre = [
     28 : "Action",
     12: "Adventure",
@@ -42,6 +45,8 @@ class Constants {
     enum requestType : String {
         case movieSearch = "/3/search/movie"
         case nowPlaying =  "/3/movie/now_playing"
+        case upcoming = "/3/movie/upcoming"
+        case discoverMovie = "/3/discover/movie"
     }
     enum queryParameter : String {
         case api_key = "api_key"

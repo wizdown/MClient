@@ -63,7 +63,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="searchTextField" destination="aer-ab-XwZ" id="eZt-hy-Qt5"/>
-                        <segue destination="PZm-kg-c7b" kind="show" identifier="movieDetailSegue" id="Wmk-IG-YK6"/>
+                        <segue destination="PZm-kg-c7b" kind="show" identifier="SearchToMovieDetailSegue" id="Wmk-IG-YK6"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A1l-GH-iaU" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -97,7 +97,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HFE-mp-rnX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3191.1999999999998" y="21.139430284857571"/>
+            <point key="canvasLocation" x="3596" y="847"/>
         </scene>
         <!--Search-->
         <scene sceneID="umK-qy-EQX">
@@ -153,11 +153,54 @@
                     <navigationItem key="navigationItem" id="fp8-oM-QPz"/>
                     <connections>
                         <outlet property="collectionView" destination="O5k-hp-Wo6" id="dYI-GG-ZjT"/>
+                        <segue destination="PZm-kg-c7b" kind="show" identifier="NowPlayingToMovieDetailSegue" id="Ik3-cF-w38"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fpc-Lg-qPk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2400.8000000000002" y="846.9265367316342"/>
+        </scene>
+        <!--Upcoming View Controller-->
+        <scene sceneID="GRr-fU-LRX">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="EoO-0a-ppb" customClass="UpcomingViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="xOE-qK-DRJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="P11-ZO-xVY"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="zjl-XD-SWh">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="O2B-wA-HWd">
+                                <rect key="frame" x="0.0" y="56" width="375" height="554"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="UVV-3V-2Ya">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="O2B-wA-HWd" secondAttribute="trailing" id="2Jm-6r-JnR"/>
+                            <constraint firstItem="O2B-wA-HWd" firstAttribute="leading" secondItem="zjl-XD-SWh" secondAttribute="leading" id="3OR-q4-Sgt"/>
+                            <constraint firstItem="P11-ZO-xVY" firstAttribute="top" secondItem="O2B-wA-HWd" secondAttribute="bottom" constant="8" symbolic="YES" id="Pmq-xD-Exz"/>
+                            <constraint firstItem="O2B-wA-HWd" firstAttribute="centerY" secondItem="zjl-XD-SWh" secondAttribute="centerY" id="uul-l0-kF9"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Lex-sZ-QsI"/>
+                    <connections>
+                        <outlet property="collectionView" destination="O2B-wA-HWd" id="0W4-aO-JuC"/>
+                        <segue destination="PZm-kg-c7b" kind="show" identifier="UpcomingToMovieDetailSegue" id="4wT-5N-GOk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TlK-og-oL6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2400.8000000000002" y="1694.3028485757122"/>
         </scene>
         <!--Tab Bar View Controller-->
         <scene sceneID="gu3-oL-4ef">
@@ -171,12 +214,13 @@
                     </tabBar>
                     <connections>
                         <segue destination="nvt-p1-VsR" kind="relationship" relationship="viewControllers" id="CYg-ou-pBV"/>
+                        <segue destination="oJ8-w1-vym" kind="relationship" relationship="viewControllers" id="B3S-C7-MI9"/>
                         <segue destination="Hu1-Tx-5kz" kind="relationship" relationship="viewControllers" id="kkM-Cv-LQB"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HXV-1f-l3g" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="500" y="22.938530734632685"/>
+            <point key="canvasLocation" x="241" y="847"/>
         </scene>
         <!--Playing-->
         <scene sceneID="Ana-sI-gvZ">
@@ -197,9 +241,32 @@
             </objects>
             <point key="canvasLocation" x="1461.5999999999999" y="846.9265367316342"/>
         </scene>
+        <!--Upcoming-->
+        <scene sceneID="GXW-3C-ido">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="oJ8-w1-vym" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Upcoming" image="upcoming" id="ouk-tV-zjL"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ajl-7c-jMP">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="EoO-0a-ppb" kind="relationship" relationship="rootViewController" id="ajJ-ty-tiw"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bl5-3k-shO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1462" y="1694"/>
+        </scene>
     </scenes>
     <resources>
         <image name="playing" width="25" height="25"/>
         <image name="search" width="25" height="25"/>
+        <image name="upcoming" width="25" height="25"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="4wT-5N-GOk"/>
+    </inferredMetricsTieBreakers>
 </document>

@@ -1,40 +1,40 @@
 //
-//  NowPlayingViewController.swift
+//  UpcomingViewController.swift
 //  MClient
 //
-//  Created by gupta.a on 05/09/17.
+//  Created by gupta.a on 06/09/17.
 //  Copyright © 2017 gupta.a. All rights reserved.
 //
 
 import UIKit
 
+fileprivate var itemsPerRow : CGFloat = 2
+fileprivate let sectionInsets = UIEdgeInsets(top: 10.0 , left: 10.0 , bottom: 10.0 , right: 10.0 )
 
-fileprivate var itemsPerRow: CGFloat = 2
-fileprivate let sectionInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
-
-class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UICollectionViewDataSource  , UIScrollViewDelegate{
+class UpcomingViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource  , UIScrollViewDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private var nowPlayingMovies = [[WMovie]]()
-    
-    private var nowPlayingMoviesRequest: WMRequest? {
+    private var upcomingMovies = [[WMovie]]()
+    private var count: Int = 1
+
+    private var upcomingMoviesRequest :WMRequest? {
         didSet{
-            getNowPlayingMovies()
+            getUpcomingMovies()
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.automaticallyAdjustsScrollViewInsets = false      // This has been done is storyboard. Thats why its been commented here
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
+        //        self.collectionView.setCollectionViewLayout(self, animated: true)
         
         let nib = UINib(nibName: "newMovieCell", bundle: nil )
         collectionView.register(nib, forCellWithReuseIdentifier: Constants.cellResuseIdentifier )
         
-        title = "Now Playing"
-        nowPlayingMoviesRequest = WMRequest.nowPlayingMoviesRequest()
+        title = "Upcoming"
+        upcomingMoviesRequest = WMRequest.upcomingMoviesRequest()
         count = 1
     }
     
@@ -42,10 +42,10 @@ class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UIC
     private let reloadTimeLag : Double = 2.0 // seconds
     
     
-     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentDate = Date()
         
-        if nowPlayingMoviesRequest != nil ,
+        if upcomingMoviesRequest != nil ,
             currentDate.timeIntervalSince1970 - timeSinceLastMovieResultsFetch.timeIntervalSince1970 > reloadTimeLag ,
             scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
             loadMore()
@@ -53,34 +53,33 @@ class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UIC
         }
     }
     
-    private var count: Int = 1
     private func loadMore(){
         print("Loading More(\(count))")
         count = count + 1
-        getNowPlayingMovies()
+        getUpcomingMovies()
         
     }
     
-    private func getNowPlayingMovies() {
+    private func getUpcomingMovies() {
         var request: WMRequest?
         if count > 1 {
-            request = nowPlayingMoviesRequest?.newer
+            request = upcomingMoviesRequest?.newer
         }else {
-            request = nowPlayingMoviesRequest
+            request = upcomingMoviesRequest
         }
         
         if  request != nil {
-            WMovie.performNowPlayingMoviesRequest(request: request!) { [weak self] movies in
+            WMovie.performUpcomingMoviesRequest(request: request!) { [weak self] movies in
                 DispatchQueue.main.async{
                     self?.insertMovies(movies)
                 }
             }
         }
     }
-    
+
     private func insertMovies( _ movies: [WMovie] ) {
-        if nowPlayingMovies.count == 0 {
-            self.nowPlayingMovies.insert(movies,at : 0) //2
+        if upcomingMovies.count == 0 {
+            self.upcomingMovies.insert(movies,at : 0) //2
             self.collectionView?.insertSections([0]) // 3
             print("Load ==> Movies Found : \(movies.count)")
             
@@ -88,9 +87,9 @@ class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UIC
         else
         {
             if(movies.count > 0) {
-                let oldCount = nowPlayingMovies[0].count
-                self.nowPlayingMovies[0].append(contentsOf: movies)
-                let newCount = nowPlayingMovies[0].count
+                let oldCount = upcomingMovies[0].count
+                self.upcomingMovies[0].append(contentsOf: movies)
+                let newCount = upcomingMovies[0].count
                 self.collectionView?.performBatchUpdates({
                     var currentItem = oldCount
                     while currentItem < newCount {
@@ -105,7 +104,7 @@ class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UIC
             
         }
     }
-
+    
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
         
@@ -117,19 +116,19 @@ class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UIC
         collectionView?.collectionViewLayout.invalidateLayout()
     }
     
-     func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return nowPlayingMovies.count
+        return upcomingMovies.count
     }
     
-     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return nowPlayingMovies[section].count
+        return upcomingMovies[section].count
     }
     
-     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.cellResuseIdentifier, for: indexPath)
-        let movie: WMovie = nowPlayingMovies[indexPath.section][indexPath.row]
+        let movie: WMovie = upcomingMovies[indexPath.section][indexPath.row]
         // Configure the cell
         if let cell = cell as? newMovieCell {
             cell.movie = movie
@@ -139,7 +138,7 @@ class NowPlayingViewController: UIViewController , UICollectionViewDelegate, UIC
     }
 }
 
-extension NowPlayingViewController : UICollectionViewDelegateFlowLayout {
+extension UpcomingViewController : UICollectionViewDelegateFlowLayout {
     
     
     //1
