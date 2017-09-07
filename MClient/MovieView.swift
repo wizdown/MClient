@@ -25,7 +25,13 @@ class MovieView: UIView {
     private func updateUI() {
         title.text = movie?.title
         overview.text = movie?.overview
-        releaseDate.text = "Release : \(String(describing: movie?.release_date.description.components(separatedBy: " ")[0]))"
+        if let release_date = movie?.release_date.description.components(separatedBy: " ")[0] {
+                releaseDate.text = "Release : \(release_date)"
+        }
+        else {
+            releaseDate.text = "Release : Not Found"
+        }
+        
         
         let movieId = movie?.id
         var imageURL: URL?
