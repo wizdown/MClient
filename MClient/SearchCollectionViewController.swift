@@ -176,12 +176,9 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-//        print("row : \(indexPath.row)")
         let movie: WMovie = searchResults[indexPath.section][indexPath.row]
-        // Configure the cell
         if let cell = cell as? newMovieCell {
             cell.movie = movie
-//            cell.title.text = "Hoila"
         }
         return cell
     }

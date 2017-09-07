@@ -76,13 +76,23 @@ struct WMovie {
     }
     
     func getFullPosterImageURL() -> URL? {
-        var baseImageURL: String = "https://image.tmdb.org/t/p/w300"
+        var baseImageURL: String = Constants.baseImageURL
         if let poster_path = self.poster_path {
             baseImageURL.append(poster_path)
             return URL(string: baseImageURL)
         }
         return nil
     }
+    
+    func getFullBackdropImageURL() -> URL? {
+        var baseImageURL: String = Constants.baseImageURL
+        if let backdrop_path = self.backdrop_path {
+            baseImageURL.append(backdrop_path)
+            return URL(string: baseImageURL)
+        }
+        return nil
+    }
+    
 }
 
 extension WMovie {
