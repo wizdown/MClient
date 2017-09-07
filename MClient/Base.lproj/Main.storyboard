@@ -155,7 +155,6 @@
                                             </stackView>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="RJV-9N-D2q" secondAttribute="bottom" id="Lat-He-h2E"/>
                                             <constraint firstItem="z9A-L6-YcT" firstAttribute="leading" secondItem="SlW-op-IDt" secondAttribute="leading" id="M6v-yP-t3T"/>
                                             <constraint firstItem="RJV-9N-D2q" firstAttribute="leading" secondItem="SlW-op-IDt" secondAttribute="leading" id="MTF-BV-bIA"/>
                                             <constraint firstAttribute="trailing" secondItem="RJV-9N-D2q" secondAttribute="trailing" id="SnF-BD-eoE"/>
@@ -163,17 +162,37 @@
                                             <constraint firstItem="z9A-L6-YcT" firstAttribute="top" secondItem="SlW-op-IDt" secondAttribute="top" id="gL0-I5-QwF"/>
                                         </constraints>
                                     </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="ndp-Tu-2ed">
+                                        <rect key="frame" x="0.0" y="371.5" width="375" height="36"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Genre" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x0F-Un-gQg">
+                                                <rect key="frame" x="0.0" y="0.0" width="44.5" height="18"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Genre Content" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Huh-j4-ZYT">
+                                                <rect key="frame" x="0.0" y="18" width="100.5" height="18"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="SlW-op-IDt" secondAttribute="trailing" id="86q-ih-J8y"/>
                                     <constraint firstItem="SlW-op-IDt" firstAttribute="leading" secondItem="Iv1-tg-P5K" secondAttribute="leading" id="A0p-kX-mm8"/>
                                     <constraint firstItem="SrS-w1-Ldp" firstAttribute="width" secondItem="Iv1-tg-P5K" secondAttribute="width" id="AwQ-lI-8Y9"/>
+                                    <constraint firstAttribute="trailing" secondItem="ndp-Tu-2ed" secondAttribute="trailing" id="F5U-43-InC"/>
                                     <constraint firstItem="SlW-op-IDt" firstAttribute="top" secondItem="Iv1-tg-P5K" secondAttribute="top" id="FAU-dq-21t"/>
                                     <constraint firstItem="RJV-9N-D2q" firstAttribute="width" secondItem="Iv1-tg-P5K" secondAttribute="width" id="Imh-hY-EUZ"/>
+                                    <constraint firstItem="ndp-Tu-2ed" firstAttribute="top" secondItem="IqD-8Y-h5Z" secondAttribute="bottom" id="X47-1R-fS2"/>
                                     <constraint firstItem="SlW-op-IDt" firstAttribute="width" secondItem="Iv1-tg-P5K" secondAttribute="width" id="Zu6-bx-oYe"/>
                                     <constraint firstItem="SlW-op-IDt" firstAttribute="width" secondItem="Iv1-tg-P5K" secondAttribute="width" id="amA-Nd-bPb"/>
                                     <constraint firstAttribute="bottom" secondItem="SlW-op-IDt" secondAttribute="bottom" id="h16-zM-OXm"/>
                                     <constraint firstItem="IqD-8Y-h5Z" firstAttribute="width" secondItem="Iv1-tg-P5K" secondAttribute="width" id="kOt-0U-wbN"/>
+                                    <constraint firstItem="ndp-Tu-2ed" firstAttribute="leading" secondItem="Iv1-tg-P5K" secondAttribute="leading" id="kfT-ay-yzG"/>
                                     <constraint firstItem="yGD-57-qjS" firstAttribute="width" secondItem="Iv1-tg-P5K" secondAttribute="width" id="rHC-iv-rOU"/>
                                 </constraints>
                             </scrollView>
@@ -187,6 +206,7 @@
                         </constraints>
                         <connections>
                             <outlet property="backdrop" destination="z9A-L6-YcT" id="PAc-n8-6cg"/>
+                            <outlet property="genre" destination="Huh-j4-ZYT" id="Qia-w9-zTw"/>
                             <outlet property="overview" destination="tfh-6x-z4b" id="wL3-Ji-g81"/>
                             <outlet property="releaseDate" destination="IqD-8Y-h5Z" id="Gv0-oN-ZZH"/>
                             <outlet property="title" destination="ZQS-fE-CPg" id="hIe-ff-C1L"/>

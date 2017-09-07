@@ -16,6 +16,8 @@ class MovieView: UIView {
     @IBOutlet weak var overview: UILabel!
     @IBOutlet weak var releaseDate: UILabel!
     
+    @IBOutlet weak var genre: UILabel!
+    
     var movie : WMovie? {
         didSet{
             updateUI()
@@ -55,6 +57,8 @@ class MovieView: UIView {
             }
             
         }
+        
+        
     }
     
     
