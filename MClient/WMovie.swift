@@ -76,7 +76,7 @@ struct WMovie {
     }
     
     func getFullPosterImageURL() -> URL? {
-        var baseImageURL: String = Constants.baseImageURL
+        var baseImageURL: String = Constants.basePosterImageURL
         if let poster_path = self.poster_path {
             baseImageURL.append(poster_path)
             return URL(string: baseImageURL)
@@ -85,7 +85,7 @@ struct WMovie {
     }
     
     func getFullBackdropImageURL() -> URL? {
-        var baseImageURL: String = Constants.baseImageURL
+        var baseImageURL: String = Constants.baseBackdropImageUrl
         if let backdrop_path = self.backdrop_path {
             baseImageURL.append(backdrop_path)
             return URL(string: baseImageURL)

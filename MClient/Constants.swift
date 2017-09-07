@@ -13,8 +13,8 @@ class Constants {
     static let base_url: String = "api.themoviedb.org"
     static let url_scheme="https"
     static let api_key: String = "71c4e026a81c526c33013f530de0d158"
-    static let baseImageURL: String = "https://image.tmdb.org/t/p/w300"  // Take care of quality if possible
-
+    static let basePosterImageURL: String = "https://image.tmdb.org/t/p/w300"  // Take care of quality if possible
+    static let baseBackdropImageUrl: String="https://image.tmdb.org/t/p/w1280"
     
     static let cellResuseIdentifier = "movieCell"
 

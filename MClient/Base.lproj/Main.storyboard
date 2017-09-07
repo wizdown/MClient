@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -86,20 +87,23 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="260" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="SlW-op-IDt">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="194"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="371.5"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="darkLoading" translatesAutoresizingMaskIntoConstraints="NO" id="z9A-L6-YcT">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="104"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="281.5"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="z9A-L6-YcT" secondAttribute="height" multiplier="4:3" id="apl-B0-Uaz"/>
+                                                </constraints>
                                             </imageView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="RJV-9N-D2q">
-                                                <rect key="frame" x="0.0" y="104" width="375" height="90"/>
+                                                <rect key="frame" x="0.0" y="281.5" width="375" height="90"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="yGD-57-qjS">
                                                         <rect key="frame" x="0.0" y="0.0" width="375" height="36"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yRY-eB-5wO">
-                                                                <rect key="frame" x="0.0" y="0.0" width="30" height="18"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="33" height="18"/>
+                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
@@ -115,8 +119,8 @@
                                                         <rect key="frame" x="0.0" y="36" width="375" height="36"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Overview" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pgg-F7-875">
-                                                                <rect key="frame" x="0.0" y="0.0" width="64" height="18"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="69" height="18"/>
+                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
@@ -365,6 +369,6 @@
         <image name="upcoming" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Wmk-IG-YK6"/>
+        <segue reference="4wT-5N-GOk"/>
     </inferredMetricsTieBreakers>
 </document>
