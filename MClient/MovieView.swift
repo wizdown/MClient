@@ -25,16 +25,6 @@ class MovieView: UIView {
     }
     
     private func updateUI() {
-        title.text = movie?.title
-        overview.text = movie?.overview
-        if let release_date = movie?.release_date.description.components(separatedBy: " ")[0] {
-                releaseDate.text = "Release : \(release_date)"
-        }
-        else {
-            releaseDate.text = "Release : Not Found"
-        }
-        
-        
         let movieId = movie?.id
         var imageURL: URL?
         imageURL = movie?.getFullBackdropImageURL()
@@ -58,7 +48,30 @@ class MovieView: UIView {
             
         }
         
+        title.text = movie?.title
         
+        overview.text = movie?.overview
+        
+        if let release_date = movie?.release_date.description.components(separatedBy: " ")[0] {
+                releaseDate.text = "Release : \(release_date)"
+        }
+        else {
+            releaseDate.text = "Release : Not Found"
+        }
+        
+        var movie_genre: String = ""
+        if let genre_array = movie?.genre ,
+            genre_array.count > 0 {
+            for current_genre in genre_array {
+                if movie_genre.characters.count > 0 {
+                    movie_genre.append(", ")
+                }
+                movie_genre.append(current_genre)
+            }
+            genre.text = movie_genre
+        } else {
+            genre.text = "Not Found"
+        }
     }
     
     
