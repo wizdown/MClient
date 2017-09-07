@@ -48,29 +48,26 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         }
     }
     
-    private var timeSinceLastMovieResultsFetch : Date = Date()
-    private let reloadTimeLag : Double = 2.0 // seconds
-    
+//    private var timeSinceLastMovieResultsFetch : Date = Date()
+//    private let reloadTimeLag : Double = 2.0 // seconds
+//    
 
      override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let currentDate = Date()
         
         if lastMovieSearchRequest != nil ,
-            currentDate.timeIntervalSince1970 - timeSinceLastMovieResultsFetch.timeIntervalSince1970 > reloadTimeLag ,
+            previousQueryPending == false ,
             scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
             loadMore()
-            timeSinceLastMovieResultsFetch = currentDate
         }
     }
     
     private var count = 1
+    
     private func loadMore(){
-        if previousQueryPending == false {
-            previousQueryPending = true
-            print("Loading More(\(count))")
-            count = count + 1
-            searchForMovie()
-        }
+        previousQueryPending = true
+        print("Loading More(\(count))")
+        count = count + 1
+        searchForMovie()
     }
     
     
@@ -217,8 +214,6 @@ class SearchCollectionViewController: UICollectionViewController , UITextFieldDe
         }
     }
     
-    
-
 }
 
 extension SearchCollectionViewController : UICollectionViewDelegateFlowLayout {

@@ -44,8 +44,7 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
     var _results = [[WMovie]]()
     var _count: Int = 1
     private var _previousQueryPending: Bool = false
-    private var _timeSinceLastMovieResultsFetch: Date = Date()
-    private let _reloadTimeLag : Double = 2.0 // seconds
+
 
    
     
@@ -62,24 +61,34 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
         self._collectionView?.dataSource = self
     }
     
+    //    private var _timeSinceLastMovieResultsFetch: Date = Date()
+    //    private let _reloadTimeLag : Double = 2.0 // seconds
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let currentDate = Date()
+//        
+//        if _movieRequest != nil ,
+//            currentDate.timeIntervalSince1970 - _timeSinceLastMovieResultsFetch.timeIntervalSince1970 > _reloadTimeLag ,
+//            scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
+//            loadMore()
+//            _timeSinceLastMovieResultsFetch = currentDate
+//        }
+//    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let currentDate = Date()
-        
         if _movieRequest != nil ,
-            currentDate.timeIntervalSince1970 - _timeSinceLastMovieResultsFetch.timeIntervalSince1970 > _reloadTimeLag ,
+            _previousQueryPending == false ,
             scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
             loadMore()
-            _timeSinceLastMovieResultsFetch = currentDate
         }
     }
     
     private func loadMore() {
-        if _previousQueryPending == false {
-            _previousQueryPending = true
-            print("Loading More(\(_count))")
-            _count = _count + 1
-            getResults()
-        }
+        _previousQueryPending = true
+        print("Loading More(\(_count))")
+        _count = _count + 1
+        getResults()
+        
     }
     
  

@@ -84,12 +84,12 @@
 				0FB5C2CF1F5E6E7C005708AA /* newMovieCell.swift */,
 				0FB5C2D01F5E6E7C005708AA /* newMovieCell.xib */,
 				0F38FD391F5FAC2E00F12834 /* UITabBarViewController.swift */,
+				0FB5C24B1F554CAF005708AA /* SearchCollectionViewController.swift */,
+				0F38FD4F1F6067CF00F12834 /* MoviesCollectionViewController.swift */,
 				0FB5C2D31F5E894B005708AA /* NowPlayingViewController.swift */,
 				0F38FD3B1F5FC2EE00F12834 /* UpcomingViewController.swift */,
-				0FB5C24B1F554CAF005708AA /* SearchCollectionViewController.swift */,
 				0F38FD4B1F60106B00F12834 /* MovieDetailsViewController.swift */,
 				0F38FD4D1F60120C00F12834 /* MovieView.swift */,
-				0F38FD4F1F6067CF00F12834 /* MoviesCollectionViewController.swift */,
 			);
 			path = MClient;
 			sourceTree = "<group>";
