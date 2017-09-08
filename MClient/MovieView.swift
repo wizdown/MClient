@@ -22,7 +22,7 @@ class MovieView: UIView {
     
     var movie : WMovie? {
         didSet{
-            updateUI()
+            setNeedsDisplay()
         }
     }
     
@@ -76,6 +76,7 @@ class MovieView: UIView {
             genre.text = "Not Found"
         }
         
+        print("Setting CastCollectionViewMovieId")
         castCollectionView.movieId = movie?.id
     }
     

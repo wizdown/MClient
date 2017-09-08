@@ -19,7 +19,10 @@ class CastCollectionView: UICollectionView , UICollectionViewDelegate, UICollect
     
     var movieId: Int? {
         didSet{
-            setNeedsDisplay()
+            print("Movie Id Received for cast")
+//            setNeedsDisplay()
+            initialize()
+            getResults()
         }
     }
     
@@ -32,13 +35,16 @@ class CastCollectionView: UICollectionView , UICollectionViewDelegate, UICollect
     private func insertCast(_ cast: [WCastPeople]) {
         self._cast.removeAll()
         self._cast.insert(cast,at : 0) //2
-        self.reloadData()
+//        self.reloadData()
+        self.insertSections([0])
         print("Load ==> Cast Count Found : \(cast.count)")
 
     }
     
     private func initialize(){
         if initialized == false {
+            print("Initializing")
+
             initialized = true
             delegate = self
             dataSource = self
@@ -48,6 +54,7 @@ class CastCollectionView: UICollectionView , UICollectionViewDelegate, UICollect
     }
     
     private func getResults(){
+        print("Getting results")
         if let id = movieId {
             let request = WCRequest.castForMovieRequest(movieId: id)
             if request != nil {
@@ -63,8 +70,8 @@ class CastCollectionView: UICollectionView , UICollectionViewDelegate, UICollect
     }
     
     override func draw(_ rect: CGRect) {
-        initialize()
-        getResults()
+//        initialize()
+//        getResults()
     }
     
     
@@ -85,6 +92,7 @@ class CastCollectionView: UICollectionView , UICollectionViewDelegate, UICollect
         if let cell = cell as? NewCastCell {
             cell.cast = cast
         }
+        print("index :  \(indexPath.row)")
         return cell
     }
 }
