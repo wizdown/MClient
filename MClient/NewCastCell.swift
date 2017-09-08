@@ -21,6 +21,7 @@ class NewCastCell: UICollectionViewCell {
     
     private func updateUI(){
         
+        poster.image = nil 
         let castId = cast?.id
         let imageURL = cast?.getFullProfileImageURL()
         
