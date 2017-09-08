@@ -55,7 +55,7 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
 
         initialize()
         
-        _collectionView?.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.cellResuseIdentifier)
+        _collectionView?.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
         title = _navigationViewControllerTitle
         self._collectionView?.delegate = self
         self._collectionView?.dataSource = self
@@ -143,7 +143,7 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.cellResuseIdentifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.movieCellReuseIdentifier, for: indexPath)
         let movie: WMovie = _results[indexPath.section][indexPath.row]
         // Configure the cell
         if let cell = cell as? newMovieCell {

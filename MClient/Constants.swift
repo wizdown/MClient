@@ -16,7 +16,10 @@ class Constants {
     static let basePosterImageURL: String = "https://image.tmdb.org/t/p/w300"  // Take care of quality if possible
     static let baseBackdropImageUrl: String="https://image.tmdb.org/t/p/w1280"
     
-    static let cellResuseIdentifier = "movieCell"
+    static let baseCastProfileImageUrl: String = "https://image.tmdb.org/t/p/w300"
+    
+    static let movieCellReuseIdentifier = "movieCell"
+    static let castCellReuseIdentifier = "castCell"
 
     static let genre = [
     28 : "Action",
@@ -49,6 +52,9 @@ class Constants {
         case nowPlaying =  "/3/movie/now_playing"
         case upcoming = "/3/movie/upcoming"
         case discoverMovie = "/3/discover/movie"
+        case getCastForMovie_Part_1_of_2 = "/3/movie/"
+        case getCastForMovie_Part_2_of_2 = "/credits"
+        
     }
     enum queryParameter : String {
         case api_key = "api_key"

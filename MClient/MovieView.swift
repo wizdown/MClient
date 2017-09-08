@@ -18,6 +18,8 @@ class MovieView: UIView {
     
     @IBOutlet weak var genre: UILabel!
     
+    @IBOutlet weak var castCollectionView: CastCollectionView!
+    
     var movie : WMovie? {
         didSet{
             updateUI()
@@ -25,6 +27,7 @@ class MovieView: UIView {
     }
     
     private func updateUI() {
+        
         let movieId = movie?.id
         var imageURL: URL?
         imageURL = movie?.getFullBackdropImageURL()
@@ -72,6 +75,8 @@ class MovieView: UIView {
         } else {
             genre.text = "Not Found"
         }
+        
+        castCollectionView.movieId = movie?.id
     }
     
     
