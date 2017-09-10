@@ -92,7 +92,7 @@ class CastCollectionView: UICollectionView , UICollectionViewDelegate, UICollect
         if let cell = cell as? NewCastCell {
             cell.cast = cast
         }
-        print("index :  \(indexPath.row)")
+//        print("index :  \(indexPath.row)")
         return cell
     }
 }

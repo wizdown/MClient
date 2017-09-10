@@ -56,10 +56,10 @@ class MovieView: UIView {
         overview.text = movie?.overview
         
         if let release_date = movie?.release_date.description.components(separatedBy: " ")[0] {
-                releaseDate.text = "Release : \(release_date)"
+                releaseDate.text = release_date
         }
         else {
-            releaseDate.text = "Release : Not Found"
+            releaseDate.text = "Not Found"
         }
         
         var movie_genre: String = ""
