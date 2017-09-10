@@ -13,17 +13,16 @@ struct WMovie {
     
     let poster_path: String?
     let backdrop_path: String?
-    let genre : [String]
-    let overview: String
+    let original_language: String?
+    let release_date: Date?
+    
     let original_title: String
+    let overview: String
     let popularity: Double
     let id: Int
-    let original_language: String
-    let release_date: Date
     let title: String
-    
-    // To be used in Details
-    let runtime: Int?
+    let genre : [String]
+
     
     fileprivate static func performRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ){
         let url: URL = request.url!
@@ -97,12 +96,10 @@ struct WMovie {
 
 extension WMovie {
     init?(json: [String: Any]){
-        guard let overview = json["overview"] as? String,
-            let original_title = json["original_title"] as? String,
+        guard
             let popularity = json["popularity"] as? Double,
             let id = json["id"] as? Int,
             let genre_ids = json["genre_ids"] as? [Int],
-            let original_language = json["original_language"] as? String,
             let title = json["title"] as? String
             else {
                 return nil
@@ -136,27 +133,39 @@ extension WMovie {
 
         //Release Date Initialization
 //        print(json["releaseDate"])
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         if let release_date_string = json["release_date"] as? String ,
-            release_date_string.characters.count > 0 {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            self.release_date = dateFormatter.date(from:release_date_string)!
+            release_date_string.characters.count > 0 ,
+            let release_date = dateFormatter.date(from:release_date_string) {
+            self.release_date = release_date
 
         }else {
-            return nil
+            self.release_date = nil
         }
         
-        if let time = json["runtime"] as? Int {
-            self.runtime = time
+        if  let overview = json["overview"] as? String {
+            self.overview = overview
         } else {
-            self.runtime = nil
+            self.overview = "Not Found"
         }
         
-        self.overview = overview
-        self.original_title = original_title
+        if let original_title = json["original_title"] as? String {
+            self.original_title = original_title
+        } else {
+            self.original_title = "Not Found"
+        }
+        
+        if let original_language = json["original_language"] as? String {
+            self.original_language = original_language
+        }
+        else {
+            self.original_language = "Not Found"
+        }
+
+        
         self.popularity = popularity
         self.id = id
-        self.original_language = original_language
         self.title = title
         
     }

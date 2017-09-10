@@ -22,6 +22,11 @@ class Constants {
     static let castCellReuseIdentifier = "castCell"
     static let searchHeaderReuseIdentifier = "searchHeader"
 
+    static let gender = [
+        1: "Female",
+        2: "Male"
+    ]
+    
     static let genre = [
     28 : "Action",
     12: "Adventure",

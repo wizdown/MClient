@@ -9,9 +9,14 @@
 import Foundation
 
 struct WCastPeople {
-    let name: String?
-    let id: Int?
+    let name: String
+    let id: Int
     let profile_path: String?
+   
+    let biography: String?
+    let date_of_birth: Date? // Here there might be some ambiguity in some API calls
+    let place_of_birth: String?
+    let gender: String?
     
     static func performGetCastForAMovieRequest(request: WCRequest, completion: @escaping ([WCastPeople]) -> Void ){
         let url: URL = request.url!
@@ -70,8 +75,42 @@ extension WCastPeople {
         } else {
             self.profile_path = nil
         }
+        
         self.name = name
         self.id = id
+        
+        if let genderId = json["gender"] as? Int,
+            let gender = Constants.gender[genderId]{
+            self.gender = gender
+        } else {
+            self.gender = "Not Found"
+        }
+        
+        if let biography = json["biography"] as? String {
+            self.biography = biography
+        } else {
+            self.biography = "Not Found"
+        }
+        
+        if let place_of_birth = json["place_of_birth"] as? String {
+            self.place_of_birth = place_of_birth
+        } else {
+            self.place_of_birth = "Not Found"
+        }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        if let date_of_birth_string = json["birthday"] as? String ,
+            date_of_birth_string.characters.count > 0 ,
+            let date_of_birth = dateFormatter.date(from:date_of_birth_string) {
+            self.date_of_birth = date_of_birth
+            
+        }else {
+            self.date_of_birth = nil
+        }
+
+        
+        
     }
     
     
