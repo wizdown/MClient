@@ -6,45 +6,61 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="movieCell" id="gTV-IL-0wX" customClass="newMovieCell" customModule="MClient" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="124" height="111"/>
+            <rect key="frame" x="0.0" y="0.0" width="180" height="186"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="124" height="111"/>
+                <rect key="frame" x="0.0" y="0.0" width="180" height="186"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vXt-vt-4nI">
-                        <rect key="frame" x="6" y="5" width="113" height="81"/>
-                    </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pZM-24-ZX6">
-                        <rect key="frame" x="6" y="90" width="112" height="16"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HtY-To-MNf">
+                        <rect key="frame" x="0.0" y="0.0" width="180" height="186"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vXt-vt-4nI">
+                                <rect key="frame" x="4" y="4" width="172" height="150.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="vXt-vt-4nI" secondAttribute="height" multiplier="8:7" id="gGU-Rc-35M"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pZM-24-ZX6">
+                                <rect key="frame" x="4" y="158.5" width="172" height="23.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="pZM-24-ZX6" secondAttribute="bottom" constant="4" id="6rQ-i5-PCr"/>
+                            <constraint firstItem="vXt-vt-4nI" firstAttribute="top" secondItem="HtY-To-MNf" secondAttribute="top" constant="4" id="GlA-Ol-CMI"/>
+                            <constraint firstItem="pZM-24-ZX6" firstAttribute="leading" secondItem="HtY-To-MNf" secondAttribute="leading" constant="4" id="PIC-4g-p1B"/>
+                            <constraint firstAttribute="trailing" secondItem="vXt-vt-4nI" secondAttribute="trailing" constant="4" id="a3V-5X-4uo"/>
+                            <constraint firstItem="pZM-24-ZX6" firstAttribute="top" secondItem="vXt-vt-4nI" secondAttribute="bottom" constant="4" id="hZp-U3-6aL"/>
+                            <constraint firstItem="vXt-vt-4nI" firstAttribute="leading" secondItem="HtY-To-MNf" secondAttribute="leading" constant="4" id="odG-dL-o7H"/>
+                            <constraint firstAttribute="trailing" secondItem="pZM-24-ZX6" secondAttribute="trailing" constant="4" id="vxK-Kf-v3v"/>
+                        </constraints>
+                    </view>
                 </subviews>
             </view>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="pZM-24-ZX6" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="6" id="0xJ-6J-bD3"/>
-                <constraint firstItem="vXt-vt-4nI" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="6rz-YS-WNU"/>
-                <constraint firstAttribute="trailing" secondItem="vXt-vt-4nI" secondAttribute="trailing" constant="5" id="8Jt-ev-WUx"/>
-                <constraint firstAttribute="trailing" secondItem="pZM-24-ZX6" secondAttribute="trailing" constant="6" id="K62-PA-YFf"/>
-                <constraint firstAttribute="bottom" secondItem="pZM-24-ZX6" secondAttribute="bottom" constant="5" id="lfB-Ih-Mlo"/>
-                <constraint firstItem="vXt-vt-4nI" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="6" id="v4Q-UT-Jmh"/>
-                <constraint firstItem="pZM-24-ZX6" firstAttribute="top" secondItem="vXt-vt-4nI" secondAttribute="bottom" constant="4" id="wsM-o7-Wk5"/>
+                <constraint firstItem="HtY-To-MNf" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="BV4-Gf-nCk"/>
+                <constraint firstItem="HtY-To-MNf" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Wlu-FZ-6Um"/>
+                <constraint firstAttribute="bottom" secondItem="HtY-To-MNf" secondAttribute="bottom" id="Y6x-Ic-cjJ"/>
+                <constraint firstAttribute="trailing" secondItem="HtY-To-MNf" secondAttribute="trailing" id="vdP-uu-mgX"/>
             </constraints>
-            <size key="customSize" width="124" height="111"/>
+            <size key="customSize" width="180" height="186"/>
             <connections>
                 <outlet property="poster" destination="vXt-vt-4nI" id="efs-TW-VgH"/>
                 <outlet property="title" destination="pZM-24-ZX6" id="RZj-Lj-Dwh"/>
             </connections>
-            <point key="canvasLocation" x="-137" y="57.5"/>
+            <point key="canvasLocation" x="-109" y="95"/>
         </collectionViewCell>
     </objects>
 </document>
