@@ -21,7 +21,7 @@ class NewCastCell: UICollectionViewCell {
     
     private func updateUI(){
         
-        poster.image = nil 
+        poster.image = UIImage(named: "darkLoading")
         let castId = cast?.id
         let imageURL = cast?.getFullProfileImageURL()
         
