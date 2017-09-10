@@ -11,66 +11,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Search Collection View Controller-->
-        <scene sceneID="JPS-BK-vZq">
-            <objects>
-                <collectionViewController id="Nls-tB-w2q" customClass="SearchCollectionViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" id="0HQ-Kb-j65">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="76A-CS-1cp">
-                            <size key="itemSize" width="175" height="220"/>
-                            <size key="headerReferenceSize" width="50" height="50"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        </collectionViewFlowLayout>
-                        <cells/>
-                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="searchHeader" id="TJl-E5-O19" customClass="SearchHeaderCell" customModule="MClient" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3vF-jO-Orm">
-                                    <rect key="frame" x="24" y="15" width="326" height="21"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
-                            <constraints>
-                                <constraint firstItem="3vF-jO-Orm" firstAttribute="leading" secondItem="TJl-E5-O19" secondAttribute="leadingMargin" constant="16" id="Fvx-T7-lxL"/>
-                                <constraint firstItem="3vF-jO-Orm" firstAttribute="centerX" secondItem="TJl-E5-O19" secondAttribute="centerX" id="ecm-K1-BDx"/>
-                                <constraint firstItem="3vF-jO-Orm" firstAttribute="centerY" secondItem="TJl-E5-O19" secondAttribute="centerY" id="jsA-NB-Q7E"/>
-                            </constraints>
-                            <connections>
-                                <outlet property="label" destination="3vF-jO-Orm" id="rMZ-cs-hf4"/>
-                            </connections>
-                        </collectionReusableView>
-                        <connections>
-                            <outlet property="dataSource" destination="Nls-tB-w2q" id="UE8-OQ-gYH"/>
-                            <outlet property="delegate" destination="Nls-tB-w2q" id="YUf-mL-ydS"/>
-                        </connections>
-                    </collectionView>
-                    <navigationItem key="navigationItem" id="knq-Yz-E38">
-                        <nil key="title"/>
-                        <textField key="titleView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search Movie" textAlignment="center" minimumFontSize="17" id="aer-ab-XwZ">
-                            <rect key="frame" x="16.5" y="7" width="342" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <nil key="textColor"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                            <textInputTraits key="textInputTraits" keyboardType="webSearch"/>
-                        </textField>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="searchTextField" destination="aer-ab-XwZ" id="eZt-hy-Qt5"/>
-                        <segue destination="PZm-kg-c7b" kind="show" identifier="SearchToMovieDetailSegue" id="Wmk-IG-YK6"/>
-                    </connections>
-                </collectionViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="A1l-GH-iaU" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2376.8000000000002" y="22.03898050974513"/>
-        </scene>
         <!--Movie Details View Controller-->
         <scene sceneID="BJg-qP-DUs">
             <objects>
@@ -256,25 +196,6 @@
             </objects>
             <point key="canvasLocation" x="3596" y="845.57721139430294"/>
         </scene>
-        <!--Search-->
-        <scene sceneID="umK-qy-EQX">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Hu1-Tx-5kz" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Search" image="search" id="00q-X7-QuX"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="HXK-3y-C88">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="Nls-tB-w2q" kind="relationship" relationship="rootViewController" id="rKC-oB-8Sw"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gNU-Wn-jzv" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1439.2" y="22.938530734632685"/>
-        </scene>
         <!--Now Playing View Controller-->
         <scene sceneID="vvn-kB-9af">
             <objects>
@@ -372,12 +293,83 @@
                     <connections>
                         <segue destination="nvt-p1-VsR" kind="relationship" relationship="viewControllers" id="CYg-ou-pBV"/>
                         <segue destination="oJ8-w1-vym" kind="relationship" relationship="viewControllers" id="B3S-C7-MI9"/>
-                        <segue destination="Hu1-Tx-5kz" kind="relationship" relationship="viewControllers" id="kkM-Cv-LQB"/>
+                        <segue destination="KtW-ip-rus" kind="relationship" relationship="viewControllers" id="Emr-ID-dSE"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HXV-1f-l3g" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="241" y="847"/>
+        </scene>
+        <!--Search View Controller-->
+        <scene sceneID="yxV-Rk-6I7">
+            <objects>
+                <viewController id="sMF-FR-V0n" customClass="SearchViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ydQ-L8-UXs"/>
+                        <viewControllerLayoutGuide type="bottom" id="8Sy-xc-XmF"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="qSg-C4-zeN">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="W5l-LU-FiC">
+                                <rect key="frame" x="0.0" y="64" width="375" height="44"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="f5i-Fe-avr">
+                                <rect key="frame" x="0.0" y="112" width="375" height="506"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="rJN-Ac-aTN">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="50" height="50"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="searchHeader" id="Mqn-hX-Tc5" customClass="SearchHeaderCell" customModule="MClient" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Section Header" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2gz-Wh-olh">
+                                            <rect key="frame" x="12" y="12" width="351" height="26"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailingMargin" secondItem="2gz-Wh-olh" secondAttribute="trailing" constant="4" id="KMr-02-hXy"/>
+                                        <constraint firstItem="2gz-Wh-olh" firstAttribute="top" secondItem="Mqn-hX-Tc5" secondAttribute="topMargin" constant="4" id="Tjn-M0-KC4"/>
+                                        <constraint firstItem="2gz-Wh-olh" firstAttribute="leading" secondItem="Mqn-hX-Tc5" secondAttribute="leadingMargin" constant="4" id="ruU-Mf-GLm"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="2gz-Wh-olh" secondAttribute="bottom" constant="4" id="yxe-1h-xOm"/>
+                                    </constraints>
+                                    <connections>
+                                        <outlet property="label" destination="2gz-Wh-olh" id="bbZ-wN-kGF"/>
+                                    </connections>
+                                </collectionReusableView>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="W5l-LU-FiC" secondAttribute="trailing" id="51o-Wc-7oj"/>
+                            <constraint firstItem="f5i-Fe-avr" firstAttribute="leading" secondItem="qSg-C4-zeN" secondAttribute="leading" id="WIq-MM-hrt"/>
+                            <constraint firstItem="f5i-Fe-avr" firstAttribute="top" secondItem="W5l-LU-FiC" secondAttribute="bottom" constant="4" id="WYF-Fn-AZQ"/>
+                            <constraint firstItem="W5l-LU-FiC" firstAttribute="top" secondItem="ydQ-L8-UXs" secondAttribute="bottom" id="aca-0g-rKy"/>
+                            <constraint firstItem="8Sy-xc-XmF" firstAttribute="top" secondItem="f5i-Fe-avr" secondAttribute="bottom" id="mLm-SN-77L"/>
+                            <constraint firstItem="W5l-LU-FiC" firstAttribute="leading" secondItem="qSg-C4-zeN" secondAttribute="leading" id="w3o-eA-WTA"/>
+                            <constraint firstAttribute="trailing" secondItem="f5i-Fe-avr" secondAttribute="trailing" id="yfx-Ea-O4h"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="wPQ-oB-j0r"/>
+                    <connections>
+                        <outlet property="collectionView" destination="f5i-Fe-avr" id="x9F-W1-6uV"/>
+                        <outlet property="searchBar" destination="W5l-LU-FiC" id="Il8-7J-ZFH"/>
+                        <segue destination="PZm-kg-c7b" kind="show" identifier="SearchToMovieDetailSegue" id="vRD-GY-Txm"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="r80-hx-6oO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2336.8000000000002" y="-170.46476761619192"/>
         </scene>
         <!--Playing-->
         <scene sceneID="Ana-sI-gvZ">
@@ -417,6 +409,25 @@
             </objects>
             <point key="canvasLocation" x="1462" y="1694"/>
         </scene>
+        <!--Search-->
+        <scene sceneID="uuL-VJ-q7H">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="KtW-ip-rus" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Search" image="search" id="chs-wW-GOx"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ANy-1K-FQ0">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="sMF-FR-V0n" kind="relationship" relationship="rootViewController" id="34I-Fp-3fh"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Qq-Qy-cCb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1462" y="-170"/>
+        </scene>
     </scenes>
     <resources>
         <image name="playing" width="25" height="25"/>
@@ -424,6 +435,6 @@
         <image name="upcoming" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="4wT-5N-GOk"/>
+        <segue reference="vRD-GY-Txm"/>
     </inferredMetricsTieBreakers>
 </document>

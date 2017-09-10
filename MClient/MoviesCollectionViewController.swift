@@ -19,11 +19,7 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
     var _collectionView: UICollectionView?
     var _navigationViewControllerTitle: String?
     var _segueIdentifierForMovieDetails: String?
-    var _movieRequest: WMRequest?{
-        didSet{
-            getResults()
-        }
-    }
+    var _movieRequest: WMRequest?
 
     
     func getResults() { // need to override this in subclass
@@ -43,7 +39,7 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
     
     var _results = [[WMovie]]()
     var _count: Int = 1
-    private var _previousQueryPending: Bool = false
+    var _previousQueryPending: Bool = false
 
 
    
@@ -59,6 +55,10 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
         title = _navigationViewControllerTitle
         self._collectionView?.delegate = self
         self._collectionView?.dataSource = self
+        
+        if _movieRequest != nil {
+            getResults()
+        }
     }
     
     //    private var _timeSinceLastMovieResultsFetch: Date = Date()
