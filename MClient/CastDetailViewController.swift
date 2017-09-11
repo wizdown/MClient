@@ -101,6 +101,18 @@ class CastDetailViewController: UIViewController , UICollectionViewDataSource , 
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "CastToMovie", sender: indexPath)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            if let moviesViewController = segue.destination.contents as? MovieDetailsViewController,
+                let indexPath = sender as? IndexPath {
+                moviesViewController.movie = _movies[indexPath.section][indexPath.row]
+                print("Setting movie for MovieDetailsViewController")
+        }
+    }
+    
 }
 
 extension CastDetailViewController : UICollectionViewDelegateFlowLayout {
