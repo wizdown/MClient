@@ -176,19 +176,22 @@ extension WMovie {
             self.release_date = nil
         }
         
-        if  let overview = json["overview"] as? String {
+        if  let overview = json["overview"] as? String,
+            overview.characters.count > 0 {
             self.overview = overview
         } else {
             self.overview = Constants.notFound
         }
         
-        if let original_title = json["original_title"] as? String {
+        if let original_title = json["original_title"] as? String ,
+            original_title.characters.count > 0{
             self.original_title = original_title
         } else {
             self.original_title = Constants.notFound
         }
         
-        if let original_language = json["original_language"] as? String {
+        if let original_language = json["original_language"] as? String ,
+            original_language.characters.count > 0 {
             self.original_language = original_language
         }
         else {
@@ -198,7 +201,11 @@ extension WMovie {
         
         self.popularity = popularity
         self.id = id
-        self.title = title
+        if title.characters.count > 0 {
+            self.title = title
+        } else {
+            self.title = Constants.notFound
+        }
         
     }
 }

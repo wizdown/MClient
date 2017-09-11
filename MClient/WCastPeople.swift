@@ -121,13 +121,15 @@ extension WCastPeople {
             self.gender = Constants.notFound
         }
         
-        if let biography = json["biography"] as? String {
+        if let biography = json["biography"] as? String ,
+            biography.characters.count > 0 {
             self.biography = biography
         } else {
             self.biography = Constants.notFound
         }
         
-        if let place_of_birth = json["place_of_birth"] as? String {
+        if let place_of_birth = json["place_of_birth"] as? String,
+            place_of_birth.characters.count > 0 {
             self.place_of_birth = place_of_birth
         } else {
             self.place_of_birth = Constants.notFound

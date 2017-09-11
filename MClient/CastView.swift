@@ -33,40 +33,44 @@ class CastView: UIView {
     
     private func updateUI() {
         
-        let castId = cast?.id
-        var imageURL: URL?
-        imageURL = cast?.getFullBackdropImageURL()
-    
-        DispatchQueue.global(qos: .userInteractive ).async { [weak self] in
-            if let url = imageURL ,
-                let imageData = try? Data(contentsOf: url) {
-                DispatchQueue.main.async { [weak self ] in
-                    if castId == self?.cast?.id {
-                        self?.poster.image = UIImage(data: imageData)
+        if let person = cast {
+            let castId = person.id
+            var imageURL: URL?
+            imageURL = cast?.getFullBackdropImageURL()
+            
+            DispatchQueue.global(qos: .userInteractive ).async { [weak self] in
+                if let url = imageURL ,
+                    let imageData = try? Data(contentsOf: url) {
+                    DispatchQueue.main.async { [weak self ] in
+                        if castId == self?.cast?.id {
+                            self?.poster.image = UIImage(data: imageData)
+                        }
+                    }
+                } else {
+                    DispatchQueue.main.async { [weak self ] in
+                        self?.poster.image = UIImage(named: "imageNotFound")
                     }
                 }
-            } else {
-                DispatchQueue.main.async { [weak self ] in
-                    self?.poster.image = UIImage(named: "imageNotFound")
-                }
+                
             }
             
+            if let dob = person.date_of_birth?.description.components(separatedBy: " ")[0] {
+                date_of_birth.text = dob
+            }
+            else {
+                date_of_birth.text = Constants.notFound
+            }
+            
+            name.text = person.name
+            
+            gender.text = person.gender
+            
+            place_of_birth.text = person.place_of_birth
+            
+            biography.text = person.biography
+
         }
         
-        if let dob = cast?.date_of_birth?.description.components(separatedBy: " ")[0] {
-            date_of_birth.text = dob
-        }
-        else {
-            date_of_birth.text = Constants.notFound
-        }
-    
-        name.text = cast?.name
-        
-        gender.text = cast?.gender
-        
-        place_of_birth.text = cast?.place_of_birth
-        
-        biography.text = cast?.biography
     }
     
     override func draw(_ rect: CGRect) {

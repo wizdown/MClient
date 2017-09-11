@@ -217,11 +217,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/WCastPeople.swift"
-            timestampString = "526803532.804532"
+            timestampString = "526809405.791237"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
             landmarkName = "init(json:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -239,6 +239,38 @@
             startingLineNumber = "38"
             endingLineNumber = "38"
             landmarkName = "performGetCastDetailsRequest(request:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MClient/WCastPeople.swift"
+            timestampString = "526808914.725683"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
+            landmarkName = "init(json:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MClient/CastView.swift"
+            timestampString = "526814107.908798"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "updateUI()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
