@@ -147,20 +147,20 @@ extension WMovie {
         if  let overview = json["overview"] as? String {
             self.overview = overview
         } else {
-            self.overview = "Not Found"
+            self.overview = Constants.notFound
         }
         
         if let original_title = json["original_title"] as? String {
             self.original_title = original_title
         } else {
-            self.original_title = "Not Found"
+            self.original_title = Constants.notFound
         }
         
         if let original_language = json["original_language"] as? String {
             self.original_language = original_language
         }
         else {
-            self.original_language = "Not Found"
+            self.original_language = Constants.notFound
         }
 
         

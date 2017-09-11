@@ -96,7 +96,7 @@
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="bvz-ad-XxH" customClass="CastCollectionView" customModule="MClient" customModuleProvider="target">
+                                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="bvz-ad-XxH">
                                                         <rect key="frame" x="0.0" y="18" width="367" height="180"/>
                                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
@@ -190,11 +190,46 @@
                     <size key="freeformSize" width="375" height="800"/>
                     <connections>
                         <outlet property="movieView" destination="AeT-Ph-Hls" id="U3q-Pi-Veu"/>
+                        <segue destination="yxN-Lp-xWi" kind="show" identifier="castDetailSegue" id="Q2t-ox-mGS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HFE-mp-rnX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3596" y="845.57721139430294"/>
+        </scene>
+        <!--Cast Detail View Controller-->
+        <scene sceneID="QhO-QP-ABW">
+            <objects>
+                <viewController id="yxN-Lp-xWi" customClass="CastDetailViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="QP5-Fr-4lY"/>
+                        <viewControllerLayoutGuide type="bottom" id="7Av-QS-1Ys"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Th1-Jz-qPv">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="800"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VHQ-5C-9uZ">
+                                <rect key="frame" x="16" y="389.5" width="343" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="VHQ-5C-9uZ" firstAttribute="centerY" secondItem="Th1-Jz-qPv" secondAttribute="centerY" id="TyH-lH-zxA"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="VHQ-5C-9uZ" secondAttribute="trailing" id="jd0-xE-8nW"/>
+                            <constraint firstItem="VHQ-5C-9uZ" firstAttribute="leading" secondItem="Th1-Jz-qPv" secondAttribute="leadingMargin" id="olw-B8-gBV"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="name" destination="VHQ-5C-9uZ" id="4ZX-Ii-VCc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jch-ml-4Ub" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4724" y="846"/>
         </scene>
         <!--Now Playing View Controller-->
         <scene sceneID="vvn-kB-9af">

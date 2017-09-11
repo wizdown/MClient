@@ -18,7 +18,7 @@ class MovieView: UIView {
     
     @IBOutlet weak var genre: UILabel!
     
-    @IBOutlet weak var castCollectionView: CastCollectionView!
+    @IBOutlet weak var castCollectionView: UICollectionView!
     
     var movie : WMovie? {
         didSet{
@@ -55,11 +55,11 @@ class MovieView: UIView {
         
         overview.text = movie?.overview
         
-        if let release_date = movie?.release_date.description.components(separatedBy: " ")[0] {
+        if let release_date = movie?.release_date?.description.components(separatedBy: " ")[0] {
                 releaseDate.text = release_date
         }
         else {
-            releaseDate.text = "Not Found"
+            releaseDate.text = Constants.notFound
         }
         
         var movie_genre: String = ""
@@ -73,16 +73,10 @@ class MovieView: UIView {
             }
             genre.text = movie_genre
         } else {
-            genre.text = "Not Found"
+            genre.text = Constants.notFound
         }
-        
-        print("Setting CastCollectionViewMovieId")
-        castCollectionView.movieId = movie?.id
     }
-    
-    
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
+
     override func draw(_ rect: CGRect) {
         // Drawing code
         updateUI()

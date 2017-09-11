@@ -74,7 +74,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/MovieView.swift"
-            timestampString = "526477836.470611"
+            timestampString = "526795557.605669"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "64"
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/WCastPeople.swift"
-            timestampString = "526471842.42029"
+            timestampString = "526754962.0145"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
             landmarkName = "performGetCastForAMovieRequest(request:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -185,27 +185,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/CastCollectionView.swift"
-            timestampString = "526557244.540902"
+            timestampString = "526795557.605669"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
-            landmarkName = "movieId"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MClient/CastCollectionView.swift"
-            timestampString = "526558053.307712"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
             landmarkName = "draw(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -217,11 +201,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/CastCollectionView.swift"
-            timestampString = "526558053.307712"
+            timestampString = "526795557.605669"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
             landmarkName = "draw(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -233,11 +217,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/CastCollectionView.swift"
-            timestampString = "526558053.307712"
+            timestampString = "526795557.605669"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
             landmarkName = "draw(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -248,13 +232,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MClient/CastCollectionView.swift"
-            timestampString = "526558053.307712"
+            filePath = "MClient/WCastPeople.swift"
+            timestampString = "526754962.0145"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
-            landmarkName = "insertCast(_:)"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
+            landmarkName = "init(json:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -21,6 +21,8 @@ class Constants {
     static let movieCellReuseIdentifier = "movieCell"
     static let castCellReuseIdentifier = "castCell"
     static let searchHeaderReuseIdentifier = "searchHeader"
+    
+    static let notFound = "Not Found"
 
     static let gender = [
         1: "Female",

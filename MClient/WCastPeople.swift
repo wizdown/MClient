@@ -83,19 +83,19 @@ extension WCastPeople {
             let gender = Constants.gender[genderId]{
             self.gender = gender
         } else {
-            self.gender = "Not Found"
+            self.gender = Constants.notFound
         }
         
         if let biography = json["biography"] as? String {
             self.biography = biography
         } else {
-            self.biography = "Not Found"
+            self.biography = Constants.notFound
         }
         
         if let place_of_birth = json["place_of_birth"] as? String {
             self.place_of_birth = place_of_birth
         } else {
-            self.place_of_birth = "Not Found"
+            self.place_of_birth = Constants.notFound
         }
         
         let dateFormatter = DateFormatter()
