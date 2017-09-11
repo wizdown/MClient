@@ -22,10 +22,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     
     var movie : WMovie?
     
-    var _cast = [[WCastPeople]]()
-
-    private var castForMovieRequest: WCRequest?
-    
+    private var _cast = [[WCastPeople]]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +43,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         
         if let castDetailViewController = segue.destination.contents as? CastDetailViewController ,
             let indexPath = sender as? IndexPath {
-            castDetailViewController.cast = _cast[indexPath.section][indexPath.row]
+            castDetailViewController._cast = _cast[indexPath.section][indexPath.row]
             print("Setting Cast for Cast Details")
         }
     }
@@ -93,8 +90,6 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         return cell
     }
 
-    
-
 }
 
 extension UIViewController {
@@ -112,7 +107,7 @@ extension MovieDetailsViewController : UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-                //2
+        
         let paddingSpace = sectionInsets.left * (itemsPerColumn + 1)
         let availableHeight = movieView.castCollectionView.frame.height - paddingSpace
         let HeightPerItem = availableHeight / itemsPerColumn

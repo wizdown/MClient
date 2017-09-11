@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/Constants.swift"
-            timestampString = "526539747.29281"
+            timestampString = "526801323.287064"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
             landmarkName = "Constants"
             landmarkType = "3">
             <Locations>
@@ -233,12 +233,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/WCastPeople.swift"
-            timestampString = "526754962.0145"
+            timestampString = "526801323.287064"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
+            startingLineNumber = "147"
+            endingLineNumber = "147"
             landmarkName = "init(json:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MClient/WCastPeople.swift"
+            timestampString = "526800532.484746"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "performGetCastDetailsRequest(request:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

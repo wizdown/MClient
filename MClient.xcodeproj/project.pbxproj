@@ -18,6 +18,7 @@
 		0F38FD5C1F6166A500F12834 /* NewCastCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F38FD5A1F6166A500F12834 /* NewCastCell.xib */; };
 		0F431C231F658651008DF236 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F431C221F658651008DF236 /* SearchViewController.swift */; };
 		0F431C251F65A92D008DF236 /* CastDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F431C241F65A92D008DF236 /* CastDetailViewController.swift */; };
+		0F431C271F6644F0008DF236 /* CastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F431C261F6644F0008DF236 /* CastView.swift */; };
 		0FB5C2141F554729005708AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C2131F554729005708AA /* AppDelegate.swift */; };
 		0FB5C2191F55472A005708AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FB5C2171F55472A005708AA /* Main.storyboard */; };
 		0FB5C21B1F55472A005708AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FB5C21A1F55472A005708AA /* Assets.xcassets */; };
@@ -43,6 +44,7 @@
 		0F38FD5A1F6166A500F12834 /* NewCastCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewCastCell.xib; sourceTree = "<group>"; };
 		0F431C221F658651008DF236 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		0F431C241F65A92D008DF236 /* CastDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CastDetailViewController.swift; sourceTree = "<group>"; };
+		0F431C261F6644F0008DF236 /* CastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CastView.swift; sourceTree = "<group>"; };
 		0FB5C2101F554729005708AA /* MClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FB5C2131F554729005708AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0FB5C2181F55472A005708AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				0F38FD591F6166A500F12834 /* NewCastCell.swift */,
 				0F38FD5A1F6166A500F12834 /* NewCastCell.xib */,
 				0F431C241F65A92D008DF236 /* CastDetailViewController.swift */,
+				0F431C261F6644F0008DF236 /* CastView.swift */,
 			);
 			path = MClient;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 				0FB5C2CC1F5D3FBE005708AA /* SearchHeaderCell.swift in Sources */,
 				0F38FD4E1F60120C00F12834 /* MovieView.swift in Sources */,
 				0F38FD501F6067CF00F12834 /* MoviesCollectionViewController.swift in Sources */,
+				0F431C271F6644F0008DF236 /* CastView.swift in Sources */,
 				0F38FD5B1F6166A500F12834 /* NewCastCell.swift in Sources */,
 				0FB5C2511F555135005708AA /* WMovie.swift in Sources */,
 				0FB5C2141F554729005708AA /* AppDelegate.swift in Sources */,

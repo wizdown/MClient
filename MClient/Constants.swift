@@ -17,6 +17,8 @@ class Constants {
     static let baseBackdropImageUrl: String="https://image.tmdb.org/t/p/w1280"
     
     static let baseCastProfileImageUrl: String = "https://image.tmdb.org/t/p/w300"
+    static let baseCastProfileBackdropImageUrl: String = "https://image.tmdb.org/t/p/w1280"
+
     
     static let movieCellReuseIdentifier = "movieCell"
     static let castCellReuseIdentifier = "castCell"
@@ -62,6 +64,7 @@ class Constants {
         case discoverMovie = "/3/discover/movie"
         case getCastForMovie_Part_1_of_2 = "/3/movie/"
         case getCastForMovie_Part_2_of_2 = "/credits"
+        case castDetails = "/3/person/"
         
     }
     enum queryParameter : String {

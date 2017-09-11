@@ -50,8 +50,41 @@ struct WCastPeople {
         task.resume()
     }
     
+    static func performGetCastDetailsRequest(request: WCRequest, completion: @escaping (WCastPeople?) -> Void ){
+        let url: URL = request.url!
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+            } else {
+                
+                var cast: WCastPeople? = nil
+                if let data = data ,
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] ,
+                    let result = json {
+                        if let person = WCastPeople(json: result) {
+                            cast = person
+                    }
+                }
+                completion(cast)
+            }
+        }
+        
+        // put handler here
+        task.resume()
+    }
+
+    
     func getFullProfileImageURL() -> URL? {
         var baseImageURL: String = Constants.baseCastProfileImageUrl
+        if let profile_path = self.profile_path {
+            baseImageURL.append(profile_path)
+            return URL(string: baseImageURL)
+        }
+        return nil
+    }
+    
+    func getFullBackdropImageURL() -> URL? {
+        var baseImageURL: String = Constants.baseCastProfileBackdropImageUrl
         if let profile_path = self.profile_path {
             baseImageURL.append(profile_path)
             return URL(string: baseImageURL)
