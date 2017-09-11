@@ -92,6 +92,38 @@ struct WMovie {
         return nil
     }
     
+    static func performGetCastForAMovieRequest(request: WCRequest, completion: @escaping ([WCastPeople]) -> Void ){
+        let url: URL = request.url!
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+            } else {
+                
+                var cast: [WCastPeople] = []
+                var count = 1
+                if let data = data ,
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    
+                    if let jsonArr = json!["cast"] as? [[String: Any]] {
+                        for case let result in jsonArr {
+                            //                            print("Cast \(count)")
+                            //                            print(result)
+                            count = count + 1
+                            if let person = WCastPeople(json: result) {
+                                cast.append(person)
+                            }
+                        }
+                    }
+                }
+                
+                completion(cast)
+            }
+        }
+        
+        // put handler here
+        task.resume()
+    }
+    
 }
 
 extension WMovie {

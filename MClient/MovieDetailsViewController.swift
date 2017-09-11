@@ -60,9 +60,9 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     private func getResults(){
         print("Getting Cast results")
         if let id = movie?.id {
-            let request = WCRequest.castForMovieRequest(movieId: id)
+            let request = WMRequest.castForMovieRequest(movieId: id)
             if request != nil {
-                WCastPeople.performGetCastForAMovieRequest(request: request!) { [weak self] cast in
+                WMovie.performGetCastForAMovieRequest(request: request!) { [weak self] cast in
                     DispatchQueue.main.async {
                         self?.insertCast(cast)
                     }

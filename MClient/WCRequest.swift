@@ -38,17 +38,17 @@ class WCRequest {
         return WCRequest(urlComponents: urlComponents)
 
     }
-    static func castForMovieRequest(movieId: Int) -> WCRequest? {
-        var url_path = Constants.requestType.getCastForMovie_Part_1_of_2.rawValue
-        url_path.append(String(movieId))
-        url_path.append(Constants.requestType.getCastForMovie_Part_2_of_2.rawValue)
-        
+    
+    static func movieCreditsRequest( castId : Int ) ->WCRequest? {
+        let url_path = Constants.getUrlPathForMovieCreditsRequest(castId: castId)
         var urlComponents = URLComponents()
         urlComponents.scheme = Constants.url_scheme
         urlComponents.host = Constants.base_url
         urlComponents.path = url_path
-        urlComponents.queryItems = [URLQueryItem(name: Constants.queryParameter.api_key.rawValue, value: Constants.api_key )]
+        urlComponents.queryItems = [URLQueryItem(name: Constants.queryParameter.api_key.rawValue, value: Constants.api_key ), URLQueryItem(name: Constants.queryParameter.language.rawValue, value:
+            "en-US")]
         return WCRequest(urlComponents: urlComponents)
     }
+   
     
 }

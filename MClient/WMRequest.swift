@@ -127,5 +127,19 @@ class WMRequest : NSObject {
         return request
     }
     
+  
+    
+    static func castForMovieRequest(movieId: Int) -> WCRequest? {
+        
+        let url_path = Constants.getUrlPathForCastForMovieRequest(movieId: movieId)
+        
+        var urlComponents = URLComponents()
+        urlComponents.scheme = Constants.url_scheme
+        urlComponents.host = Constants.base_url
+        urlComponents.path = url_path
+        urlComponents.queryItems = [URLQueryItem(name: Constants.queryParameter.api_key.rawValue, value: Constants.api_key )]
+        return WCRequest(urlComponents: urlComponents)
+    }
+    
     
 }

@@ -22,11 +22,12 @@ class CastDetailViewController: UIViewController , UICollectionViewDataSource , 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        castView.collectionView.register(UINib(nibName: "NewMovieCell", bundle: nil) , forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
+        castView.collectionView.register(UINib(nibName: "newMovieCell", bundle: nil) , forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
         castView.collectionView.delegate = self
         castView.collectionView.dataSource = self
         if _cast != nil {
             getCastDetails()
+            getMovieCredits()
         }
         
     }
@@ -41,6 +42,30 @@ class CastDetailViewController: UIViewController , UICollectionViewDataSource , 
             print("Unable to fetch Cast Details")
         }
         
+    }
+    
+    private func insertMovieCredits(movies: [WMovie]){
+        self._movies.removeAll()
+        self._movies.insert(movies,at : 0) //2
+        //        self.reloadData()
+        castView.collectionView.insertSections([0])
+        print("Load ==> Movie Credits Found : \(movies.count)")
+    }
+    
+    private func getMovieCredits(){
+        print("Getting movie credits")
+        if let id = _cast?.id {
+            let request = WCRequest.movieCreditsRequest(castId: id)
+            if request != nil {
+                WCastPeople.performMovieCreditsRequest(request: request!) { [weak self] movies in
+                    DispatchQueue.main.async {
+                        self?.insertMovieCredits(movies: movies)
+                    }
+                }
+            }
+        } else {
+            print("MoviesCollectionView: Unable to fetch data")
+        }
     }
     
     private func getCastDetails(){

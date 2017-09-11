@@ -57,13 +57,25 @@ class Constants {
 //        "movieSearch" : "/3/search/movie"
 //    ]
     
+    static func getUrlPathForMovieCreditsRequest(castId: Int) -> String {
+        var url_path = "/3/person/"
+        url_path.append(String(castId))
+        url_path.append("/movie_credits")
+        return url_path
+    }
+    
+    static func getUrlPathForCastForMovieRequest ( movieId: Int ) -> String {
+        var url_path = "/3/movie/"
+        url_path.append(String(movieId))
+        url_path.append("/credits")
+        return url_path
+    }
+    
     enum requestType : String {
         case movieSearch = "/3/search/movie"
         case nowPlaying =  "/3/movie/now_playing"
         case upcoming = "/3/movie/upcoming"
         case discoverMovie = "/3/discover/movie"
-        case getCastForMovie_Part_1_of_2 = "/3/movie/"
-        case getCastForMovie_Part_2_of_2 = "/credits"
         case castDetails = "/3/person/"
         
     }

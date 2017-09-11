@@ -18,37 +18,7 @@ struct WCastPeople {
     let place_of_birth: String?
     let gender: String?
     
-    static func performGetCastForAMovieRequest(request: WCRequest, completion: @escaping ([WCastPeople]) -> Void ){
-        let url: URL = request.url!
-        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
-            if error != nil {
-                print(error!.localizedDescription)
-            } else {
-                
-                var cast: [WCastPeople] = []
-                var count = 1
-                if let data = data ,
-                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                    
-                    if let jsonArr = json!["cast"] as? [[String: Any]] {
-                        for case let result in jsonArr {
-                            //                            print("Cast \(count)")
-                            //                            print(result)
-                            count = count + 1
-                            if let person = WCastPeople(json: result) {
-                                cast.append(person)
-                            }
-                        }
-                    }
-                }
-                
-                completion(cast)
-            }
-        }
-        
-        // put handler here
-        task.resume()
-    }
+  
     
     static func performGetCastDetailsRequest(request: WCRequest, completion: @escaping (WCastPeople?) -> Void ){
         let url: URL = request.url!
@@ -66,6 +36,38 @@ struct WCastPeople {
                     }
                 }
                 completion(cast)
+            }
+        }
+        
+        // put handler here
+        task.resume()
+    }
+    
+    static func performMovieCreditsRequest(request: WCRequest, completion: @escaping ([WMovie]) -> Void ){
+        let url: URL = request.url!
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+            } else {
+                
+                var movies: [WMovie] = []
+                var count = 1
+                if let data = data ,
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    
+                    if let jsonArr = json!["cast"] as? [[String: Any]] {
+                        for case let result in jsonArr {
+                            //                            print("Movie \(count)")
+                            //                            print(result)
+                            count = count + 1
+                            if let movie = WMovie(json: result) {
+                                movies.append(movie)
+                            }
+                        }
+                    }
+                }
+                
+                completion(movies)
             }
         }
         
