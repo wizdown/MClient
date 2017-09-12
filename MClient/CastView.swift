@@ -10,20 +10,45 @@ import UIKit
 
 class CastView: UIView {
     
+    @IBOutlet weak var nameHeader: UILabel!
+    @IBOutlet weak var genderHeader: UILabel!
+    @IBOutlet weak var dobHeader: UILabel!
+    @IBOutlet weak var placeOfBirthHeader: UILabel!
+    @IBOutlet weak var biographyHeader: UILabel!
+    @IBOutlet weak var actedInHeader: UILabel!
+    
+    
     @IBOutlet weak var poster: UIImageView!
-    
     @IBOutlet weak var name: UILabel!
-
     @IBOutlet weak var gender: UILabel!
-    
     @IBOutlet weak var date_of_birth: UILabel!
-    
     @IBOutlet weak var place_of_birth: UILabel!
-    
     @IBOutlet weak var biography: UILabel!
-    
     @IBOutlet weak var collectionView: UICollectionView!
     
+    
+     func clearDefaults(){
+        nameHeader.text = ""
+        genderHeader.text = ""
+        dobHeader.text = ""
+        placeOfBirthHeader.text = ""
+        biographyHeader.text = ""
+        actedInHeader.text = ""
+        name.text = ""
+        gender.text = ""
+        date_of_birth.text = ""
+        place_of_birth.text = ""
+        biography.text = ""
+    }
+    
+    private func setDefaults(){
+        nameHeader.text = "Name"
+        genderHeader.text = "Gender : "
+        dobHeader.text = "Date Of Birth : "
+        placeOfBirthHeader.text = "Place Of Birth"
+        biographyHeader.text = "Biography"
+        actedInHeader.text = "Acted In"
+    }
     
     var cast : WCastPeople? {
         didSet{
@@ -34,6 +59,8 @@ class CastView: UIView {
     private func updateUI() {
         
         if let person = cast {
+            setDefaults()
+            poster.image = UIImage(named: "darkLoading")
             let castId = person.id
             var imageURL: URL?
             imageURL = cast?.getFullBackdropImageURL()

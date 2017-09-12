@@ -213,8 +213,11 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="780"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CHz-hr-q5c">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="649.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="650"/>
                                         <subviews>
+                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="xRn-k5-IR8">
+                                                <rect key="frame" x="169" y="275" width="37" height="37"/>
+                                            </activityIndicatorView>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2JQ-bB-ryQ">
                                                 <rect key="frame" x="4" y="4" width="367" height="275.5"/>
                                                 <constraints>
@@ -222,16 +225,16 @@
                                                 </constraints>
                                             </imageView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="CZh-kn-z5u">
-                                                <rect key="frame" x="4" y="283.5" width="367" height="36"/>
+                                                <rect key="frame" x="4" y="283.5" width="367" height="36.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="260" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VHQ-5C-9uZ">
-                                                        <rect key="frame" x="0.0" y="0.0" width="367" height="18"/>
+                                                        <rect key="frame" x="0.0" y="0.5" width="367" height="18"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NameVal" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QYG-ZJ-zog">
-                                                        <rect key="frame" x="0.0" y="18" width="367" height="18"/>
+                                                        <rect key="frame" x="0.0" y="18.5" width="367" height="18.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -239,7 +242,7 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B1s-ga-uGh">
-                                                <rect key="frame" x="4" y="323.5" width="367" height="18"/>
+                                                <rect key="frame" x="4" y="324" width="367" height="18"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="260" verticalHuggingPriority="251" text="Gender : " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EOt-gB-Skd">
                                                         <rect key="frame" x="0.0" y="0.0" width="66.5" height="18"/>
@@ -256,7 +259,7 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fye-Qj-fx4">
-                                                <rect key="frame" x="4" y="345.5" width="367" height="18"/>
+                                                <rect key="frame" x="4" y="346" width="367" height="18"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="260" verticalHuggingPriority="251" text="Date Of Birth : " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BP5-eE-kgK">
                                                         <rect key="frame" x="0.0" y="0.0" width="107.5" height="18"/>
@@ -273,7 +276,7 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="vKi-7X-tbT">
-                                                <rect key="frame" x="4" y="367.5" width="367" height="36"/>
+                                                <rect key="frame" x="4" y="368" width="367" height="36"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="260" text="Place Of Birth" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jNK-Hw-5PJ">
                                                         <rect key="frame" x="0.0" y="0.0" width="101" height="18"/>
@@ -290,7 +293,7 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="uNW-Vp-QSU">
-                                                <rect key="frame" x="4" y="407.5" width="367" height="36"/>
+                                                <rect key="frame" x="4" y="408" width="367" height="36"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="261" text="Biography" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eTq-Zx-dEO">
                                                         <rect key="frame" x="0.0" y="0.0" width="75" height="18"/>
@@ -307,7 +310,7 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="SpK-du-umH">
-                                                <rect key="frame" x="4" y="447.5" width="367" height="198"/>
+                                                <rect key="frame" x="4" y="448" width="367" height="198"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="260" text="Acted in" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gac-he-0kK">
                                                         <rect key="frame" x="0.0" y="0.0" width="60.5" height="18"/>
@@ -342,12 +345,15 @@
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="uNW-Vp-QSU" secondAttribute="trailing" constant="4" id="2JB-Ab-LKe"/>
                                             <constraint firstAttribute="bottom" secondItem="SpK-du-umH" secondAttribute="bottom" constant="4" id="3ug-Hg-IWf"/>
+                                            <constraint firstItem="xRn-k5-IR8" firstAttribute="centerX" secondItem="CZh-kn-z5u" secondAttribute="centerX" id="6Gn-0R-2yU"/>
                                             <constraint firstAttribute="trailing" secondItem="2JQ-bB-ryQ" secondAttribute="trailing" constant="4" id="8IT-d1-mWj"/>
+                                            <constraint firstItem="xRn-k5-IR8" firstAttribute="top" secondItem="CHz-hr-q5c" secondAttribute="top" constant="275" id="ADw-MV-d3a"/>
                                             <constraint firstItem="CZh-kn-z5u" firstAttribute="top" secondItem="2JQ-bB-ryQ" secondAttribute="bottom" constant="4" id="FB7-Vn-24F"/>
                                             <constraint firstItem="B1s-ga-uGh" firstAttribute="leading" secondItem="CHz-hr-q5c" secondAttribute="leading" constant="4" id="FFK-Lk-31e"/>
                                             <constraint firstAttribute="trailing" secondItem="fye-Qj-fx4" secondAttribute="trailing" constant="4" id="MCr-u0-LIJ"/>
                                             <constraint firstItem="vKi-7X-tbT" firstAttribute="top" secondItem="fye-Qj-fx4" secondAttribute="bottom" constant="4" id="NNn-0C-kSA"/>
                                             <constraint firstItem="SpK-du-umH" firstAttribute="top" secondItem="uNW-Vp-QSU" secondAttribute="bottom" constant="4" id="NUR-LK-Ne1"/>
+                                            <constraint firstItem="B1s-ga-uGh" firstAttribute="top" secondItem="xRn-k5-IR8" secondAttribute="bottom" constant="12" id="RdZ-Ka-Cxx"/>
                                             <constraint firstAttribute="trailing" secondItem="CZh-kn-z5u" secondAttribute="trailing" constant="4" id="Vd1-vN-qDk"/>
                                             <constraint firstItem="fye-Qj-fx4" firstAttribute="top" secondItem="B1s-ga-uGh" secondAttribute="bottom" constant="4" id="WAC-Jf-bvg"/>
                                             <constraint firstItem="CZh-kn-z5u" firstAttribute="leading" secondItem="CHz-hr-q5c" secondAttribute="leading" constant="4" id="Ys6-sl-keB"/>
@@ -381,17 +387,24 @@
                             <constraint firstAttribute="trailing" secondItem="fKo-EK-aJE" secondAttribute="trailing" id="vyo-3S-0zW"/>
                         </constraints>
                         <connections>
+                            <outlet property="actedInHeader" destination="gac-he-0kK" id="xeh-BM-Azu"/>
                             <outlet property="biography" destination="zWt-aR-kIk" id="Fxe-Xr-ZI8"/>
+                            <outlet property="biographyHeader" destination="eTq-Zx-dEO" id="hgJ-Px-6nQ"/>
                             <outlet property="collectionView" destination="TtW-BZ-NFL" id="1dG-z5-cXp"/>
                             <outlet property="date_of_birth" destination="dyk-De-1Se" id="sd6-Es-J5K"/>
+                            <outlet property="dobHeader" destination="BP5-eE-kgK" id="mHD-Ao-Ah6"/>
                             <outlet property="gender" destination="N3F-jx-n7k" id="TsY-Fn-KcX"/>
+                            <outlet property="genderHeader" destination="EOt-gB-Skd" id="DFX-H8-fhj"/>
                             <outlet property="name" destination="QYG-ZJ-zog" id="hMx-X6-Xk2"/>
+                            <outlet property="nameHeader" destination="VHQ-5C-9uZ" id="FtU-c6-Qey"/>
+                            <outlet property="placeOfBirthHeader" destination="jNK-Hw-5PJ" id="61L-Ke-qRg"/>
                             <outlet property="place_of_birth" destination="b4A-fg-XgH" id="rPt-rV-tXY"/>
                             <outlet property="poster" destination="2JQ-bB-ryQ" id="eLf-0A-0rU"/>
                         </connections>
                     </view>
                     <connections>
                         <outlet property="castView" destination="Th1-Jz-qPv" id="HOJ-nI-tci"/>
+                        <outlet property="spinner" destination="xRn-k5-IR8" id="s7I-nQ-bpr"/>
                         <segue destination="PZm-kg-c7b" kind="show" identifier="CastToMovie" id="p3d-bS-CA6"/>
                     </connections>
                 </viewController>

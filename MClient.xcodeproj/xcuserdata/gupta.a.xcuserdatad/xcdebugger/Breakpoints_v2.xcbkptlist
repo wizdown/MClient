@@ -265,13 +265,91 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/CastView.swift"
-            timestampString = "526814107.908798"
+            timestampString = "526874181.605276"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
             landmarkName = "updateUI()"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MClient/CastView.swift"
+            timestampString = "526873947.400817"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "13"
+            endingLineNumber = "13"
+            landmarkName = "CastView"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MClient.CastView.poster.getter : weak Swift.ImplicitlyUnwrappedOptional&lt;__ObjC.UIImageView&gt;"
+                  moduleName = "MClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/CastView.swift"
+                  timestampString = "526873948.962659"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "27">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MClient.CastView.poster.setter : weak Swift.ImplicitlyUnwrappedOptional&lt;__ObjC.UIImageView&gt;"
+                  moduleName = "MClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/CastView.swift"
+                  timestampString = "526873948.966061"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "42">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MClient.CastView.init (frame : __C.CGRect) -&gt; MClient.CastView"
+                  moduleName = "MClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/CastView.swift"
+                  timestampString = "526873948.971816"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "75">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MClient.CastView.init (coder : __ObjC.NSCoder) -&gt; Swift.Optional&lt;MClient.CastView&gt;"
+                  moduleName = "MClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/CastView.swift"
+                  timestampString = "526873948.975369"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "40">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

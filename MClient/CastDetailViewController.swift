@@ -12,11 +12,17 @@ fileprivate var itemsPerColumn : CGFloat = 1
 fileprivate let sectionInsets = UIEdgeInsets(top: 5.0 , left: 5.0 , bottom: 5.0 , right: 5.0 )
 
 class CastDetailViewController: UIViewController , UICollectionViewDataSource , UICollectionViewDelegate {
-
+    
+   
+  
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
     @IBOutlet var castView: CastView!
+    
     var _cast: WCastPeople?
     
     private var _movies = [[WMovie]]()
+ 
 
     
     override func viewDidLoad() {
@@ -25,7 +31,9 @@ class CastDetailViewController: UIViewController , UICollectionViewDataSource , 
         castView.collectionView.register(UINib(nibName: "newMovieCell", bundle: nil) , forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
         castView.collectionView.delegate = self
         castView.collectionView.dataSource = self
+        castView.clearDefaults()
         if _cast != nil {
+            spinner?.startAnimating()
             getCastDetails()
             getMovieCredits()
         }
@@ -37,6 +45,9 @@ class CastDetailViewController: UIViewController , UICollectionViewDataSource , 
             _cast = updatedCast
             print("Load ==> Cast Details Updated")
             castView.cast = _cast
+            spinner?.stopAnimating()
+            spinner?.removeFromSuperview()
+
         }
         else {
             print("Unable to fetch Cast Details")
