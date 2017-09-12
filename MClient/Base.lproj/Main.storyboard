@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F2073" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VaN-C5-fdb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F2073" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ytM-q1-2ra">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -495,6 +495,77 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TlK-og-oL6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2400.8000000000002" y="1694.3028485757122"/>
+        </scene>
+        <!--Start Up View Controller-->
+        <scene sceneID="sHC-7E-dx7">
+            <objects>
+                <viewController storyboardIdentifier="StartUpViewControllerId" id="ytM-q1-2ra" customClass="StartUpViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="f7z-zT-Crs"/>
+                        <viewControllerLayoutGuide type="bottom" id="XDr-sf-tN8"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ccW-Ma-GgK">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="PfQ-qJ-Cpd">
+                                <rect key="frame" x="160" y="290" width="55" height="87"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MTk-lE-Pgu">
+                                        <rect key="frame" x="0.0" y="0.0" width="55" height="39"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                        <state key="normal" title="Login"/>
+                                        <connections>
+                                            <segue destination="Grr-O6-MqP" kind="show" id="UJX-Fm-2pC"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Raf-5D-hTR">
+                                        <rect key="frame" x="0.0" y="48" width="55" height="39"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                        <state key="normal" title="Skip"/>
+                                        <connections>
+                                            <action selector="performSkip:" destination="ytM-q1-2ra" eventType="touchUpInside" id="zq3-vU-tFY"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="PfQ-qJ-Cpd" firstAttribute="centerY" secondItem="ccW-Ma-GgK" secondAttribute="centerY" id="8dO-IG-Xbw"/>
+                            <constraint firstItem="PfQ-qJ-Cpd" firstAttribute="centerX" secondItem="ccW-Ma-GgK" secondAttribute="centerX" id="gdr-KI-q0X"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="loginButton" destination="MTk-lE-Pgu" id="6wf-Tl-qn2"/>
+                        <outlet property="skipButton" destination="Raf-5D-hTR" id="J81-jW-4a6"/>
+                        <segue destination="VaN-C5-fdb" kind="show" identifier="startupToTabSegue" id="ne7-CX-ZOo"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="etO-ie-aNq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1180" y="855.9220389805098"/>
+        </scene>
+        <!--Login View Controller-->
+        <scene sceneID="G73-LP-63g">
+            <objects>
+                <viewController id="Grr-O6-MqP" customClass="LoginViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OpX-8C-kQ7"/>
+                        <viewControllerLayoutGuide type="bottom" id="Xnt-b6-LL7"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="WdB-z2-kIO">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="ytM-q1-2ra" kind="show" identifier="loginToStartupSegue" id="oan-FF-HjE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bnu-Kv-TQF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-473" y="175"/>
         </scene>
         <!--Tab Bar View Controller-->
         <scene sceneID="gu3-oL-4ef">

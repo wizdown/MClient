@@ -29,6 +29,7 @@ class MovieView: UIView {
     private func updateUI() {
         
         let movieId = movie?.id
+        backdrop.image = UIImage(named: "darLoading" )
         var imageURL: URL?
         imageURL = movie?.getFullBackdropImageURL()
         if imageURL == nil {

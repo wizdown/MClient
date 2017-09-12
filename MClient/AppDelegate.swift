@@ -14,7 +14,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        print("url: \(url)")
+        var request_token: String? = nil
+        if let token = URLComponents(string: url.absoluteString)?.queryItems?
+            .first(where: { $0.name == "request_token" })?.value {
+            request_token = token
+            print("Authenticated Token : \(token)")
+        }
+        //extract data from url here
+        
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let initialViewController = storyboard.instantiateViewController(withIdentifier: "StartUpViewControllerId")
+        if let startController = initialViewController as? StartUpViewController{
+            if request_token == nil {
+                startController.auth = Auth(authFailed: true)
+            }
+            else{
+                startController.auth = Auth(authFailed: false, authToken: request_token)
+            }
+        }
+        self.window?.rootViewController = initialViewController
+        self.window?.makeKeyAndVisible()
+        return true
+    }
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 //        window?.tintColor = themeColor
