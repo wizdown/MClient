@@ -21,6 +21,7 @@
 		0F431C271F6644F0008DF236 /* CastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F431C261F6644F0008DF236 /* CastView.swift */; };
 		0F431C2D1F67E072008DF236 /* StartUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F431C2C1F67E072008DF236 /* StartUpViewController.swift */; };
 		0F431C2F1F67E08C008DF236 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F431C2E1F67E08C008DF236 /* LoginViewController.swift */; };
+		0F431C321F67FCC8008DF236 /* mclient.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0F431C301F67FCC8008DF236 /* mclient.xcdatamodeld */; };
 		0FB5C2141F554729005708AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5C2131F554729005708AA /* AppDelegate.swift */; };
 		0FB5C2191F55472A005708AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FB5C2171F55472A005708AA /* Main.storyboard */; };
 		0FB5C21B1F55472A005708AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FB5C21A1F55472A005708AA /* Assets.xcassets */; };
@@ -49,6 +50,7 @@
 		0F431C261F6644F0008DF236 /* CastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CastView.swift; sourceTree = "<group>"; };
 		0F431C2C1F67E072008DF236 /* StartUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartUpViewController.swift; sourceTree = "<group>"; };
 		0F431C2E1F67E08C008DF236 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		0F431C311F67FCC8008DF236 /* mclient.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = mclient.xcdatamodel; sourceTree = "<group>"; };
 		0FB5C2101F554729005708AA /* MClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FB5C2131F554729005708AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0FB5C2181F55472A005708AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -75,6 +77,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0F431C331F680205008DF236 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				0F431C2C1F67E072008DF236 /* StartUpViewController.swift */,
+				0F431C2E1F67E08C008DF236 /* LoginViewController.swift */,
+				0F38FD391F5FAC2E00F12834 /* UITabBarViewController.swift */,
+				0F38FD4F1F6067CF00F12834 /* MoviesCollectionViewController.swift */,
+				0FB5C2D31F5E894B005708AA /* NowPlayingViewController.swift */,
+				0F38FD3B1F5FC2EE00F12834 /* UpcomingViewController.swift */,
+				0F431C221F658651008DF236 /* SearchViewController.swift */,
+				0F38FD4B1F60106B00F12834 /* MovieDetailsViewController.swift */,
+				0F431C241F65A92D008DF236 /* CastDetailViewController.swift */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		0F431C341F680218008DF236 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0FB5C2CF1F5E6E7C005708AA /* newMovieCell.swift */,
+				0FB5C2D01F5E6E7C005708AA /* newMovieCell.xib */,
+				0F38FD591F6166A500F12834 /* NewCastCell.swift */,
+				0F38FD5A1F6166A500F12834 /* NewCastCell.xib */,
+				0FB5C2CB1F5D3FBE005708AA /* SearchHeaderCell.swift */,
+				0F38FD4D1F60120C00F12834 /* MovieView.swift */,
+				0F431C261F6644F0008DF236 /* CastView.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		0F431C351F680241008DF236 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				0F431C301F67FCC8008DF236 /* mclient.xcdatamodeld */,
+			);
+			name = CoreData;
+			sourceTree = "<group>";
+		};
 		0FB5C2071F554729005708AA = {
 			isa = PBXGroup;
 			children = (
@@ -97,22 +137,9 @@
 				0FB5C2171F55472A005708AA /* Main.storyboard */,
 				0FB5C2251F554734005708AA /* Supporting Files */,
 				0FB5C24F1F555128005708AA /* Wrapper */,
-				0FB5C2CF1F5E6E7C005708AA /* newMovieCell.swift */,
-				0FB5C2D01F5E6E7C005708AA /* newMovieCell.xib */,
-				0F38FD391F5FAC2E00F12834 /* UITabBarViewController.swift */,
-				0F38FD4F1F6067CF00F12834 /* MoviesCollectionViewController.swift */,
-				0FB5C2D31F5E894B005708AA /* NowPlayingViewController.swift */,
-				0F38FD3B1F5FC2EE00F12834 /* UpcomingViewController.swift */,
-				0F431C221F658651008DF236 /* SearchViewController.swift */,
-				0FB5C2CB1F5D3FBE005708AA /* SearchHeaderCell.swift */,
-				0F38FD4B1F60106B00F12834 /* MovieDetailsViewController.swift */,
-				0F38FD4D1F60120C00F12834 /* MovieView.swift */,
-				0F38FD591F6166A500F12834 /* NewCastCell.swift */,
-				0F38FD5A1F6166A500F12834 /* NewCastCell.xib */,
-				0F431C241F65A92D008DF236 /* CastDetailViewController.swift */,
-				0F431C261F6644F0008DF236 /* CastView.swift */,
-				0F431C2C1F67E072008DF236 /* StartUpViewController.swift */,
-				0F431C2E1F67E08C008DF236 /* LoginViewController.swift */,
+				0F431C341F680218008DF236 /* Views */,
+				0F431C331F680205008DF236 /* ViewControllers */,
+				0F431C351F680241008DF236 /* CoreData */,
 			);
 			path = MClient;
 			sourceTree = "<group>";
@@ -225,6 +252,7 @@
 				0FB5C2141F554729005708AA /* AppDelegate.swift in Sources */,
 				0F431C2F1F67E08C008DF236 /* LoginViewController.swift in Sources */,
 				0FB5C2D41F5E894B005708AA /* NowPlayingViewController.swift in Sources */,
+				0F431C321F67FCC8008DF236 /* mclient.xcdatamodeld in Sources */,
 				0F38FD4C1F60106B00F12834 /* MovieDetailsViewController.swift in Sources */,
 				0F38FD3A1F5FAC2E00F12834 /* UITabBarViewController.swift in Sources */,
 				0F38FD561F614E7600F12834 /* WCastPeople.swift in Sources */,
@@ -403,6 +431,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		0F431C301F67FCC8008DF236 /* mclient.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				0F431C311F67FCC8008DF236 /* mclient.xcdatamodel */,
+			);
+			currentVersion = 0F431C311F67FCC8008DF236 /* mclient.xcdatamodel */;
+			path = mclient.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 0FB5C2081F554729005708AA /* Project object */;
 }
