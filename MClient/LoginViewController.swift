@@ -29,7 +29,7 @@ class LoginViewController: UIViewController {
                 if token == nil {
                     print("Token Not found")
                     // Redirect Back To login page
-                    self?.performSegue(withIdentifier: "backToSegue", sender: nil)
+                    self?.performSegue(withIdentifier: "loginToStartupSegue", sender: nil)
                 } else {
                     print("Token : \(token!)")
                     let webv = UIWebView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: CGFloat(UIScreen.main.bounds.width), height: CGFloat(UIScreen.main.bounds.height))))

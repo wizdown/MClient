@@ -166,13 +166,12 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
             print("Setting Movie for Movie Details")
         }
     }
-
 }
 
 extension MoviesCollectionViewController : UICollectionViewDelegateFlowLayout {
     
     
-    //1
+//    1
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -180,7 +179,6 @@ extension MoviesCollectionViewController : UICollectionViewDelegateFlowLayout {
         let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
         let availableWidth = view.frame.width - paddingSpace
         let widthPerItem = availableWidth / itemsPerRow
-        
         return CGSize(width: widthPerItem, height: widthPerItem )
     }
     
