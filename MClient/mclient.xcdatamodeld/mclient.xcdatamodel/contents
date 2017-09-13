@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16F2073" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Movie" representedClassName="Movie" syncable="YES" codeGenerationType="category">
+    <entity name="Movie" representedClassName=".Movie" syncable="YES" codeGenerationType="category">
         <attribute name="backdrop_path" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="genre" attributeType="String" syncable="YES"/>
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -11,7 +11,7 @@
         <attribute name="title" attributeType="String" syncable="YES"/>
         <relationship name="cast" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="People" inverseName="movieCredits" inverseEntity="People" syncable="YES"/>
     </entity>
-    <entity name="People" representedClassName="People" syncable="YES" codeGenerationType="category">
+    <entity name="People" representedClassName=".People" syncable="YES" codeGenerationType="category">
         <attribute name="biography" attributeType="String" syncable="YES"/>
         <attribute name="date_of_birth" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="gender" attributeType="String" syncable="YES"/>
@@ -22,7 +22,7 @@
         <relationship name="movieCredits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Movie" inverseName="cast" inverseEntity="Movie" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Movie" positionX="-378" positionY="-9" width="128" height="28"/>
+        <element name="Movie" positionX="-378" positionY="-9" width="128" height="178"/>
         <element name="People" positionX="-54" positionY="-9" width="128" height="163"/>
     </elements>
 </model>

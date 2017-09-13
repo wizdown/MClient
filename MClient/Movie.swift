@@ -37,31 +37,22 @@ class Movie: NSManagedObject {
         return _movie
     }
     
-    static func findOrCreateCast(matchingId movie: WMovie, cast : [WCastPeople] , in context : NSManagedObjectContext) throws -> Movie {
+    static func findOrCreateCast(matching movie: WMovie, cast : [WCastPeople] , in context : NSManagedObjectContext) throws -> Movie {
         // The following code assumes that a Movie object has already been created before
         // adding the cast here
-        
-        let request: NSFetchRequest<Movie> = Movie.fetchRequest()
-        request.predicate = NSPredicate(format: "id = %ld", Int64(movie.id))
-        var matches : [Movie]
+        var _movie: Movie
         do {
-            matches = try context.fetch(request)
-            assert(matches.count == 1 , "Movie.findOrCreateMovieCast -- DB Inconsistency")
-        } catch {
-            throw error
-        }
-        
-        for current_cast in cast {
-            do {
-                let new_cast = try People.findOrCreatePeople(matching: current_cast, in: context)
-                matches[0].addToCast(new_cast)
-            }catch {
-                print(error.localizedDescription)
+            _movie  = try Movie.findOrCreateMovie(matching: movie, in: context)
+            for current_cast in cast {
+                do {
+                    let new_cast = try People.findOrCreatePeople(matching: current_cast, in: context)
+                    _movie.addToCast(new_cast)
+                }catch {
+                    print(error.localizedDescription)
+                }
             }
-            
         }
-        return matches[0]
-        
+        return _movie
     }
     
 }
