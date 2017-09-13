@@ -118,7 +118,7 @@ class WMRequest : NSObject {
         let language = URLQueryItem(name: Constants.queryParameter.language.rawValue, value: "en-US")
         let adult_content = URLQueryItem(name: Constants.queryParameter.include_adult.rawValue, value: "false")
         let include_video = URLQueryItem(name: Constants.queryParameter.include_video.rawValue, value: "false")
-        let sort_by = URLQueryItem(name: Constants.queryParameter.sort_by.rawValue,value: "popularity.desc")
+        let sort_by = URLQueryItem(name: Constants.queryParameter.sort_by.rawValue,value: "release_date.asc")
         let release_date = URLQueryItem(name: Constants.queryParameter.primary_release_date_gte.rawValue,value: Date().description.components(separatedBy: " ")[0])
         
         urlComponents.queryItems = [ api_key , language , sort_by, adult_content, include_video, release_date]

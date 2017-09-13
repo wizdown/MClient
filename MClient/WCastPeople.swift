@@ -141,7 +141,6 @@ extension WCastPeople {
             date_of_birth_string.characters.count > 0 ,
             let date_of_birth = dateFormatter.date(from:date_of_birth_string) {
             self.date_of_birth = date_of_birth
-            
         }else {
             self.date_of_birth = nil
         }

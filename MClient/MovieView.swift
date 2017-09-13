@@ -63,19 +63,7 @@ class MovieView: UIView {
             releaseDate.text = Constants.notFound
         }
         
-        var movie_genre: String = ""
-        if let genre_array = movie?.genre ,
-            genre_array.count > 0 {
-            for current_genre in genre_array {
-                if movie_genre.characters.count > 0 {
-                    movie_genre.append(", ")
-                }
-                movie_genre.append(current_genre)
-            }
-            genre.text = movie_genre
-        } else {
-            genre.text = Constants.notFound
-        }
+        genre.text = movie?.genre
     }
 
     override func draw(_ rect: CGRect) {

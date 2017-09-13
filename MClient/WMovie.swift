@@ -21,7 +21,7 @@ struct WMovie {
     let popularity: Double
     let id: Int
     let title: String
-    let genre : [String]
+    let genre : String
 
     
     fileprivate static func performRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ){
@@ -155,13 +155,23 @@ extension WMovie {
         }
 
         
-        var temp_genre: [String] = []
+        var movie_genre: String = ""
         for current_genre_id in genre_ids {
             if let current_genre = Constants.genre[current_genre_id] {
-                temp_genre.append(current_genre)
+                if movie_genre.characters.count > 0 {
+                    movie_genre.append(", ")
+                }
+                movie_genre.append(current_genre)
             }
         }
-        self.genre = temp_genre
+        
+        if(movie_genre.characters.count == 0) {
+            self.genre = Constants.notFound
+
+        }
+        else {
+            self.genre = movie_genre
+        }
 
         //Release Date Initialization
 //        print(json["releaseDate"])
