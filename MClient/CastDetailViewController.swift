@@ -13,8 +13,6 @@ fileprivate let sectionInsets = UIEdgeInsets(top: 5.0 , left: 5.0 , bottom: 5.0 
 
 class CastDetailViewController: UIViewController , UICollectionViewDataSource , UICollectionViewDelegate {
     
-   
-  
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     @IBOutlet var castView: CastView!

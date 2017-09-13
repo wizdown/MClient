@@ -20,6 +20,9 @@ struct WCastPeople {
     
   
     
+    
+    
+    
     static func performGetCastDetailsRequest(request: WCRequest, completion: @escaping (WCastPeople?) -> Void ){
         let url: URL = request.url!
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
@@ -38,7 +41,6 @@ struct WCastPeople {
                 completion(cast)
             }
         }
-        
         // put handler here
         task.resume()
     }

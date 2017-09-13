@@ -1,5 +1,5 @@
 //
-//  People.swift
+//  Person.swift
 //  MClient
 //
 //  Created by gupta.a on 13/09/17.
@@ -10,41 +10,41 @@ import UIKit
 import CoreData
 
 class Person: NSManagedObject {
-    static func findOrCreatePeople(matching people: WCastPeople , in context: NSManagedObjectContext) throws -> Person {
+    
+    static func findOrCreatePerson(matching person: WCastPeople , in context: NSManagedObjectContext) throws -> Person {
     let request : NSFetchRequest<Person> = Person.fetchRequest()
-        request.predicate = NSPredicate(format: "id = %ld", Int64(people.id))
+        request.predicate = NSPredicate(format: "id = %ld", Int64(person.id))
         do {
             let matches = try context.fetch(request)
             if matches.count > 0 {
-                assert(matches.count == 1 , "People.findOrCreatePeople -- DB Inconsistency")
+                assert(matches.count == 1 , "person.findOrCreatePerson -- DB Inconsistency")
                 return matches[0]
             }
         } catch {
             throw error
         }
         
-        let _people = Person(context: context)
-        _people.id = Int64(people.id)
-        _people.biography = people.biography
-        _people.date_of_birth = people.date_of_birth as NSDate?
-        _people.gender = people.gender
-        _people.name = people.name
-        _people.place_of_birth = people.place_of_birth
-        _people.profile_path = people.profile_path
+        let _person = Person(context: context)
+        _person.id = Int64(person.id)
+        _person.biography = person.biography
+        _person.date_of_birth = person.date_of_birth as NSDate?
+        _person.gender = person.gender
+        _person.name = person.name
+        _person.place_of_birth = person.place_of_birth
+        _person.profile_path = person.profile_path
         
-        return _people
+        return _person
     }
     
-    static func findOrCreateMovieCredits(matching people: WCastPeople, movies: [WMovie] , in context: NSManagedObjectContext ) throws -> Person {
-        // the following code assumes that a People object has already been created
-        // before adding his/her movie credits
+    
+    static func findOrCreateMovieCredits(matching person: WCastPeople, movies: [WMovie] , in context: NSManagedObjectContext ) throws -> Person {
         
         let request: NSFetchRequest<Person> = Person.fetchRequest()
-        request.predicate = NSPredicate(format: "id = %ld" , Int64(people.id))
+        request.predicate = NSPredicate(format: "id = %ld" , Int64(person.id))
         var matches: [Person]
         do {
             matches = try context.fetch(request)
-            assert(matches.count == 1, "People.findOrCreateMovieCredits -- DB InConsistency")
+            assert(matches.count == 1, "Person.findOrCreateMovieCredits -- DB InConsistency")
         }
         catch {
             throw error
