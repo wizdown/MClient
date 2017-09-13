@@ -45,7 +45,7 @@ class Movie: NSManagedObject {
             _movie  = try Movie.findOrCreateMovie(matching: movie, in: context)
             for current_cast in cast {
                 do {
-                    let new_cast = try People.findOrCreatePeople(matching: current_cast, in: context)
+                    let new_cast = try Person.findOrCreatePeople(matching: current_cast, in: context)
                     _movie.addToCast(new_cast)
                 }catch {
                     print(error.localizedDescription)

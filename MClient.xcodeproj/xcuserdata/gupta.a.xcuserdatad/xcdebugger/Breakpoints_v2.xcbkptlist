@@ -374,38 +374,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MClient/MovieDetailsViewController.swift"
-            timestampString = "526990290.353535"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
-            landmarkName = "MovieDetailsViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MClient/MovieDetailsViewController.swift"
-            timestampString = "526990290.353535"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
-            landmarkName = "MovieDetailsViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "MClient/Movie.swift"
             timestampString = "526987310.531467"
             startingColumnNumber = "9223372036854775807"
@@ -423,11 +391,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/MovieDetailsViewController.swift"
-            timestampString = "526990310.20588"
+            timestampString = "526992262.09523"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
             landmarkName = "getData()"
             landmarkType = "7">
             <Locations>
@@ -471,11 +439,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/MovieDetailsViewController.swift"
-            timestampString = "526990316.304344"
+            timestampString = "526992262.09523"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
             landmarkName = "getData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -487,11 +455,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/MovieDetailsViewController.swift"
-            timestampString = "526991018.462153"
+            timestampString = "526992262.09523"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
             landmarkName = "insertCast(_:)"
             landmarkType = "7">
          </BreakpointContent>

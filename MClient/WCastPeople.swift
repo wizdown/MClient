@@ -146,7 +146,7 @@ extension WCastPeople {
         }
     }
     
-    init(person: People){
+    init(person: Person){
         name = person.name!
         id = Int(person.id)
         profile_path = person.profile_path

@@ -9,9 +9,9 @@
 import UIKit
 import CoreData
 
-class People: NSManagedObject {
-    static func findOrCreatePeople(matching people: WCastPeople , in context: NSManagedObjectContext) throws -> People {
-    let request : NSFetchRequest<People> = People.fetchRequest()
+class Person: NSManagedObject {
+    static func findOrCreatePeople(matching people: WCastPeople , in context: NSManagedObjectContext) throws -> Person {
+    let request : NSFetchRequest<Person> = Person.fetchRequest()
         request.predicate = NSPredicate(format: "id = %ld", Int64(people.id))
         do {
             let matches = try context.fetch(request)
@@ -23,7 +23,7 @@ class People: NSManagedObject {
             throw error
         }
         
-        let _people = People(context: context)
+        let _people = Person(context: context)
         _people.id = Int64(people.id)
         _people.biography = people.biography
         _people.date_of_birth = people.date_of_birth as NSDate?
@@ -35,13 +35,13 @@ class People: NSManagedObject {
         return _people
     }
     
-    static func findOrCreateMovieCredits(matching people: WCastPeople, movies: [WMovie] , in context: NSManagedObjectContext ) throws -> People {
+    static func findOrCreateMovieCredits(matching people: WCastPeople, movies: [WMovie] , in context: NSManagedObjectContext ) throws -> Person {
         // the following code assumes that a People object has already been created
         // before adding his/her movie credits
         
-        let request: NSFetchRequest<People> = People.fetchRequest()
+        let request: NSFetchRequest<Person> = Person.fetchRequest()
         request.predicate = NSPredicate(format: "id = %ld" , Int64(people.id))
-        var matches: [People]
+        var matches: [Person]
         do {
             matches = try context.fetch(request)
             assert(matches.count == 1, "People.findOrCreateMovieCredits -- DB InConsistency")

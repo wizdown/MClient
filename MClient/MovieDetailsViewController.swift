@@ -33,38 +33,8 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         super.viewDidLoad()
         movieView.castCollectionView.register(UINib(nibName: "NewCastCell", bundle: nil), forCellWithReuseIdentifier: Constants.castCellReuseIdentifier)
         getData()
-        // Do any additional setup after loading the view.
     }
-    
-//    private func getData(){
-//        if let contents = movie {
-//            movieView.movie = contents
-//            
-//            if let context: NSManagedObjectContext = container?.viewContext {
-//                context.perform {
-//                    let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context)
-//                    try? context.save()
-//                    if db_movie?.cast?.count == 0 {
-//                        self.getResults()
-//                    } else {
-//                        if let db_cast = db_movie?.cast?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [People] {
-//                            
-//                            var temp_cast = [WCastPeople]()
-//                            for current_person in db_cast {
-//                                temp_cast.append(WCastPeople(person: current_person))
-//                            }
-//                            self.insertCast(temp_cast)
-//                        }
-//                        else {
-//                            self.getResults()
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
 
-    
     private func getData() {
         if let contents = movie {
             movieView.movie = contents
@@ -76,7 +46,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
                     self.getResults()
                 } else {
                     
-                    if let db_cast = db_movie?.cast?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [People] {
+                    if let db_cast = db_movie?.cast?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
                         var temp_cast = [WCastPeople]()
                         for current_person in db_cast {
                             temp_cast.append(WCastPeople(person: current_person))
