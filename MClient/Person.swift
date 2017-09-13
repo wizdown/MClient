@@ -26,16 +26,42 @@ class Person: NSManagedObject {
         
         let _person = Person(context: context)
         _person.id = Int64(person.id)
-        _person.biography = person.biography
-        _person.date_of_birth = person.date_of_birth as NSDate?
         _person.gender = person.gender
         _person.name = person.name
-        _person.place_of_birth = person.place_of_birth
         _person.profile_path = person.profile_path
+        
+        _person.place_of_birth = person.place_of_birth
+        _person.date_of_birth = person.date_of_birth as NSDate?
+        _person.biography = person.biography
         
         return _person
     }
     
+    func hasCompleteInfo(_ person : Person){
+        if person.date_of_birth == nil ,
+            person.biography == Constants.notFound ,
+            person.place_of_birth == Constants.notFound
+        {
+            
+            return false
+        }
+        return true
+    }
+    
+    static func addAditionalPersonDetails(matching person: WCastPeople, in context: NSManagedObjectContext) throws -> Person {
+       // This fn saves extra details of the person that weren't saved in its previous call
+        var _person: Person
+        do {
+            _person = Person.findOrCreatePerson(matching: person, in: context)
+            _person.date_of_birth = person.date_of_birth as NSDate?
+            _person.biography = person.biography
+            _person.place_of_birth = person.place_of_birth
+        } catch{
+            throw error
+        }
+        return _person
+    }
+
     
     static func findOrCreateMovieCredits(matching person: WCastPeople, movies: [WMovie] , in context: NSManagedObjectContext ) throws -> Person {
         
