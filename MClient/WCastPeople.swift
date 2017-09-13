@@ -144,9 +144,16 @@ extension WCastPeople {
         }else {
             self.date_of_birth = nil
         }
-
-        
-        
+    }
+    
+    init(person: People){
+        name = person.name!
+        id = Int(person.id)
+        profile_path = person.profile_path
+        biography = person.biography
+        date_of_birth = person.date_of_birth as Date?
+        place_of_birth = person.place_of_birth
+        gender = person.gender
     }
     
     

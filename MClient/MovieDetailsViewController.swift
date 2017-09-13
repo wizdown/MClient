@@ -7,12 +7,17 @@
 //
 
 import UIKit
+import CoreData
 
 fileprivate var itemsPerColumn : CGFloat = 1
 fileprivate let sectionInsets = UIEdgeInsets(top: 5.0 , left: 5.0 , bottom: 5.0 , right: 5.0 )
 
 class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , UICollectionViewDataSource {
-
+    
+    var container: NSPersistentContainer? =
+        (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+    
+    
     @IBOutlet weak var movieView: MovieView! {
         didSet{
             movieView.castCollectionView.delegate = self
@@ -28,12 +33,44 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         super.viewDidLoad()
         movieView.castCollectionView.register(UINib(nibName: "NewCastCell", bundle: nil), forCellWithReuseIdentifier: Constants.castCellReuseIdentifier)
         _cast.removeAll()
-        if let contents = movie {
-            movieView.movie = contents
-            getResults()
-        }
+        getData()
         // Do any additional setup after loading the view.
     }
+    
+    private func getData(){
+        if let contents = movie {
+            movieView.movie = contents
+            
+            if let context = container?.viewContext {
+                context.perform {
+                    let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context)
+                    if db_movie?.cast?.count == 0 {
+                        self.getResults()
+                    } else {
+                        if let db_cast = db_movie?.cast?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [People] {
+                            
+                            var temp_cast = [WCastPeople]()
+                            for current_person in db_cast {
+                                temp_cast.append(WCastPeople(person: current_person))
+                            }
+                            self.insertCast(temp_cast)
+                        }
+                        else {
+                            self.getResults()
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private func updateCast(_ cast : [WCastPeople]) {
+        container?.performBackgroundTask { context in
+            _ = try? Movie.findOrCreateCast(matchingId: self.movie!, cast: cast, in: context)
+            try? context.save()
+        }
+    }
+    
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         performSegue(withIdentifier: "castDetailSegue", sender: indexPath)
@@ -65,6 +102,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
                 WMovie.performGetCastForAMovieRequest(request: request!) { [weak self] cast in
                     DispatchQueue.main.async {
                         self?.insertCast(cast)
+                        self?.updateCast(cast)
                     }
                 }
             }
