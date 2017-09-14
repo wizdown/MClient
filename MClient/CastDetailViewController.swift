@@ -35,45 +35,39 @@ class CastDetailViewController: UIViewController , UICollectionViewDataSource , 
         
         if let contents = _cast {
             spinner?.startAnimating()
-//            container?.performBackgroundTask{ context in
-//                let db_person = try? Person.findOrCreatePerson(matching: contents, in: context)
-//                try? context.save()
-//                print("Printing the Db_Person")
-////                print(db_person?.name)
-//                print(db_person)
-//                print("Cast_Person")
-//                print(contents)
-//                if db_person != nil , db_person!.hasCompleteInfo {
-//                    if db_person!.hasCompleteInfo == true {
-//                        print("Complete Info")
-//                    }
-//                    else {
-//                        print("Nah")
-//                    }
+            container?.performBackgroundTask{ context in
+                let db_person = try? Person.findOrCreatePerson(matching: contents, in: context)
+                try? context.save()
+
+                if db_person != nil , db_person!.hasCompleteInfo {
+                
 //                    // Check for movieCredits only
-//                    DispatchQueue.main.async {
-//                     self.updateCast(cast: WCastPeople(person: db_person!))   
-//                    }
-//                    if db_person?.movieCredits?.count == 0 {
-//                        self.getMovieCredits()
-//                    } else {
-//                        if let db_movie_credits = db_person?.movieCredits?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Movie] {
-//                            var temp_movieCredits = [WMovie]()
-//                            for current_credit in db_movie_credits {
-//                                temp_movieCredits.append(WMovie(credit: current_credit))
-//                            }
-//                            DispatchQueue.main.async { [weak self] in
-//                                self?.insertMovieCredits(movies: temp_movieCredits)
-//                            }
-//                        }
-//                    }
-//                }
-//                else {
-                    // get Both Info
+                    let fetched_person = WCastPeople(person: db_person!)
+                    DispatchQueue.main.async {
+                        self.updateCast(cast: fetched_person)
+                    }
+                    
+
+                    if db_person?.movieCredits?.count == 0 {
+                        self.getMovieCredits()
+                    } else {
+                        if let db_movie_credits = db_person?.movieCredits?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Movie] {
+                            var temp_movieCredits = [WMovie]()
+                            for current_credit in db_movie_credits {
+                                temp_movieCredits.append(WMovie(credit: current_credit))
+                            }
+                            DispatchQueue.main.async { [weak self] in
+                                self?.insertMovieCredits(movies: temp_movieCredits)
+                            }
+                        }
+                    }
+                }
+                else {
+//                     get Both Info
                     self.getCastDetails()
                     self.getMovieCredits()
-//                }
-//            }
+                }
+            }
         }
         
     }
@@ -126,7 +120,7 @@ class CastDetailViewController: UIViewController , UICollectionViewDataSource , 
                 WCastPeople.performMovieCreditsRequest(request: request!) { [weak self] movies in
                     DispatchQueue.main.async {
                         self?.insertMovieCredits(movies: movies)
-//                        self?.updateMovieCreditsInDB(movies)
+                        self?.updateMovieCreditsInDB(movies)
                     }
                 }
             }
@@ -143,7 +137,7 @@ class CastDetailViewController: UIViewController , UICollectionViewDataSource , 
                 WCastPeople.performGetCastDetailsRequest(request: request!) { [weak self] cast in
                     DispatchQueue.main.async {
                         self?.updateCast(cast: cast)
-//                        self?.updateCompleteCastInDb(cast!)
+                        self?.updateCompleteCastInDb(cast!)
                     }
                 }
             }
@@ -177,7 +171,7 @@ class CastDetailViewController: UIViewController , UICollectionViewDataSource , 
             if let moviesViewController = segue.destination.contents as? MovieDetailsViewController,
                 let indexPath = sender as? IndexPath {
                 moviesViewController.movie = _movies[indexPath.section][indexPath.row]
-                print("Setting movie for MovieDetailsViewController")
+//                print("Setting movie for MovieDetailsViewController")
         }
     }
     
@@ -208,3 +202,4 @@ extension CastDetailViewController : UICollectionViewDelegateFlowLayout {
         return sectionInsets.top
     }
 }
+//
