@@ -101,8 +101,8 @@ struct WMovie {
                 
                 var cast: [WCastPeople] = []
                 var count = 1
-                if let data = data ,
-                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                if let valid_data = data ,
+                    let json = try? JSONSerialization.jsonObject(with: valid_data, options: []) as? [String: Any] {
                     
                     if let jsonArr = json!["cast"] as? [[String: Any]] {
                         for case let result in jsonArr {
@@ -217,5 +217,18 @@ extension WMovie {
             self.title = Constants.notFound
         }
         
+    }
+    
+    init(credit: Movie) {
+        self.backdrop_path = credit.backdrop_path
+        self.genre = credit.genre!
+        self.id = Int(credit.id)
+        self.overview = credit.overview!
+        self.popularity = credit.popularity
+        self.poster_path = credit.poster_path
+        self.release_date = credit.release_date as Date?
+        self.title = credit.title!
+        self.original_title = Constants.notFound
+        self.original_language = Constants.notFound
     }
 }

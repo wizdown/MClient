@@ -37,7 +37,6 @@ class Movie: NSManagedObject {
         return _movie
     }
     
-
     
     static func findOrCreateCast(matching movie: WMovie, cast : [WCastPeople] , in context : NSManagedObjectContext) throws -> Movie {
         // The following code assumes that a Movie object has already been created before
@@ -51,8 +50,12 @@ class Movie: NSManagedObject {
                     _movie.addToCast(new_cast)
                 }catch {
                     print(error.localizedDescription)
+                    throw error
                 }
             }
+        } catch {
+            print(error.localizedDescription)
+            throw error
         }
         return _movie
     }

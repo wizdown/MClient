@@ -13,11 +13,14 @@ class Person: NSManagedObject {
     
     static func findOrCreatePerson(matching person: WCastPeople , in context: NSManagedObjectContext) throws -> Person {
     let request : NSFetchRequest<Person> = Person.fetchRequest()
+        request.returnsObjectsAsFaults = false
+
         request.predicate = NSPredicate(format: "id = %ld", Int64(person.id))
         do {
             let matches = try context.fetch(request)
             if matches.count > 0 {
                 assert(matches.count == 1 , "person.findOrCreatePerson -- DB Inconsistency")
+//                print(matches[0])
                 return matches[0]
             }
         } catch {
@@ -37,10 +40,10 @@ class Person: NSManagedObject {
         return _person
     }
     
-    func hasCompleteInfo(_ person : Person){
-        if person.date_of_birth == nil ,
-            person.biography == Constants.notFound ,
-            person.place_of_birth == Constants.notFound
+    var hasCompleteInfo : Bool {
+        if self.date_of_birth == nil ,
+            self.biography == Constants.notFound,
+            self.place_of_birth == Constants.notFound
         {
             
             return false
@@ -48,11 +51,12 @@ class Person: NSManagedObject {
         return true
     }
     
+   
     static func addAditionalPersonDetails(matching person: WCastPeople, in context: NSManagedObjectContext) throws -> Person {
        // This fn saves extra details of the person that weren't saved in its previous call
         var _person: Person
         do {
-            _person = Person.findOrCreatePerson(matching: person, in: context)
+            _person = try Person.findOrCreatePerson(matching: person, in: context)
             _person.date_of_birth = person.date_of_birth as NSDate?
             _person.biography = person.biography
             _person.place_of_birth = person.place_of_birth

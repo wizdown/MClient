@@ -41,8 +41,10 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
             container?.performBackgroundTask{ context in
                 let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context)
                 try? context.save()
+                
 //                if let db_movie_cast = db_movie?.cast , db_movie_cast.count == 0 {
-                if db_movie?.cast?.count == 0 {
+                if let db_movie_cast = db_movie?.cast ,
+                    db_movie_cast.count == 0 {
                     self.getResults()
                 } else {
                     
@@ -54,23 +56,43 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
                         DispatchQueue.main.async { [ weak self ] in
                             self?.insertCast(temp_cast)
                         }
-                    } else {
-                        self.getResults()
                     }
                 }
             }
-        
         }
     }
     
     private func updateCastInDB(_ cast : [WCastPeople]) {
         container?.performBackgroundTask { context in
-            _ = try? Movie.findOrCreateCast(matching: self.movie!, cast: cast, in: context)
-            try? context.save()
-            print("Cast and Movie Saved")
+            let db_movie = try? Movie.findOrCreateCast(matching: self.movie!, cast: cast, in: context)
+            print(db_movie?.cast!)
+            do {
+                try context.save()
+                print("Cast and Movie Saved")
+            }catch {
+                print(error.localizedDescription)
+//                throw error
+            }
         }
     }
     
+//    private func updateCastInDB(_ cast : [WCastPeople]) {
+//        container?.performBackgroundTask { context in
+//            let db_movie = try? Movie.findOrCreateCast(matching: self.movie!, cast: cast, in: context)
+//            try? context.save()
+//            print("Cast and Movie Saved")
+//            
+////            self.printAllDcastDetails(db_movie!)
+//        }
+//    }
+//    
+//    private func printAllDcastDetails(_ db_movie : Movie){
+//        if let db_cast = db_movie.cast?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
+//            for current_cast in db_cast {
+//                print(current_cast)
+//            }
+//        }
+//    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         performSegue(withIdentifier: "castDetailSegue", sender: indexPath)
@@ -99,10 +121,12 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         if let id = movie?.id {
             let request = WMRequest.castForMovieRequest(movieId: id)
             if request != nil {
-                WMovie.performGetCastForAMovieRequest(request: request!) { [weak self] cast in
+                WMovie.performGetCastForAMovieRequest(request: request!) {
+                    [weak self]
+                    (cast: [WCastPeople]) in
                     DispatchQueue.main.async { [weak self] in
                         self?.insertCast(cast)
-                        self?.updateCastInDB(cast)
+                        self?.updateCastInDB(cast)  // This call be removed from main thread // Do it later
                     }
                 }
             }
@@ -120,7 +144,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.castCellReuseIdentifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.castCellReuseIdentifier, for: indexPath )
         let cast: WCastPeople = _cast[indexPath.section][indexPath.row]
         if let cell = cell as? NewCastCell {
             cell.cast = cast

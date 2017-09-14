@@ -41,133 +41,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MClient/MoviesCollectionViewController.swift"
-            timestampString = "526449769.609186"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
-            landmarkName = "loadMore()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MClient/NowPlayingViewController.swift"
-            timestampString = "526418221.715756"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
-            landmarkName = "initialize()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MClient/MovieView.swift"
-            timestampString = "526971707.228366"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
-            landmarkName = "updateUI()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MClient/WCRequest.swift"
-            timestampString = "526474518.911253"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "11"
-            endingLineNumber = "11"
-            landmarkName = "WCRequest"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MClient/Constants.swift"
-            timestampString = "526801323.287064"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "23"
-            endingLineNumber = "23"
-            landmarkName = "Constants"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "globalinit_33_BAB547E8575B50CD4E3CECBBF1F4E047_func5"
-                  moduleName = "MClient"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/Constants.swift"
-                  timestampString = "526476469.83225"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "19"
-                  endingLineNumber = "19"
-                  offsetFromSymbolStart = "23">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "MClient.Constants.cellResuseIdentifier.unsafeMutableAddressor : Swift.String"
-                  moduleName = "MClient"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/Constants.swift"
-                  timestampString = "526476469.834759"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "19"
-                  endingLineNumber = "19"
-                  offsetFromSymbolStart = "4">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "static MClient.Constants.cellResuseIdentifier.getter : Swift.String"
-                  moduleName = "MClient"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/Constants.swift"
-                  timestampString = "526476469.836812"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "19"
-                  endingLineNumber = "19"
-                  offsetFromSymbolStart = "48">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "MClient/CastCollectionView.swift"
             timestampString = "526795557.605669"
             startingColumnNumber = "9223372036854775807"
@@ -217,13 +90,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/WCastPeople.swift"
-            timestampString = "526993237.808141"
+            timestampString = "527070505.96256"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "150"
-            endingLineNumber = "150"
-            landmarkName = "WCastPeople"
-            landmarkType = "4">
+            startingLineNumber = "148"
+            endingLineNumber = "148"
+            landmarkName = "init(json:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -233,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/WCastPeople.swift"
-            timestampString = "526993237.808141"
+            timestampString = "527056450.378118"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
             landmarkName = "performGetCastDetailsRequest(request:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -249,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/WCastPeople.swift"
-            timestampString = "526993237.808141"
+            timestampString = "527056450.378118"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
             landmarkName = "init(json:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -371,7 +244,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/Movie.swift"
@@ -390,44 +263,76 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MClient/MovieDetailsViewController.swift"
-            timestampString = "526992262.09523"
+            filePath = "MClient/Movie.swift"
+            timestampString = "527057538.759679"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "findOrCreateCast(matching:cast:in:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MClient/Movie.swift"
+            timestampString = "527067775.820184"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "findOrCreateCast(matching:cast:in:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MClient/MovieDetailsViewController.swift"
+            timestampString = "527068805.402013"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
             landmarkName = "getData()"
             landmarkType = "7">
             <Locations>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "MClient.MovieDetailsViewController.(getData in _45FAEDD827E2167E2EA7D4EEB5A1E134) () -&gt; ()"
+                  symbolName = "MClient.MovieDetailsViewController.((getData in _45FAEDD827E2167E2EA7D4EEB5A1E134) () -&gt; ()).(closure #1)"
                   moduleName = "MClient"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gupta.a/Training/MClient/MClient/MovieDetailsViewController.swift"
-                  timestampString = "526990830.187187"
+                  timestampString = "527070353.851023"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "69"
-                  endingLineNumber = "69"
-                  offsetFromSymbolStart = "38">
+                  startingLineNumber = "46"
+                  endingLineNumber = "46"
+                  offsetFromSymbolStart = "1528">
                </Location>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "MClient.MovieDetailsViewController.(getData in _45FAEDD827E2167E2EA7D4EEB5A1E134) () -&gt; ()"
+                  symbolName = "MClient.MovieDetailsViewController.((getData in _45FAEDD827E2167E2EA7D4EEB5A1E134) () -&gt; ()).(closure #1)"
                   moduleName = "MClient"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gupta.a/Training/MClient/MClient/MovieDetailsViewController.swift"
-                  timestampString = "526990830.189031"
+                  timestampString = "527070353.852955"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "69"
-                  endingLineNumber = "69"
-                  offsetFromSymbolStart = "856">
+                  startingLineNumber = "46"
+                  endingLineNumber = "46"
+                  offsetFromSymbolStart = "1673">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -439,28 +344,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MClient/MovieDetailsViewController.swift"
-            timestampString = "526992262.09523"
+            timestampString = "527070353.762309"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "getData()"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "updateCastInDB(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MClient/MovieDetailsViewController.swift"
-            timestampString = "526992262.09523"
+            filePath = "MClient/WMovie.swift"
+            timestampString = "527070875.348162"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
-            landmarkName = "insertCast(_:)"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
+            landmarkName = "performGetCastForAMovieRequest(request:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

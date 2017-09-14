@@ -9,19 +9,15 @@
 import Foundation
 
 struct WCastPeople {
+    
     let name: String
     let id: Int
     let profile_path: String?
    
-    let biography: String?
+    let biography: String
     let date_of_birth: Date? // Here there might be some ambiguity in some API calls
-    let place_of_birth: String?
-    let gender: String?
-    
-  
-    
-    
-    
+    let place_of_birth: String
+    let gender: String
     
     static func performGetCastDetailsRequest(request: WCRequest, completion: @escaping (WCastPeople?) -> Void ){
         let url: URL = request.url!
@@ -122,13 +118,14 @@ extension WCastPeople {
         } else {
             self.gender = Constants.notFound
         }
-        
+//        
         if let biography = json["biography"] as? String ,
             biography.characters.count > 0 {
             self.biography = biography
         } else {
             self.biography = Constants.notFound
         }
+//        self.biography = Constants.notFound
         
         if let place_of_birth = json["place_of_birth"] as? String,
             place_of_birth.characters.count > 0 {
@@ -136,6 +133,8 @@ extension WCastPeople {
         } else {
             self.place_of_birth = Constants.notFound
         }
+        
+//        self.place_of_birth = Constants.notFound
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -150,12 +149,13 @@ extension WCastPeople {
     
     init(person: Person){
         name = person.name!
+//        name = "Dummy"
         id = Int(person.id)
         profile_path = person.profile_path
-        biography = person.biography
+        biography = person.biography!
         date_of_birth = person.date_of_birth as Date?
-        place_of_birth = person.place_of_birth
-        gender = person.gender
+        place_of_birth = person.place_of_birth!
+        gender = person.gender!
     }
     
     
