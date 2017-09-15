@@ -133,18 +133,15 @@ class UpcomingViewController: MoviesCollectionViewController {
 //    }
     
     override func getResults() {
-        
         if let context = container?.viewContext {
             let date = Movie.getLatestDate(in: context)
             let request = WMRequest.upcomingMoviesRequest(forDateAfterThis: date)
-            if request != nil {
-                WMovie.performRequest(request: request!, completion: { [weak self ]
-                    (movies : [WMovie]) in
-                    DispatchQueue.main.async {
-                            self?.updateDb(movies)
-                    }
-                })
-            }
+            request?.performRequest(request: request!, completion: { [weak self ]
+                (movies : [WMovie]) in
+                DispatchQueue.main.async {
+                    self?.updateDb(movies)
+                }
+            })
         }
     }
     

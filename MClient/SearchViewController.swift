@@ -45,17 +45,15 @@ class SearchViewController: MoviesCollectionViewController, UISearchBarDelegate 
     
     override  func getResults() {
         var request: WMRequest?
-        if _movieRequest != nil {
-            request = _movieRequest!.newer
-        }
-        else {
+        if _movieRequest == nil {
             request = WMRequest.movieSearchRequest(forMovie: searchText!)
+        } else {
+            request = _movieRequest
         }
-        
         if  request != nil {
             _movieRequest = request
             
-            WMovie.performRequest(request: request!) { [weak self] movies in
+            request?.performRequest(request: request!) { [weak self] movies in
                 if movies.count == 0 {
                     self?.didSearchReturnNoResults = true
                 }

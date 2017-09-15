@@ -578,8 +578,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="nvt-p1-VsR" kind="relationship" relationship="viewControllers" id="CYg-ou-pBV"/>
                         <segue destination="oJ8-w1-vym" kind="relationship" relationship="viewControllers" id="B3S-C7-MI9"/>
+                        <segue destination="nvt-p1-VsR" kind="relationship" relationship="viewControllers" id="CYg-ou-pBV"/>
                         <segue destination="KtW-ip-rus" kind="relationship" relationship="viewControllers" id="Emr-ID-dSE"/>
                     </connections>
                 </tabBarController>

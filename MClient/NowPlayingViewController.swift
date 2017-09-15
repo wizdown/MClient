@@ -74,18 +74,13 @@ class NowPlayingViewController:MoviesCollectionViewController {
     
     override func getResults() {
         var request: WMRequest?
-        if _count > 1 {
-            request = _movieRequest?.newer
-        }else {
-            request = WMRequest.nowPlayingMoviesRequest()
-        }
-        if  request != nil {
-            WMovie.performRequest(request: request!) { [weak self] movies in
-                DispatchQueue.main.async{
-                    self?.insertMovies(movies)
-                }
+        request = _movieRequest
+        request?.performRequest(request: request!) { [weak self] movies in
+            DispatchQueue.main.async{
+                self?.insertMovies(movies)
             }
         }
+        
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {

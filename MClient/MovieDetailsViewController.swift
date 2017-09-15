@@ -92,7 +92,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     
     private func updateCastInDB(_ cast : [WCastPeople]) {
         container?.performBackgroundTask { context in
-            let db_movie = try? Movie.findOrCreateCast(matching: self.movie!, cast: cast, in: context)
+            _ = try? Movie.findOrCreateCast(matching: self.movie!, cast: cast, in: context)
 //            print(db_movie?.cast!)
             do {
                 try context.save()
@@ -149,7 +149,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         if let id = movie?.id {
             let request = WMRequest.castForMovieRequest(movieId: id)
             if request != nil {
-                WMovie.performGetCastForAMovieRequest(request: request!) {
+                WMRequest.performGetCastForAMovieRequest(request: request!) {
                     [weak self]
                     (cast: [WCastPeople]) in
                     DispatchQueue.main.async { [weak self] in
