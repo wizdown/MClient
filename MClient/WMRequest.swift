@@ -169,9 +169,8 @@ class WMRequest : NSObject {
     }
 
     
-     func performRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ){
-        let url: URL = request.url!
-        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+     func performRequest(completion: @escaping ([WMovie]) -> Void ){
+        let task = URLSession.shared.dataTask(with: url!) {(data, response, error) in
             
             var movies: [WMovie] = []
             
@@ -196,7 +195,7 @@ class WMRequest : NSObject {
                     
                     if let page_count = json!["total_pages"] as? Int {
                         print("Number of pages : \(page_count)")
-                        request.setMaxPageNumber(to: page_count)
+                        self.setMaxPageNumber(to: page_count)
                     }
                 }
                 

@@ -136,7 +136,7 @@ class UpcomingViewController: MoviesCollectionViewController {
         if let context = container?.viewContext {
             let date = Movie.getLatestDate(in: context)
             let request = WMRequest.upcomingMoviesRequest(forDateAfterThis: date)
-            request?.performRequest(request: request!, completion: { [weak self ]
+            request?.performRequest(completion: { [weak self ]
                 (movies : [WMovie]) in
                 DispatchQueue.main.async {
                     self?.updateDb(movies)

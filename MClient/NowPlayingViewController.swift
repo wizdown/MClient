@@ -49,7 +49,6 @@ class NowPlayingViewController:MoviesCollectionViewController {
     
     override func showData() {
         updateUI()
-        _movieRequest = WMRequest.nowPlayingMoviesRequest()
         getResults()
     }
 
@@ -58,6 +57,7 @@ class NowPlayingViewController:MoviesCollectionViewController {
         _collectionView = collectionView
         _navigationViewControllerTitle = "Now Playing"
         _segueIdentifierForMovieDetails = "NowPlayingToMovieDetailSegue"
+        _movieRequest = WMRequest.nowPlayingMoviesRequest()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -70,14 +70,38 @@ class NowPlayingViewController:MoviesCollectionViewController {
             print("Setting Movie for Movie Details")
         }
     }
+    
+    private func updateDb(movies: [WMovie]) {
+        if let context = container?.viewContext , movies.count > 0 {
+            if _movieRequest?.lastSuccessfulRequestNumber == 1 {
+                let request: NSFetchRequest<Movie> = Movie.fetchRequest()
+                request.predicate = NSPredicate(format: "release_date <= %@", Date() as NSDate)
+                do {
+                    let matches = try context.fetch(request)
+                    if matches.count > 0 {
+                        for current_match in matches {
+                            context.delete(current_match)
+                            try context.save()
+                        }
+                    }
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+            for current_movie in movies {
+                _ = try? Movie.findOrCreateMovie(matching: current_movie, in: context)
+                try? context.save()
+            }
+        }
+        _previousQueryPending = false
+    }
 
     
     override func getResults() {
-        var request: WMRequest?
-        request = _movieRequest
-        request?.performRequest(request: request!) { [weak self] movies in
+        _movieRequest?.performRequest() { [weak self]
+            (movies: [WMovie]) in
             DispatchQueue.main.async{
-                self?.insertMovies(movies)
+                self?.updateDb(movies: movies)
             }
         }
         
