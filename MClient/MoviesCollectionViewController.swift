@@ -28,9 +28,13 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
         //put insertMovies in completion handler for movie request
     }
     
-    func initialize() { // need to override this in subclass
+    func initialize() {
         fatalError("Subclass did not implement initalize()")
-        
+    }
+    
+    func showData() {
+//        fatalError("Subclass did not implement initalize()")
+
     }
     
     // ---------------------------------------------------------------------------------------
@@ -54,10 +58,10 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
         title = _navigationViewControllerTitle
         self._collectionView?.delegate = self
         self._collectionView?.dataSource = self
-        
-        if _movieRequest != nil {
-            getResults()
-        }
+        showData()
+//        if _movieRequest != nil {
+//            getResults()
+//        }
     }
     
     //    private var _timeSinceLastMovieResultsFetch: Date = Date()

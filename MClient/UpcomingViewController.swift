@@ -20,7 +20,6 @@ class UpcomingViewController: MoviesCollectionViewController {
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
 //        { didSet{ updateUI() } }
     
-    //This var shud be private. Put its extension below this class to do so.
     var fetchedResultsController: NSFetchedResultsController<Movie>?
     
     
@@ -30,7 +29,6 @@ class UpcomingViewController: MoviesCollectionViewController {
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
             request.sortDescriptors = [NSSortDescriptor(key: "release_date", ascending: true)]
             request.predicate = NSPredicate(format: "release_date > %@", Date() as NSDate)
-            // Add predicate filtering out date here as well
             
             fetchedResultsController = NSFetchedResultsController<Movie>(
                 fetchRequest: request,
@@ -62,13 +60,15 @@ class UpcomingViewController: MoviesCollectionViewController {
         }
     }
 
+    override func showData() {
+        updateUI()
+        getResults()
+    }
     
     override func initialize() {
         _collectionView = collectionView
         _navigationViewControllerTitle = "Upcoming Movies"
         _segueIdentifierForMovieDetails = "UpcomingToMovieDetailSegue"
-        updateUI()
-        getResults()
     }
     
     private func updateDb(_ movies: [WMovie]) {
@@ -94,9 +94,7 @@ class UpcomingViewController: MoviesCollectionViewController {
 //                        for current_match in matches {
 //                            context.delete(current_match)
 //                            try? context.save()
-//
 //                        }
-//
 //                    }
 //                }catch {
 //                    print(error.localizedDescription)
