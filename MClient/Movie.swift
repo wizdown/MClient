@@ -33,7 +33,7 @@ class Movie: NSManagedObject {
         _movie.poster_path = movie.poster_path
         _movie.title = movie.title
         _movie.release_date = movie.release_date as NSDate?
-        
+        _movie.timestamp = Date() as NSDate?
         return _movie
     }
     

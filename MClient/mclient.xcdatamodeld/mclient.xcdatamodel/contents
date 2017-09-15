@@ -8,6 +8,7 @@
         <attribute name="popularity" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="poster_path" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="release_date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="title" attributeType="String" syncable="YES"/>
         <relationship name="cast" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Person" inverseName="movieCredits" inverseEntity="Person" syncable="YES"/>
     </entity>
@@ -22,7 +23,7 @@
         <relationship name="movieCredits" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Movie" inverseName="cast" inverseEntity="Movie" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Movie" positionX="-378" positionY="-9" width="128" height="178"/>
+        <element name="Movie" positionX="-378" positionY="-9" width="128" height="195"/>
         <element name="Person" positionX="-54" positionY="-9" width="128" height="163"/>
     </elements>
 </model>

@@ -25,7 +25,7 @@ class NowPlayingViewController:MoviesCollectionViewController {
         if let context = container?.viewContext {
             
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: "release_date", ascending: false)]
+            request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
             request.predicate = NSPredicate(format: "release_date <= %@", Date() as NSDate)
             
             fetchedResultsController = NSFetchedResultsController<Movie>(
