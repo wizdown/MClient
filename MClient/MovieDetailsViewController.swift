@@ -35,14 +35,42 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         getData()
     }
 
+//    private func getData() {
+//        if let contents = movie {
+//            movieView.movie = contents
+//            container?.performBackgroundTask{ context in
+//                let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context)
+//                try? context.save()
+//                
+////                if let db_movie_cast = db_movie?.cast , db_movie_cast.count == 0 {
+//                if let db_movie_cast = db_movie?.cast ,
+//                    db_movie_cast.count == 0 {
+//                    self.getResults()
+//                } else {
+//                    
+//                    if let db_cast = db_movie?.cast?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
+//                        var temp_cast = [WCastPeople]()
+//                        for current_person in db_cast {
+//                            temp_cast.append(WCastPeople(person: current_person))
+//                        }
+//                        DispatchQueue.main.async { [ weak self ] in
+//                            self?.insertCast(temp_cast)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+    
     private func getData() {
         if let contents = movie {
             movieView.movie = contents
-            container?.performBackgroundTask{ context in
-                let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context)
-                try? context.save()
+            let context = container?.viewContext
+            context?.perform {
+                let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context!)
+                try? context?.save()
                 
-//                if let db_movie_cast = db_movie?.cast , db_movie_cast.count == 0 {
+                //                if let db_movie_cast = db_movie?.cast , db_movie_cast.count == 0 {
                 if let db_movie_cast = db_movie?.cast ,
                     db_movie_cast.count == 0 {
                     self.getResults()
@@ -65,7 +93,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     private func updateCastInDB(_ cast : [WCastPeople]) {
         container?.performBackgroundTask { context in
             let db_movie = try? Movie.findOrCreateCast(matching: self.movie!, cast: cast, in: context)
-            print(db_movie?.cast!)
+//            print(db_movie?.cast!)
             do {
                 try context.save()
                 print("Cast and Movie Saved")

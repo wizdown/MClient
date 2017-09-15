@@ -60,4 +60,24 @@ class Movie: NSManagedObject {
         return _movie
     }
     
+    
+    // To be used in upcoming request
+    static func getLatestDate(in context: NSManagedObjectContext) -> Date {
+        let request: NSFetchRequest<Movie> = Movie.fetchRequest()
+        request.sortDescriptors = [ NSSortDescriptor(key: "release_date", ascending: true ) ]
+        do {
+            let matches = try context.fetch(request)
+            if matches.count > 0,
+               let date = matches[matches.count-1].release_date as Date? {
+                    return date
+            } else {
+                return Date()
+            }
+        } catch{
+            print(error.localizedDescription)
+            return Date()
+        }
+        
+    }
+    
 }

@@ -55,7 +55,7 @@ class SearchViewController: MoviesCollectionViewController, UISearchBarDelegate 
         if  request != nil {
             _movieRequest = request
             
-            WMovie.performMovieSearchRequest(request: request!) { [weak self] movies in
+            WMovie.performRequest(request: request!) { [weak self] movies in
                 if movies.count == 0 {
                     self?.didSearchReturnNoResults = true
                 }

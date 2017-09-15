@@ -24,14 +24,16 @@ struct WMovie {
     let genre : String
 
     
-    fileprivate static func performRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ){
+     static func performRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ){
         let url: URL = request.url!
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            
+            var movies: [WMovie] = []
+            
             if error != nil {
                 print(error!.localizedDescription)
             } else {
                 
-                var movies: [WMovie] = []
                 var count = 1
                 if let data = data ,
                     let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
@@ -52,27 +54,15 @@ struct WMovie {
                         request.setMaxPageNumber(to: page_count)
                     }
                 }
-                
-                completion(movies)
             }
+            
+            completion(movies)
         }
         
         // put handler here
         task.resume()
     }
-    
-    static func performMovieSearchRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ) {
-        performRequest(request: request, completion: completion)
-    }
-    
-    static func performNowPlayingMoviesRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ) {
-        performRequest(request: request, completion: completion)
 
-    }
-    static func performUpcomingMoviesRequest(request: WMRequest, completion: @escaping ([WMovie]) -> Void ) {
-        performRequest(request: request, completion: completion)
-        
-    }
     
     func getFullPosterImageURL() -> URL? {
         var baseImageURL: String = Constants.basePosterImageURL

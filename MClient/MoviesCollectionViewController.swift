@@ -42,7 +42,6 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
     var _previousQueryPending: Bool = false
 
 
-   
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,8 +75,7 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
 //    }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if _movieRequest != nil ,
-            _previousQueryPending == false ,
+        if _previousQueryPending == false ,
             scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
             loadMore()
         }

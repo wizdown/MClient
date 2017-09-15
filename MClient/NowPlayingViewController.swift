@@ -33,7 +33,7 @@ class NowPlayingViewController:MoviesCollectionViewController {
         }
         
         if  request != nil {
-            WMovie.performNowPlayingMoviesRequest(request: request!) { [weak self] movies in
+            WMovie.performRequest(request: request!) { [weak self] movies in
                 DispatchQueue.main.async{
                     self?.insertMovies(movies)
                 }
