@@ -33,121 +33,237 @@ class CastDetailViewController: UIViewController , UICollectionViewDataSource , 
         castView.collectionView.register(UINib(nibName: "newMovieCell", bundle: nil) , forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
         castView.collectionView.delegate = self
         castView.collectionView.dataSource = self
+        getData()
+    }
+    
+    private func getData(){
         castView.clearDefaults()
-        
         if let contents = _cast {
-            spinner?.startAnimating()
-            container?.performBackgroundTask{ context in
-                let db_person = try? Person.findOrCreatePerson(matching: contents, in: context)
-                try? context.save()
-
-                if db_person != nil , db_person!.hasCompleteInfo {
-                
-//                    // Check for movieCredits only
-                    let fetched_person = WCastPeople(person: db_person!)
-                    DispatchQueue.main.async {
-                        self.updateCast(cast: fetched_person)
+            spinner.startAnimating()
+            container?.performBackgroundTask{ [weak self] context in
+                if let db_person = try? Person.findOrCreatePerson(matching: contents, in: context)
+                {
+                    if (self?.needsPersistence.required)! {
+                        try? context.save()
                     }
-                    
-
-                    if db_person?.movieCredits?.count == 0 {
-                        self.getMovieCredits()
-                    } else {
-                        if let db_movie_credits = db_person?.movieCredits?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Movie] {
-                            var temp_movieCredits = [WMovie]()
-                            for current_credit in db_movie_credits {
-                                temp_movieCredits.append(WMovie(credit: current_credit))
-                            }
-                            DispatchQueue.main.async { [weak self] in
-                                self?.insertMovieCredits(movies: temp_movieCredits)
-                            }
+                    self?.getAndDisplayCastAndMovieCredits(forDbPerson: db_person , context: context)
+                }
+            }
+            
+        }
+    }
+    
+    private func stopAndRemoveSpinner() {
+        spinner.stopAnimating()
+        spinner.removeFromSuperview()
+        
+    }
+    
+    private func getAndDisplayCastAndMovieCredits(forDbPerson db_person : Person , context: NSManagedObjectContext){
+        if db_person.hasCompleteInfo {
+            // Found full cast details(yet to check for movie credits) in DB
+            DispatchQueue.main.async { [ weak self ] in
+                self?.stopAndRemoveSpinner()
+                self?.updateCast(cast: WCastPeople(person: db_person))
+            }
+            self.getAndDisplayMovieCreditsFromNetwork(forDbPerson : db_person, context : context)
+        }
+        else {
+            getAndDisplayCastFromNetwork(forDbPerson: db_person, context: context)
+        }
+    }
+    
+    private func getAndDisplayCastFromNetwork(forDbPerson db_person : Person , context: NSManagedObjectContext) {
+        context.perform {
+            if let id = self._cast?.id {
+                let request = WCRequest.castDetailsRequest(castId: id)
+                request?.performGetCastDetailsRequest{
+                    (person: WCastPeople?) in
+                    if person == nil {
+                        // Request For castDetails Failed. Do something here
+                        DispatchQueue.main.async{ [weak self ] in
+                            self?.stopAndRemoveSpinner()
+                            // Add some sort of displayError here
                         }
+                    } else {
+                        DispatchQueue.main.async { [weak self ] in
+                            self?.stopAndRemoveSpinner()
+                            self?.updateCast(cast: person)
+                        }
+                        self.updateCompleteCastInDb(forPerson: person!, context: context)
+                        self.getAndDisplayMovieCreditsFromNetwork(forDbPerson : db_person, context : context)
                     }
                 }
-                else {
-//                     get Both Info
-                    self.getCastDetails()
-                    self.getMovieCredits()
+            }
+        }
+    }
+    
+    
+    private func getAndDisplayMovieCreditsFromNetwork(forDbPerson db_person: Person, context: NSManagedObjectContext ) {
+        if let id = _cast?.id {
+            let request = WCRequest.movieCreditsRequest(castId: id)
+            request?.performMovieCreditsRequest() { [weak self ]
+                (movieCredits: [WMovie]) in
+                    if movieCredits.count > 0{
+                         DispatchQueue.main.async { [weak self ] in
+                            self?.updateMovieCreditsInView(movies: movieCredits)  // done
+                        }
+                    }else {
+                            // Perform tasks for failure of movie CreditsRequest
+                        self?.updateMovieCreditsFromDb(forDbPerson : db_person , context: context) // make
+                }
+                
+            }
+        }
+    }
+
+    private func updateCompleteCastInDb(forPerson person: WCastPeople, context: NSManagedObjectContext) {
+        if needsPersistence.required {
+            context.perform {
+                do {
+                    _ = try Person.findOrCreatePerson(matching: person , in: context)
+                    try context.save()
+                }
+                catch{
+                    print(error.localizedDescription)
                 }
             }
         }
         
     }
-    
-    private func updateMovieCreditsInDB(_ movieCredits : [WMovie]) {
-        container?.performBackgroundTask { context in
-            _ = try? Person.findOrCreateMovieCredits(matching: self._cast!, movies: movieCredits, in: context)
-            try? context.save()
-            print("Cast and MovieCredits Saved")
-        }
+
+    private func updateMovieCreditsInView(movies: [WMovie]){
+        self._movies.removeAll()
+        self._movies.insert(movies,at : 0)
+        castView.collectionView.reloadData()
+        print("Load ==> Movie Credits Found : \(movies.count)")
     }
-    
-    private func updateCompleteCastInDb(_ cast : WCastPeople){
-        container?.performBackgroundTask{ context  in
-            _ = try? Person.addAditionalPersonDetails(matching: cast, in: context)
-            try? context.save()
-            print("Cast saved")
+
+    private func updateMovieCreditsFromDb(forDbPerson db_person: Person , context: NSManagedObjectContext )
+    {
+        context.perform {
+            if let db_movie_credits = db_person.movieCredits?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Movie] {
+                var temp_movie_credits = [WMovie]()
+                for current_movie_credit in db_movie_credits {
+                    temp_movie_credits.append(WMovie(credit: current_movie_credit))
+                }
+                DispatchQueue.main.async { [weak self] in
+                    self?.updateMovieCreditsInView(movies: temp_movie_credits)
+                }
+            }
         }
     }
     
     private func updateCast(cast: WCastPeople?) {
         if let updatedCast = cast {
-                _cast = updatedCast
-                print("Load ==> Cast Details Updated")
-                castView.cast = _cast
-                spinner?.stopAnimating()
-                spinner?.removeFromSuperview()
-            
+            _cast = updatedCast
+            print("Load ==> Cast Details Updated")
+            castView.cast = _cast
         }
         else {
             print("Unable to fetch Cast Details")
         }
         
     }
-    
-    private func insertMovieCredits(movies: [WMovie]){
-        self._movies.removeAll()
-        self._movies.insert(movies,at : 0) //2
-        //        self.reloadData()
-//        castView.collectionView.insertSections([0])
-        castView.collectionView.reloadData()
-        print("Load ==> Movie Credits Found : \(movies.count)")
-    }
-    
-    private func getMovieCredits(){
-        print("Getting movie credits")
-        if let id = _cast?.id {
-            let request = WCRequest.movieCreditsRequest(castId: id)
-            if request != nil {
-                WCastPeople.performMovieCreditsRequest(request: request!) { [weak self] movies in
-                    DispatchQueue.main.async {
-                        self?.insertMovieCredits(movies: movies)
-                        self?.updateMovieCreditsInDB(movies)
-                    }
-                }
-            }
-        } else {
-            print("MoviesCollectionView: Unable to fetch data")
-        }
-    }
-    
-    private func getCastDetails(){
-        print("Getting Cast Details")
-        if let id = _cast?.id {
-            let request = WCRequest.castDetailsRequest(castId: id)
-            if request != nil {
-                WCastPeople.performGetCastDetailsRequest(request: request!) { [weak self] cast in
-                    DispatchQueue.main.async {
-                        self?.updateCast(cast: cast)
-                        self?.updateCompleteCastInDb(cast!)
-                    }
-                }
-            }
-        } else {
-            print("CastDetailsViewController: Unable to fetch data")
-        }
-    }
-    
+
+
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        
+//        castView.collectionView.register(UINib(nibName: "newMovieCell", bundle: nil) , forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
+//        castView.collectionView.delegate = self
+//        castView.collectionView.dataSource = self
+//        
+//        castView.clearDefaults()
+//        
+//        if let contents = _cast {
+//            spinner?.startAnimating()
+//            container?.performBackgroundTask{ context in
+//                let db_person = try? Person.findOrCreatePerson(matching: contents, in: context)
+//                try? context.save()
+//
+//                if db_person != nil , db_person!.hasCompleteInfo {
+//                
+////                    // Check for movieCredits only
+//                    let fetched_person = WCastPeople(person: db_person!)
+//                    DispatchQueue.main.async {
+//                        self.updateCast(cast: fetched_person)
+//                    }
+//                    if db_person?.movieCredits?.count == 0 {
+//                        self.getMovieCredits()
+//                    } else {
+//                        if let db_movie_credits = db_person?.movieCredits?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Movie] {
+//                            var temp_movieCredits = [WMovie]()
+//                            for current_credit in db_movie_credits {
+//                                temp_movieCredits.append(WMovie(credit: current_credit))
+//                            }
+//                            DispatchQueue.main.async { [weak self] in
+//                                self?.insertMovieCredits(movies: temp_movieCredits)
+//                            }
+//                        }
+//                    }
+//                }
+//                else {
+////                     get Both Info
+//                    self.getCastDetails()
+//                    self.getMovieCredits()
+//                }
+//            }
+//        }
+//    }
+//    
+//    private func updateMovieCreditsInDB(_ movieCredits : [WMovie]) {
+//        container?.performBackgroundTask { context in
+//            _ = try? Person.findOrCreateMovieCredits(matching: self._cast!, movies: movieCredits, in: context)
+//            try? context.save()
+//            print("Cast and MovieCredits Saved")
+//        }
+//    }
+
+//    private func updateCompleteCastInDb(_ cast : WCastPeople){
+//        container?.performBackgroundTask{ context  in
+//            _ = try? Person.addAditionalPersonDetails(matching: cast, in: context)
+//            try? context.save()
+//            print("Cast saved")
+//        }
+//    }
+//    
+//
+//   
+//    private func getMovieCredits(){
+//        print("Getting movie credits")
+//        if let id = _cast?.id {
+//            let request = WCRequest.movieCreditsRequest(castId: id)
+//            if request != nil {
+//                request?.performMovieCreditsRequest(request: request!) { [weak self] movies in
+//                    DispatchQueue.main.async {
+//                        self?.insertMovieCredits(movies: movies)
+//                        self?.updateMovieCreditsInDB(movies)
+//                    }
+//                }
+//            }
+//        } else {
+//            print("MoviesCollectionView: Unable to fetch data")
+//        }
+//    }
+
+//    private func getCastDetails(){
+//        print("Getting Cast Details")
+//        if let id = _cast?.id {
+//            let request = WCRequest.castDetailsRequest(castId: id)
+//            if request != nil {
+//                request?.performGetCastDetailsRequest(request: request!) { [weak self] cast in
+//                    DispatchQueue.main.async {
+//                        self?.updateCast(cast: cast)
+//                        self?.updateCompleteCastInDb(cast!)
+//                    }
+//                }
+//            }
+//        } else {
+//            print("CastDetailsViewController: Unable to fetch data")
+//        }
+//    }
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return _movies.count
     }

@@ -49,6 +49,62 @@ class WCRequest {
             "en-US")]
         return WCRequest(urlComponents: urlComponents)
     }
+    
+    func performGetCastDetailsRequest( completion: @escaping (WCastPeople?) -> Void ){
+        let url: URL = self.url!
+        var cast: WCastPeople? = nil
+
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+            } else {
+                
+                if let data = data ,
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] ,
+                    let result = json {
+                    if let person = WCastPeople(json: result) {
+                        cast = person
+                    }
+                }
+            }
+            completion(cast)
+        }
+        // put handler here
+        task.resume()
+    }
+    
+    func performMovieCreditsRequest( completion: @escaping ([WMovie]) -> Void ){
+        let url: URL = self.url!
+        var movies: [WMovie] = []
+        
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+            } else {
+                
+                var count = 1
+                if let data = data ,
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    
+                    if let jsonArr = json!["cast"] as? [[String: Any]] {
+                        for case let result in jsonArr {
+                            //                            print("Movie \(count)")
+                            //                            print(result)
+                            count = count + 1
+                            if let movie = WMovie(json: result) {
+                                movies.append(movie)
+                            }
+                        }
+                    }
+                }
+            }
+            completion(movies)
+        }
+        
+        // put handler here
+        task.resume()
+    }
+
    
     
 }

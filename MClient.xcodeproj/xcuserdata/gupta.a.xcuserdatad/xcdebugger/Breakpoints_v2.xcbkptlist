@@ -89,29 +89,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MClient/UpcomingViewController.swift"
-            timestampString = "527179892.853009"
+            filePath = "MClient/CastDetailViewController.swift"
+            timestampString = "527188082.957457"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
-            landmarkName = "updateDb(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MClient/MoviesCollectionViewController.swift"
-            timestampString = "527167210.878075"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
-            landmarkName = "loadMore()"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "getAndDisplayCastAndMovieCredits(forDbPerson:context:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

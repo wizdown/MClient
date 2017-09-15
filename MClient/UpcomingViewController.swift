@@ -41,7 +41,6 @@ class UpcomingViewController: MoviesCollectionViewController {
             
             do {
                 try fetchedResultsController?.performFetch()
-                print("Fetch request success")
             } catch {
                 print(error.localizedDescription)
             }

@@ -36,33 +36,6 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         movieView.castCollectionView.register(UINib(nibName: "NewCastCell", bundle: nil), forCellWithReuseIdentifier: Constants.castCellReuseIdentifier)
         getData()
     }
-
-//    private func getData() {
-//        if let contents = movie {
-//            movieView.movie = contents
-//            container?.performBackgroundTask{ context in
-//                let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context)
-//                try? context.save()
-//                
-////                if let db_movie_cast = db_movie?.cast , db_movie_cast.count == 0 {
-//                if let db_movie_cast = db_movie?.cast ,
-//                    db_movie_cast.count == 0 {
-//                    self.getResults()
-//                } else {
-//                    
-//                    if let db_cast = db_movie?.cast?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
-//                        var temp_cast = [WCastPeople]()
-//                        for current_person in db_cast {
-//                            temp_cast.append(WCastPeople(person: current_person))
-//                        }
-//                        DispatchQueue.main.async { [ weak self ] in
-//                            self?.insertCast(temp_cast)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     private func getData() {
         if let contents = movie {
@@ -121,36 +94,6 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         }
         
     }
-
-    
-//    private func getData() {
-//        if let contents = movie {
-//            movieView.movie = contents
-//            let context = container?.viewContext
-//            context?.perform {
-//                let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context!)
-//                try? context?.save()
-//                
-//                //                if let db_movie_cast = db_movie?.cast , db_movie_cast.count == 0 {
-//                if let db_movie_cast = db_movie?.cast ,
-//                    db_movie_cast.count == 0 {
-//                    self.getResults()
-//                } else {
-//                    
-//                    if let db_cast = db_movie?.cast?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
-//                        var temp_cast = [WCastPeople]()
-//                        for current_person in db_cast {
-//                            temp_cast.append(WCastPeople(person: current_person))
-//                        }
-//                        DispatchQueue.main.async { [ weak self ] in
-//                            self?.insertCast(temp_cast)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        
-//    }
     
     private func updateCastInDB(_ cast : [WCastPeople]) {
         container?.performBackgroundTask { context in
@@ -166,23 +109,6 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         }
     }
     
-//    private func updateCastInDB(_ cast : [WCastPeople]) {
-//        container?.performBackgroundTask { context in
-//            let db_movie = try? Movie.findOrCreateCast(matching: self.movie!, cast: cast, in: context)
-//            try? context.save()
-//            print("Cast and Movie Saved")
-//            
-////            self.printAllDcastDetails(db_movie!)
-//        }
-//    }
-//    
-//    private func printAllDcastDetails(_ db_movie : Movie){
-//        if let db_cast = db_movie.cast?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
-//            for current_cast in db_cast {
-//                print(current_cast)
-//            }
-//        }
-//    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         performSegue(withIdentifier: "castDetailSegue", sender: indexPath)

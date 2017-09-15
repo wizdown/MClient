@@ -39,7 +39,7 @@ class NowPlayingViewController:MoviesCollectionViewController {
             
             do {
                 try fetchedResultsController?.performFetch()
-                print("Fetch request success")
+//                print("Fetch request success")
             } catch {
                 print(error.localizedDescription)
             }
