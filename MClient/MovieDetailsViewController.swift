@@ -17,7 +17,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     
-    var needsPersistence: Bool = false
+    var needsPersistence: NeedPersistence = NeedPersistence(isNeeded: false)
     
     
     @IBOutlet weak var movieView: MovieView! {
@@ -67,30 +67,90 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     private func getData() {
         if let contents = movie {
             movieView.movie = contents
-            let context = container?.viewContext
-            context?.perform {
-                let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context!)
-                try? context?.save()
-                
-                //                if let db_movie_cast = db_movie?.cast , db_movie_cast.count == 0 {
-                if let db_movie_cast = db_movie?.cast ,
-                    db_movie_cast.count == 0 {
-                    self.getResults()
-                } else {
-                    
-                    if let db_cast = db_movie?.cast?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
-                        var temp_cast = [WCastPeople]()
-                        for current_person in db_cast {
-                            temp_cast.append(WCastPeople(person: current_person))
-                        }
-                        DispatchQueue.main.async { [ weak self ] in
-                            self?.insertCast(temp_cast)
-                        }
+            container?.performBackgroundTask{ [weak self] context in
+                if let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context) {
+                    if (self?.needsPersistence.required)! {  // Why did xcode force me to unwrap this ?
+                        try? context.save()
                     }
+                    self?.getAndDisplayCastFromNetwork(forDbMovie: db_movie, context: context)
                 }
             }
         }
     }
+    
+    private func getAndDisplayCastFromNetwork(forDbMovie db_movie : Movie , context: NSManagedObjectContext ) {
+        
+        if let request = WMRequest.castForMovieRequest(movieId: Int(db_movie.id)) {
+            
+            WMRequest.performGetCastForAMovieRequest(request: request) {  [weak self]
+                (cast: [WCastPeople]) in
+                if cast.count == 0 {
+                    self?.displayCastUsingDb(forDbMovie: db_movie, context: context)
+                } else {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.insertCast(cast)
+                        self?.saveCastToDb(cast: cast, forMovie: WMovie(credit:db_movie) ,  context: context)
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    private func saveCastToDb(cast : [WCastPeople] ,forMovie movie : WMovie, context: NSManagedObjectContext){
+        if needsPersistence.required {
+            context.perform {
+                _ = try? Movie.findOrCreateCast(matching: movie, cast: cast, in: context)
+                try? context.save()
+                
+            }
+        }
+    }
+    
+    private func displayCastUsingDb(forDbMovie db_movie: Movie, context: NSManagedObjectContext) {
+        context.perform {
+            if let db_cast = db_movie.cast?.sortedArray(using:[NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
+                var temp_cast = [WCastPeople]()
+                for current_person in db_cast {
+                    temp_cast.append(WCastPeople(person: current_person))
+                }
+                DispatchQueue.main.async { [weak self ] in
+                    self?.insertCast(temp_cast)
+                }
+            }
+        }
+        
+    }
+
+    
+//    private func getData() {
+//        if let contents = movie {
+//            movieView.movie = contents
+//            let context = container?.viewContext
+//            context?.perform {
+//                let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context!)
+//                try? context?.save()
+//                
+//                //                if let db_movie_cast = db_movie?.cast , db_movie_cast.count == 0 {
+//                if let db_movie_cast = db_movie?.cast ,
+//                    db_movie_cast.count == 0 {
+//                    self.getResults()
+//                } else {
+//                    
+//                    if let db_cast = db_movie?.cast?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
+//                        var temp_cast = [WCastPeople]()
+//                        for current_person in db_cast {
+//                            temp_cast.append(WCastPeople(person: current_person))
+//                        }
+//                        DispatchQueue.main.async { [ weak self ] in
+//                            self?.insertCast(temp_cast)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        
+//    }
     
     private func updateCastInDB(_ cast : [WCastPeople]) {
         container?.performBackgroundTask { context in
@@ -133,7 +193,10 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         if let castDetailViewController = segue.destination.contents as? CastDetailViewController ,
             let indexPath = sender as? IndexPath {
             castDetailViewController._cast = _cast[indexPath.section][indexPath.row]
+            
             castDetailViewController.needsPersistence = self.needsPersistence
+            castDetailViewController.needsPersistence.incrStepCount()
+            
             print("Setting Cast for Cast Details")
         }
     }

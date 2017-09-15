@@ -56,14 +56,26 @@ class UpcomingViewController: MoviesCollectionViewController {
             let indexPath = sender as? IndexPath ,
             let contents = fetchedResultsController?.object(at: indexPath) {
             movieViewController.movie = WMovie(credit: contents)
-            movieViewController.needsPersistence = true
+            
+            let persistence = NeedPersistence(isNeeded: true)
+            persistence.incrStepCount()
+            
+            movieViewController.needsPersistence = persistence
             print("Setting Movie for Movie Details")
         }
     }
 
     override func showData() {
         updateUI()
-        getResults()
+
+        // Adding check here so that it does not fetch movies that are coming in next 180 days in the initial request
+        let max_required_date = (NSCalendar.current.date(byAdding: Calendar.Component.day, value: 180, to: Date() as Date))!
+        if let context = container?.viewContext {
+            let latest_date = Movie.getLatestDate(in: context)
+            if latest_date <= max_required_date {
+                getResults()
+            }
+        }
     }
     
     override func initialize() {
@@ -83,55 +95,6 @@ class UpcomingViewController: MoviesCollectionViewController {
         _previousQueryPending = false
         
     }
-    
-//    private func updateDb(_ movies: [WMovie]) {
-//        if let context = container?.viewContext , movies.count > 0 {
-//            if _count == 1 {
-//                let request: NSFetchRequest<Movie> = Movie.fetchRequest()
-//                request.predicate = NSPredicate(format: "release_date > %@", Date() as NSDate)
-//                do {
-//                    let matches = try context.fetch(request)
-//                    if matches.count > 0 {
-//                        for current_match in matches {
-//                            context.delete(current_match)
-//                            try? context.save()
-//                        }
-//                    }
-//                }catch {
-//                    print(error.localizedDescription)
-//                }
-//            }
-//            for current_movie in movies {
-//                _ = try? Movie.findOrCreateMovie(matching: current_movie, in: context)
-//                try? context.save()
-//            }
-//
-//        }
-//        _previousQueryPending = false
-//
-//    }
-    
-//     override func getResults() {
-//     
-//        
-//        var request: WMRequest?
-//        if _count > 1 {
-//            request = _movieRequest?.newer
-//        }else {
-//            request = _movieRequest
-//        }
-//        
-//        if  request != nil {
-//            WMovie.performRequest(request: request!) { [weak self]
-//                (movies: [WMovie])  in
-//                DispatchQueue.main.async{
-//                    if movies.count > 0 {
-//                        self?.updateDb(movies)
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     override func getResults() {
         if let context = container?.viewContext {

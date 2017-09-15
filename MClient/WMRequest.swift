@@ -137,13 +137,14 @@ class WMRequest : NSObject {
     }
     
     static func performGetCastForAMovieRequest(request: WCRequest, completion: @escaping ([WCastPeople]) -> Void ){
+        
+        var cast: [WCastPeople] = []
         let url: URL = request.url!
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
                 
-                var cast: [WCastPeople] = []
                 var count = 1
                 if let valid_data = data ,
                     let json = try? JSONSerialization.jsonObject(with: valid_data, options: []) as? [String: Any] {
@@ -159,9 +160,9 @@ class WMRequest : NSObject {
                         }
                     }
                 }
-                
-                completion(cast)
             }
+            completion(cast)
+
         }
         
         // put handler here

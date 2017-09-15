@@ -16,8 +16,8 @@ class CastDetailViewController: UIViewController , UICollectionViewDataSource , 
     
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
-    var needsPersistence : Bool = false
-    
+    var needsPersistence: NeedPersistence = NeedPersistence(isNeeded: false)
+
     @IBOutlet var castView: CastView!
     
     var _cast: WCastPeople?
@@ -174,6 +174,7 @@ class CastDetailViewController: UIViewController , UICollectionViewDataSource , 
                 let indexPath = sender as? IndexPath {
                 moviesViewController.movie = _movies[indexPath.section][indexPath.row]
                 moviesViewController.needsPersistence = self.needsPersistence
+                moviesViewController.needsPersistence.incrStepCount()
 //                print("Setting movie for MovieDetailsViewController")
         }
     }

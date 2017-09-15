@@ -67,7 +67,11 @@ class NowPlayingViewController:MoviesCollectionViewController {
             let indexPath = sender as? IndexPath ,
             let contents = fetchedResultsController?.object(at: indexPath) {
             movieViewController.movie = WMovie(credit: contents)
-            movieViewController.needsPersistence = true
+            
+            let persistence = NeedPersistence(isNeeded: true)
+            persistence.incrStepCount()
+           
+            movieViewController.needsPersistence = persistence
             print("Setting Movie for Movie Details")
         }
     }

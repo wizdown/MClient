@@ -91,3 +91,30 @@ class Constants {
     }
     
 }
+
+class NeedPersistence {
+    private var _required : Bool = false
+    private var stepCount : Int = 0
+    var required: Bool {
+        get {
+            if _required , stepCount <= 2 {
+                return true
+            }
+            else {
+                    return false
+            }
+        }
+    }
+    
+    init(isNeeded : Bool ) {
+        _required = isNeeded
+    }
+    
+    
+    func incrStepCount() {
+        if _required , stepCount < 3 {
+            stepCount = stepCount + 1
+        }
+    }
+    
+}
