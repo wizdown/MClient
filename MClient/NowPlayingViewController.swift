@@ -92,23 +92,27 @@ class NowPlayingViewController:MoviesCollectionViewController {
                     print(error.localizedDescription)
                 }
                 
+                
                 // Deleting Casts with no movie Credits Left
-                let cast_request : NSFetchRequest<Person> = Person.fetchRequest()
-                request.predicate = NSPredicate(format: "movieCredits.count = %ld", 0 )
-                do {
-                    let matches = try context.fetch(cast_request)
-                    if matches.count > 0 {
-                        for current_match in matches {
-                                context.delete(current_match)
+                container?.performBackgroundTask{ background_context in
+                    let cast_request : NSFetchRequest<Person> = Person.fetchRequest()
+                    request.predicate = NSPredicate(format: "movieCredits.count = %ld", 0 )
+                    do {
+                        let matches = try background_context.fetch(cast_request)
+                        if matches.count > 0 {
+                            for current_match in matches {
+                                background_context.delete(current_match)
+                            }
+                            try background_context.save()
+                            print("Deleted \(matches.count) People with no movieCredits")
                         }
-                        try context.save()
-                        print("Deleted \(matches.count) People with no movieCredits")
+                    }
+                    catch {
+                        print("Error in removing cast with no MovieCredits")
+                        print(error.localizedDescription)
                     }
                 }
-                catch {
-                    print("Error in removing cast with no MovieCredits")
-                    print(error.localizedDescription)
-                }
+                
             }
             for current_movie in movies {
                 _ = try? Movie.findOrCreateMovie(matching: current_movie, in: context)
