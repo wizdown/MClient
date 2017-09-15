@@ -17,6 +17,8 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     
+    var needsPersistence: Bool = false
+    
     
     @IBOutlet weak var movieView: MovieView! {
         didSet{
@@ -131,6 +133,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         if let castDetailViewController = segue.destination.contents as? CastDetailViewController ,
             let indexPath = sender as? IndexPath {
             castDetailViewController._cast = _cast[indexPath.section][indexPath.row]
+            castDetailViewController.needsPersistence = self.needsPersistence
             print("Setting Cast for Cast Details")
         }
     }

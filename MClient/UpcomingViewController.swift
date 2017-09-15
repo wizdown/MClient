@@ -56,6 +56,7 @@ class UpcomingViewController: MoviesCollectionViewController {
             let indexPath = sender as? IndexPath ,
             let contents = fetchedResultsController?.object(at: indexPath) {
             movieViewController.movie = WMovie(credit: contents)
+            movieViewController.needsPersistence = true
             print("Setting Movie for Movie Details")
         }
     }

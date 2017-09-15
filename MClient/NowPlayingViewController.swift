@@ -67,6 +67,7 @@ class NowPlayingViewController:MoviesCollectionViewController {
             let indexPath = sender as? IndexPath ,
             let contents = fetchedResultsController?.object(at: indexPath) {
             movieViewController.movie = WMovie(credit: contents)
+            movieViewController.needsPersistence = true
             print("Setting Movie for Movie Details")
         }
     }
@@ -74,6 +75,8 @@ class NowPlayingViewController:MoviesCollectionViewController {
     private func updateDb(movies: [WMovie]) {
         if let context = container?.viewContext , movies.count > 0 {
             if _movieRequest?.lastSuccessfulRequestNumber == 1 {
+                
+                // Deleting old Movies
                 let request: NSFetchRequest<Movie> = Movie.fetchRequest()
                 request.predicate = NSPredicate(format: "release_date <= %@", Date() as NSDate)
                 do {
@@ -84,7 +87,26 @@ class NowPlayingViewController:MoviesCollectionViewController {
                             try context.save()
                         }
                     }
+                    print("Removed old data")
                 } catch {
+                    print(error.localizedDescription)
+                }
+                
+                // Deleting Casts with no movie Credits Left
+                let cast_request : NSFetchRequest<Person> = Person.fetchRequest()
+                request.predicate = NSPredicate(format: "movieCredits.count = %ld", 0 )
+                do {
+                    let matches = try context.fetch(cast_request)
+                    if matches.count > 0 {
+                        for current_match in matches {
+                                context.delete(current_match)
+                        }
+                        try context.save()
+                        print("Deleted \(matches.count) People with no movieCredits")
+                    }
+                }
+                catch {
+                    print("Error in removing cast with no MovieCredits")
                     print(error.localizedDescription)
                 }
             }
