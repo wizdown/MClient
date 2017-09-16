@@ -56,7 +56,7 @@ class UpcomingViewController: MoviesCollectionViewController {
             let contents = fetchedResultsController?.object(at: indexPath) {
             movieViewController.movie = WMovie(credit: contents)
             
-            let persistence = NeedPersistence(isNeeded: true)
+            var persistence = NeedPersistence(isNeeded: true)
             persistence.incrStepCount()
             
             movieViewController.needsPersistence = persistence

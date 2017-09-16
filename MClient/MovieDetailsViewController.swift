@@ -44,6 +44,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
                 if let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context) {
                     if (self?.needsPersistence.required)! {  // Why did xcode force me to unwrap this ?
                         try? context.save()
+                        print("Attempting to save Movie to DB")
                     }
                     self?.getAndDisplayCastFromNetwork(forDbMovie: db_movie, context: context)
                 }
@@ -53,13 +54,16 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     
     private func getAndDisplayCastFromNetwork(forDbMovie db_movie : Movie , context: NSManagedObjectContext ) {
         
+        print("Getting Cast from Network")
         if let request = WMRequest.castForMovieRequest(movieId: Int(db_movie.id)) {
             
             WMRequest.performGetCastForAMovieRequest(request: request) {  [weak self]
                 (cast: [WCastPeople]) in
                 if cast.count == 0 {
+                    print("Couldn't fetch cast from network")
                     self?.displayCastUsingDb(forDbMovie: db_movie, context: context)
                 } else {
+                    print("\(cast.count) cast found")
                     DispatchQueue.main.async { [weak self] in
                         self?.insertCast(cast)
                         self?.saveCastToDb(cast: cast, forMovie: WMovie(credit:db_movie) ,  context: context)
@@ -72,6 +76,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     
     private func saveCastToDb(cast : [WCastPeople] ,forMovie movie : WMovie, context: NSManagedObjectContext){
         if needsPersistence.required {
+            print("Saving Cast to DB")
             context.perform {
                 _ = try? Movie.findOrCreateCast(matching: movie, cast: cast, in: context)
                 try? context.save()
@@ -82,6 +87,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     
     private func displayCastUsingDb(forDbMovie db_movie: Movie, context: NSManagedObjectContext) {
         context.perform {
+            print("Displaying Cast from DB")
             if let db_cast = db_movie.cast?.sortedArray(using:[NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
                 var temp_cast = [WCastPeople]()
                 for current_person in db_cast {
@@ -97,6 +103,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     
     private func updateCastInDB(_ cast : [WCastPeople]) {
         container?.performBackgroundTask { context in
+            print("Saving Cast to DB")
             _ = try? Movie.findOrCreateCast(matching: self.movie!, cast: cast, in: context)
 //            print(db_movie?.cast!)
             do {
@@ -120,8 +127,9 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
             let indexPath = sender as? IndexPath {
             castDetailViewController._cast = _cast[indexPath.section][indexPath.row]
             
-            castDetailViewController.needsPersistence = self.needsPersistence
-            castDetailViewController.needsPersistence.incrStepCount()
+            var persistence = self.needsPersistence
+            persistence.incrStepCount()
+            castDetailViewController.needsPersistence = persistence
             
             print("Setting Cast for Cast Details")
         }

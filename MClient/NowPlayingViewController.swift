@@ -68,7 +68,7 @@ class NowPlayingViewController:MoviesCollectionViewController {
             let contents = fetchedResultsController?.object(at: indexPath) {
             movieViewController.movie = WMovie(credit: contents)
             
-            let persistence = NeedPersistence(isNeeded: true)
+            var persistence = NeedPersistence(isNeeded: true)
             persistence.incrStepCount()
            
             movieViewController.needsPersistence = persistence
@@ -91,7 +91,7 @@ class NowPlayingViewController:MoviesCollectionViewController {
                             try context.save()
                         }
                     }
-                    print("Removed old data")
+                    print("Removed \(matches.count) old movies")
                 } catch {
                     print(error.localizedDescription)
                 }

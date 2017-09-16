@@ -92,9 +92,9 @@ class Constants {
     
 }
 
-class NeedPersistence {
-    private var _required : Bool = false
-    private var stepCount : Int = 0
+struct NeedPersistence {
+    var _required : Bool = false
+     var stepCount : Int = 0
     var required: Bool {
         get {
             if _required , stepCount <= 2 {
@@ -111,7 +111,7 @@ class NeedPersistence {
     }
     
     
-    func incrStepCount() {
+    mutating func incrStepCount() {
         if _required , stepCount < 3 {
             stepCount = stepCount + 1
         }
