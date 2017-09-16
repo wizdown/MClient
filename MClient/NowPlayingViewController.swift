@@ -47,6 +47,13 @@ class NowPlayingViewController:MoviesCollectionViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+//        print("Now Playing will appear")
+        if _movieRequest?.lastSuccessfulRequestNumber == 0 {
+            getResults()
+        }
+    }
+    
     override func showData() {
         updateUI()
         getResults()
@@ -76,48 +83,57 @@ class NowPlayingViewController:MoviesCollectionViewController {
         }
     }
     
+    private func deleteOldMovies() {
+        container?.performBackgroundTask { context in
+            // Deleting old Movies
+            let request: NSFetchRequest<Movie> = Movie.fetchRequest()
+            request.predicate = NSPredicate(format: "release_date <= %@", Date() as NSDate)
+            do {
+                let matches = try context.fetch(request)
+                if matches.count > 0 {
+                    for current_match in matches {
+                        context.delete(current_match)
+                        try context.save()
+                    }
+                }
+                print("Removed \(matches.count) old movies")
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func deleteOldCast() {
+        // Deleting Casts with no movie Credits Left
+        container?.performBackgroundTask{ background_context in
+            let cast_request : NSFetchRequest<Person> = Person.fetchRequest()
+            cast_request.predicate = NSPredicate(format: "movieCredits.@count == 0 " )  // Issue here
+            do {
+                let matches = try background_context.fetch(cast_request)
+                if matches.count > 0 {
+                    for current_match in matches {
+                        background_context.delete(current_match)
+                    }
+                    try background_context.save()
+                    print("Deleted \(matches.count) People with no movieCredits")
+                }
+            }
+            catch {
+                print("Error in removing cast with no MovieCredits")
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     private func updateDb(movies: [WMovie]) {
         if let context = container?.viewContext , movies.count > 0 {
             if _movieRequest?.lastSuccessfulRequestNumber == 1 {
                 
-                // Deleting old Movies
-                let request: NSFetchRequest<Movie> = Movie.fetchRequest()
-                request.predicate = NSPredicate(format: "release_date <= %@", Date() as NSDate)
-                do {
-                    let matches = try context.fetch(request)
-                    if matches.count > 0 {
-                        for current_match in matches {
-                            context.delete(current_match)
-                            try context.save()
-                        }
-                    }
-                    print("Removed \(matches.count) old movies")
-                } catch {
-                    print(error.localizedDescription)
-                }
-                
-                
-                // Deleting Casts with no movie Credits Left
-                container?.performBackgroundTask{ background_context in
-                    let cast_request : NSFetchRequest<Person> = Person.fetchRequest()
-                    request.predicate = NSPredicate(format: "movieCredits.count = %ld", 0 )
-                    do {
-                        let matches = try background_context.fetch(cast_request)
-                        if matches.count > 0 {
-                            for current_match in matches {
-                                background_context.delete(current_match)
-                            }
-                            try background_context.save()
-                            print("Deleted \(matches.count) People with no movieCredits")
-                        }
-                    }
-                    catch {
-                        print("Error in removing cast with no MovieCredits")
-                        print(error.localizedDescription)
-                    }
-                }
+                deleteOldMovies()
+                deleteOldCast()
                 
             }
+            
             for current_movie in movies {
                 _ = try? Movie.findOrCreateMovie(matching: current_movie, in: context)
                 try? context.save()
@@ -128,13 +144,15 @@ class NowPlayingViewController:MoviesCollectionViewController {
 
     
     override func getResults() {
-        _movieRequest?.performRequest() { [weak self]
-            (movies: [WMovie]) in
-            DispatchQueue.main.async{
-                self?.updateDb(movies: movies)
+        if _previousQueryPending == false {
+            _previousQueryPending = true
+            _movieRequest?.performRequest() { [weak self]
+                (movies: [WMovie]) in
+                DispatchQueue.main.async{
+                    self?.updateDb(movies: movies)
+                }
             }
         }
-        
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {

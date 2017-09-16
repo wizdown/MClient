@@ -22,6 +22,7 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
     var _movieRequest: WMRequest?
     
     func getResults() { // need to override this in subclass
+        // This fn needs to set _previousQueryPending whenever it fires a network request
         fatalError("Subclass did not implement getNewMovies()")
         
         //put insertMovies in completion handler for movie request
@@ -85,7 +86,6 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
     }
     
     private func loadMore() {
-        _previousQueryPending = true
         print("Loading More(\(_count))")
         _count = _count + 1
         getResults()

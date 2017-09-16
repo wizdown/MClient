@@ -22,7 +22,7 @@ class SearchViewController: MoviesCollectionViewController, UISearchBarDelegate 
     
     private var searchText: String? {
         didSet {
-            _previousQueryPending = true
+            _previousQueryPending = false
             searchBar.resignFirstResponder()
             _results.removeAll()
             _movieRequest = nil
@@ -44,26 +44,30 @@ class SearchViewController: MoviesCollectionViewController, UISearchBarDelegate 
 
     
     override  func getResults() {
-        var request: WMRequest?
-        if _movieRequest == nil {
-            request = WMRequest.movieSearchRequest(forMovie: searchText!)
-        } else {
-            request = _movieRequest
-        }
-        if  request != nil {
-            _movieRequest = request
-            
-            request?.performRequest() { [weak self] movies in
-                if movies.count == 0 {
-                    self?.didSearchReturnNoResults = true
-                }
-                DispatchQueue.main.async{
-                    if request == self?._movieRequest {
-                        self?.insertMovies(movies)
+        if _previousQueryPending == false {
+            _previousQueryPending = true
+            var request: WMRequest?
+            if _movieRequest == nil {
+                request = WMRequest.movieSearchRequest(forMovie: searchText!)
+            } else {
+                request = _movieRequest
+            }
+            if  request != nil {
+                _movieRequest = request
+                
+                request?.performRequest() { [weak self] movies in
+                    if movies.count == 0 {
+                        self?.didSearchReturnNoResults = true
+                    }
+                    DispatchQueue.main.async{
+                        if request == self?._movieRequest {
+                            self?.insertMovies(movies)
+                        }
                     }
                 }
             }
         }
+       
     }
     
      func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

@@ -64,6 +64,15 @@ class UpcomingViewController: MoviesCollectionViewController {
         }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        if let context = container?.viewContext{
+            let latest_date = Movie.getLatestDate(in: context)
+            if latest_date <= Date() {
+                getResults()
+            }
+        }
+    }
+    
     override func showData() {
         updateUI()
 
@@ -96,7 +105,10 @@ class UpcomingViewController: MoviesCollectionViewController {
     }
     
     override func getResults() {
-        if let context = container?.viewContext {
+        
+        if _previousQueryPending == false ,
+            let context = container?.viewContext {
+            _previousQueryPending = true
             let date = Movie.getLatestDate(in: context)
             let request = WMRequest.upcomingMoviesRequest(forDateAfterThis: date)
             request?.performRequest(completion: { [weak self ]
