@@ -46,7 +46,13 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
                         try? context.save()
                         print("Attempting to save Movie to DB")
                     }
-                    self?.getAndDisplayCastFromNetwork(forDbMovie: db_movie, context: context)
+                    if let db_cast = db_movie.cast,
+                        db_cast.count > 0 {
+                        self?.displayCastUsingDb(forDbMovie: db_movie, context: context)
+                    } else {
+                        self?.getAndDisplayCastFromNetwork(forDbMovie: db_movie, context: context)
+
+                    }
                 }
             }
         }

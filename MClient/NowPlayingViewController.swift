@@ -84,8 +84,8 @@ class NowPlayingViewController:MoviesCollectionViewController {
     }
     
     private func deleteOldMovies() {
-        container?.performBackgroundTask { context in
-            // Deleting old Movies
+        
+        if let context = container?.viewContext {
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
             request.predicate = NSPredicate(format: "release_date <= %@", Date() as NSDate)
             do {
@@ -100,6 +100,7 @@ class NowPlayingViewController:MoviesCollectionViewController {
             } catch {
                 print(error.localizedDescription)
             }
+
         }
     }
     
