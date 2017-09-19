@@ -14,7 +14,7 @@ class WMRequest : NSObject {
     private var currentPageNumber: Int = 0
     private var maxPageNumber: Int = 1 // This value will be updated with each subsequent request made
     private var require_paging: Bool
-    
+        
     var lastSuccessfulRequestNumber: Int {
         get {
             return currentPageNumber

@@ -83,25 +83,41 @@ class NowPlayingViewController:MoviesCollectionViewController {
         }
     }
     
-    private func deleteOldMovies() {
+    private func doNetworkQueryResults(_ movies: [WMovie], contain db_movie : Movie) -> Bool {
+        for current_movie in movies {
+            if current_movie.id == Int(db_movie.id) {
+                return true
+
+            }
+        }
+        return false
+    }
+    
+    private func deleteOldMovies(except movies : [WMovie]) {
         
         if let context = container?.viewContext {
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
             request.predicate = NSPredicate(format: "release_date <= %@", Date() as NSDate)
+            
             do {
+                var delete_count : Int = 0
                 let matches = try context.fetch(request)
                 if matches.count > 0 {
                     for current_match in matches {
-                        context.delete(current_match)
-                        try context.save()
+                        if !doNetworkQueryResults(movies, contain: current_match) {
+                                context.delete(current_match)
+                                try context.save()
+                                delete_count = delete_count + 1
+                        }
+                        
                     }
                 }
-                print("Removed \(matches.count) old movies")
+                print("Removed \(delete_count) old movies")
             } catch {
                 print(error.localizedDescription)
             }
-
         }
+        
     }
     
     private func deleteOldCast() {
@@ -130,7 +146,7 @@ class NowPlayingViewController:MoviesCollectionViewController {
         if let context = container?.viewContext , movies.count > 0 {
             if _movieRequest?.lastSuccessfulRequestNumber == 1 {
                 
-                deleteOldMovies()
+                deleteOldMovies(except: movies)
                 deleteOldCast()
                 
             }
