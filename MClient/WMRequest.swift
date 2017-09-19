@@ -168,6 +168,8 @@ class WMRequest : NSObject {
         // put handler here
         task.resume()
     }
+    
+    
 
     
      func performRequest(completion: @escaping ([WMovie]) -> Void ){

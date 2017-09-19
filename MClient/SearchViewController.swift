@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import CoreData
 
 class SearchViewController: MoviesCollectionViewController, UISearchBarDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    var container: NSPersistentContainer? =
+        (UIApplication.shared.delegate as! AppDelegate).persistentContainer
    
     @IBOutlet weak var searchBar: UISearchBar! {
         didSet {
@@ -41,21 +45,41 @@ class SearchViewController: MoviesCollectionViewController, UISearchBarDelegate 
         _navigationViewControllerTitle = "Search"
         _segueIdentifierForMovieDetails = "SearchToMovieDetailSegue"
     }
-
     
+//    private func showResultsFromDb(sarchString: String) -> [WMovie] {
+//        var search_results = [WMovie]()
+//        if let context = container?.viewContext {
+//            let request: NSFetchRequest<Movie> = Movie.fetchRequest()
+//            request.predicate = NSPredicate(format: "any title contains[c] %@", sarchString )
+//            request.sortDescriptors = [NSSortDescriptor(key:"popularity", ascending: false)]
+//            
+//            do {
+//                let matches = try context.fetch(request)
+//                print("SearchViewController.showResultsFromDb ==> Found \(matches.count) results from DB")
+//                for current_match in matches {
+//                    let current_movie = WMovie(credit: current_match)
+//                    search_results.append(current_movie)
+//                }
+//            } catch {
+//                print("SearchViewController.showResultsFromDb ==> Error : \(error.localizedDescription)")
+//            }
+//        }
+//        return search_results
+//    }
+
+
     override  func getResults() {
+        
         if _previousQueryPending == false {
             _previousQueryPending = true
-            var request: WMRequest?
-            if _movieRequest == nil {
-                request = WMRequest.movieSearchRequest(forMovie: searchText!)
-            } else {
-                request = _movieRequest
-            }
-            if  request != nil {
-                _movieRequest = request
+            
+            let request: WMRequest? = _movieRequest ?? WMRequest.movieSearchRequest(forMovie: searchText!)
+            _movieRequest = request
+            
+            request?.performRequest() { [weak self]
+                (movies: [WMovie]) in
                 
-                request?.performRequest() { [weak self] movies in
+                if request == self?._movieRequest {
                     if movies.count == 0 {
                         self?.didSearchReturnNoResults = true
                     }
@@ -66,6 +90,7 @@ class SearchViewController: MoviesCollectionViewController, UISearchBarDelegate 
                     }
                 }
             }
+            
         }
        
     }

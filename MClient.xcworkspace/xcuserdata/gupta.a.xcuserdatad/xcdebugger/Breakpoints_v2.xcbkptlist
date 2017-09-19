@@ -2,4 +2,84 @@
 <Bucket
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MClient/SearchViewController.swift"
+            timestampString = "527496383.407362"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
+            landmarkName = "getResults()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MClient.SearchViewController.getResults () -&gt; ()"
+                  moduleName = "MClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/SearchViewController.swift"
+                  timestampString = "527495790.692676"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "438">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MClient.SearchViewController.(getResults () -&gt; ()).(closure #1)"
+                  moduleName = "MClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/SearchViewController.swift"
+                  timestampString = "527495790.69489"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "45">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MClient.SearchViewController.(getResults () -&gt; ()).(closure #1).(closure #1)"
+                  moduleName = "MClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/SearchViewController.swift"
+                  timestampString = "527495790.69769"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MClient.SearchViewController.(getResults () -&gt; ()).(closure #1).(closure #2)"
+                  moduleName = "MClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/SearchViewController.swift"
+                  timestampString = "527495790.699543"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "4">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
