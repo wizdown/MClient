@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class newMovieCell: UICollectionViewCell {
 
@@ -20,9 +21,7 @@ class newMovieCell: UICollectionViewCell {
         }
     }
     
-    private func updateUI() {
-        title.text = movie?.title
-        poster.image = UIImage(named: "loading")
+    private func getAndSetImageFromNetwork() {
         let movieId = movie?.id
         
         DispatchQueue.global(qos: .userInteractive ).async { [weak self] in
@@ -40,6 +39,20 @@ class newMovieCell: UICollectionViewCell {
             }
             
         }
+    }
+    
+    private func getAndSetImageFromCache() {
+        if let imageURL = movie?.getFullPosterImageURL() {
+            poster.sd_setImage(with: imageURL, placeholderImage: UIImage(named: "thumbnail"))
+//            poster.sd_setImage(with: imageURL, placeholderimage: UIImage(named: "thumbnail.jpg") )
+        }
+    }
+    
+    private func updateUI() {
+        title.text = movie?.title
+        poster.image = UIImage(named: "thumbnail")
+//        getAndSetImageFromNetwork()
+        getAndSetImageFromCache()
         
     }
 

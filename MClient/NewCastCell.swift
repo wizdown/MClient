@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class NewCastCell: UICollectionViewCell {
     @IBOutlet weak var poster: UIImageView!
@@ -19,9 +20,7 @@ class NewCastCell: UICollectionViewCell {
         }
     }
     
-    private func updateUI(){
-        
-        poster.image = UIImage(named: "darkLoading")
+    private func getAndSetImageFromNetwork() {
         let castId = cast?.id
         let imageURL = cast?.getFullProfileImageURL()
         
@@ -40,11 +39,22 @@ class NewCastCell: UICollectionViewCell {
             }
             
         }
-        
-        
-        
+    }
+    
+    private func getAndSetImageFromCache() {
+        if let imageURL = cast?.getFullProfileImageURL() {
+            poster.sd_setImage(with: imageURL, placeholderImage: UIImage(named: "loading"))
+            //            poster.sd_setImage(with: imageURL, placeholderimage: UIImage(named: "thumbnail.jpg") )
+        }
+    }
+    
+    private func updateUI(){
         name.text = cast?.name
+
+        poster.image = UIImage(named: "loading")
         
+//        getAndSetImageFromNetwork()
+        getAndSetImageFromCache()
         
     }
 }

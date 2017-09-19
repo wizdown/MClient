@@ -56,30 +56,41 @@ class CastView: UIView {
         }
     }
     
+    private func getAndDisplayProfileImageFromCache() {
+        if let url = cast?.getFullBackdropImageURL() {
+            poster.sd_setImage(with: url, placeholderImage: UIImage(named: "loading"))
+        }
+    }
+    
+//    private func getAndDisplayProfileImageFromNetwork() {
+//        let castId = cast?.id
+//        var imageURL: URL?
+//        imageURL = cast?.getFullBackdropImageURL()
+//        
+//        DispatchQueue.global(qos: .userInteractive ).async { [weak self] in
+//            if let url = imageURL ,
+//                let imageData = try? Data(contentsOf: url) {
+//                DispatchQueue.main.async { [weak self ] in
+//                    if castId == self?.cast?.id {
+//                        self?.poster.image = UIImage(data: imageData)
+//                    }
+//                }
+//            } else {
+//                DispatchQueue.main.async { [weak self ] in
+//                    self?.poster.image = UIImage(named: "imageNotFound")
+//                }
+//            }
+//            
+//        }
+//    }
+    
     private func updateUI() {
         
         if let person = cast {
             setDefaults()
-            poster.image = UIImage(named: "darkLoading")
-            let castId = person.id
-            var imageURL: URL?
-            imageURL = cast?.getFullBackdropImageURL()
+            poster.image = UIImage(named: "loading")
             
-            DispatchQueue.global(qos: .userInteractive ).async { [weak self] in
-                if let url = imageURL ,
-                    let imageData = try? Data(contentsOf: url) {
-                    DispatchQueue.main.async { [weak self ] in
-                        if castId == self?.cast?.id {
-                            self?.poster.image = UIImage(data: imageData)
-                        }
-                    }
-                } else {
-                    DispatchQueue.main.async { [weak self ] in
-                        self?.poster.image = UIImage(named: "imageNotFound")
-                    }
-                }
-                
-            }
+            getAndDisplayProfileImageFromCache()
             
             if let dob = person.date_of_birth?.description.components(separatedBy: " ")[0] {
                 date_of_birth.text = dob
