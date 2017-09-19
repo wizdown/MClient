@@ -110,13 +110,17 @@ class UpcomingViewController: MoviesCollectionViewController {
             let context = container?.viewContext {
             _previousQueryPending = true
             let date = Movie.getLatestDate(in: context)
-            let request = WMRequest.upcomingMoviesRequest(forDateAfterThis: date)
-            request?.performRequest(completion: { [weak self ]
-                (movies : [WMovie]) in
-                DispatchQueue.main.async {
-                    self?.updateDb(movies)
-                }
-            })
+            if let request = WMRequest.upcomingMoviesRequest(forDateAfterThis: date) {
+                request.performRequest(completion: { [weak self ]
+                    (movies : [WMovie]) in
+                    DispatchQueue.main.async {
+                        self?.updateDb(movies)
+                    }
+                })
+            } else {
+                _previousQueryPending = false
+            }
+            
         }
     }
     

@@ -9,74 +9,155 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MClient/SearchViewController.swift"
-            timestampString = "527496383.407362"
+            filePath = "MClient/MoviesCollectionViewController.swift"
+            timestampString = "527499990.026396"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
-            landmarkName = "getResults()"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
+            landmarkName = "loadMore()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MClient/MoviesCollectionViewController.swift"
+            timestampString = "527499990.026396"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "insertMovies(_:)"
             landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "MClient.SearchViewController.getResults () -&gt; ()"
+                  symbolName = "MClient.MoviesCollectionViewController.insertMovies (Swift.Array&lt;MClient.WMovie&gt;) -&gt; ()"
                   moduleName = "MClient"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/SearchViewController.swift"
-                  timestampString = "527495790.692676"
+                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/MoviesCollectionViewController.swift"
+                  timestampString = "527499990.12044"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "77"
-                  endingLineNumber = "77"
-                  offsetFromSymbolStart = "438">
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "1403">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "MClient.SearchViewController.(getResults () -&gt; ()).(closure #1)"
+                  symbolName = "MClient.MoviesCollectionViewController.(insertMovies (Swift.Array&lt;MClient.WMovie&gt;) -&gt; ()).(closure #1)"
                   moduleName = "MClient"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/SearchViewController.swift"
-                  timestampString = "527495790.69489"
+                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/MoviesCollectionViewController.swift"
+                  timestampString = "527499990.122027"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "77"
-                  endingLineNumber = "77"
-                  offsetFromSymbolStart = "45">
+                  startingLineNumber = "111"
+                  endingLineNumber = "111"
+                  offsetFromSymbolStart = "23">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MClient/MoviesCollectionViewController.swift"
+            timestampString = "527499990.026396"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "124"
+            endingLineNumber = "124"
+            landmarkName = "insertMovies(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MClient/MoviesCollectionViewController.swift"
+            timestampString = "527499990.026396"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
+            landmarkName = "insertMovies(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MClient/MoviesCollectionViewController.swift"
+            timestampString = "527499990.026396"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
+            landmarkName = "insertMovies(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MClient.MoviesCollectionViewController.insertMovies (Swift.Array&lt;MClient.WMovie&gt;) -&gt; ()"
+                  moduleName = "MClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/MoviesCollectionViewController.swift"
+                  timestampString = "527499990.135059"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "116"
+                  endingLineNumber = "116"
+                  offsetFromSymbolStart = "2061">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "MClient.SearchViewController.(getResults () -&gt; ()).(closure #1).(closure #1)"
+                  symbolName = "MClient.MoviesCollectionViewController.(insertMovies (Swift.Array&lt;MClient.WMovie&gt;) -&gt; ()).(closure #1)"
                   moduleName = "MClient"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/SearchViewController.swift"
-                  timestampString = "527495790.69769"
+                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/MoviesCollectionViewController.swift"
+                  timestampString = "527499990.136873"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "77"
-                  endingLineNumber = "77"
-                  offsetFromSymbolStart = "4">
+                  startingLineNumber = "116"
+                  endingLineNumber = "116"
+                  offsetFromSymbolStart = "304">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "MClient.SearchViewController.(getResults () -&gt; ()).(closure #1).(closure #2)"
+                  symbolName = "MClient.MoviesCollectionViewController.(insertMovies (Swift.Array&lt;MClient.WMovie&gt;) -&gt; ()).(closure #2)"
                   moduleName = "MClient"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/SearchViewController.swift"
-                  timestampString = "527495790.699543"
+                  urlString = "file:///Users/gupta.a/Training/MClient/MClient/MoviesCollectionViewController.swift"
+                  timestampString = "527499990.138235"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "77"
-                  endingLineNumber = "77"
-                  offsetFromSymbolStart = "4">
+                  startingLineNumber = "117"
+                  endingLineNumber = "117"
+                  offsetFromSymbolStart = "32">
                </Location>
             </Locations>
          </BreakpointContent>

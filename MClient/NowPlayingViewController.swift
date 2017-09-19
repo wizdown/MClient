@@ -147,11 +147,16 @@ class NowPlayingViewController:MoviesCollectionViewController {
     override func getResults() {
         if _previousQueryPending == false {
             _previousQueryPending = true
-            _movieRequest?.performRequest() { [weak self]
-                (movies: [WMovie]) in
-                DispatchQueue.main.async{
-                    self?.updateDb(movies: movies)
+            if let request = _movieRequest {
+                request.performRequest() { [weak self]
+                    (movies: [WMovie]) in
+                    DispatchQueue.main.async{
+                        self?.updateDb(movies: movies)
+                    }
                 }
+
+            } else {
+                _previousQueryPending = false
             }
         }
     }

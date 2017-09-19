@@ -12,9 +12,6 @@ import CoreData
 class SearchViewController: MoviesCollectionViewController, UISearchBarDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
-    
-    var container: NSPersistentContainer? =
-        (UIApplication.shared.delegate as! AppDelegate).persistentContainer
    
     @IBOutlet weak var searchBar: UISearchBar! {
         didSet {
@@ -32,6 +29,7 @@ class SearchViewController: MoviesCollectionViewController, UISearchBarDelegate 
             _movieRequest = nil
             didSearchReturnNoResults = false
             getResults()
+            _count = 1
             collectionView.reloadData()
         }
     }
@@ -69,30 +67,38 @@ class SearchViewController: MoviesCollectionViewController, UISearchBarDelegate 
 
 
     override  func getResults() {
-        
         if _previousQueryPending == false {
             _previousQueryPending = true
             
             let request: WMRequest? = _movieRequest ?? WMRequest.movieSearchRequest(forMovie: searchText!)
-            _movieRequest = request
             
-            request?.performRequest() { [weak self]
-                (movies: [WMovie]) in
+            if  request != nil {
+                _movieRequest = request
                 
-                if request == self?._movieRequest {
-                    if movies.count == 0 {
-                        self?.didSearchReturnNoResults = true
-                    }
-                    DispatchQueue.main.async{
-                        if request == self?._movieRequest {
-                            self?.insertMovies(movies)
+                request?.performRequest() { [weak self]
+                    (movies: [WMovie]) in
+                    
+                    if request == self?._movieRequest {
+                        if movies.count == 0 {
+                            self?.didSearchReturnNoResults = true
                         }
+                        DispatchQueue.main.async{
+                            if request == self?._movieRequest {
+                                self?.insertMovies(movies)
+                            }
+                        }
+                    }
+                    else {
+                        self?._previousQueryPending = false
                     }
                 }
             }
+            else {
+                _previousQueryPending = false
+            }
             
+           
         }
-       
     }
     
      func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

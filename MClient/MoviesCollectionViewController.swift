@@ -64,26 +64,27 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
 //        }
     }
     
-    //    private var _timeSinceLastMovieResultsFetch: Date = Date()
-    //    private let _reloadTimeLag : Double = 2.0 // seconds
-    
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        let currentDate = Date()
-//        
-//        if _movieRequest != nil ,
-//            currentDate.timeIntervalSince1970 - _timeSinceLastMovieResultsFetch.timeIntervalSince1970 > _reloadTimeLag ,
-//            scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
-//            loadMore()
-//            _timeSinceLastMovieResultsFetch = currentDate
-//        }
-//    }
+    private var _timeSinceLastMovieResultsFetch: Date = Date()
+        private let _reloadTimeLag : Double = 1.0 // seconds
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentDate = Date()
+        
         if _previousQueryPending == false ,
+            currentDate.timeIntervalSince1970 - _timeSinceLastMovieResultsFetch.timeIntervalSince1970 > _reloadTimeLag ,
             scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
-            loadMore()
+                loadMore()
+                _timeSinceLastMovieResultsFetch = currentDate
         }
     }
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        if _previousQueryPending == false ,
+//            scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
+//            print("Firing loadmore")
+//            loadMore()
+//        }
+//    }
     
     private func loadMore() {
         print("Loading More(\(_count))")
@@ -119,6 +120,7 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
             print("Reload ==> Movies Found : \(movies.count)")
             
         }
+        print("setting pending query to false")
         _previousQueryPending = false
     }
     
