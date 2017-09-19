@@ -24,11 +24,16 @@ class UpcomingViewController: MoviesCollectionViewController {
     
     
     private func updateUI() {
+        
         if let context = container?.viewContext {
             
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
             request.sortDescriptors = [NSSortDescriptor(key: "release_date", ascending: true)]
-            request.predicate = NSPredicate(format: "release_date > %@", Date() as NSDate)
+            
+             let required_date = (NSCalendar.current.date(byAdding: Calendar.Component.day, value: 1, to: Date()))
+            
+            
+            request.predicate = NSPredicate(format: "release_date >= %@", required_date! as NSDate)
             
             fetchedResultsController = NSFetchedResultsController<Movie>(
                 fetchRequest: request,
@@ -45,7 +50,9 @@ class UpcomingViewController: MoviesCollectionViewController {
                 print(error.localizedDescription)
             }
             _collectionView?.reloadData()
+            
         }
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -62,6 +69,7 @@ class UpcomingViewController: MoviesCollectionViewController {
             movieViewController.needsPersistence = persistence
             print("Setting Movie for Movie Details")
         }
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
