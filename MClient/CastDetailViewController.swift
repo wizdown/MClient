@@ -73,6 +73,7 @@ class CastDetailViewController: UIViewController , UICollectionViewDataSource , 
         }
         else {
             getAndDisplayCastFromNetwork(forDbPerson: db_person, context: context)
+            // Above method calls getMovieCreditsFromNetwork to synchronously fetch them
         }
     }
     
@@ -89,6 +90,8 @@ class CastDetailViewController: UIViewController , UICollectionViewDataSource , 
                         DispatchQueue.main.async{ [weak self ] in
                             self?.stopAndRemoveSpinner()
                             // Add some sort of displayError here
+                            let temp_cast = WCastPeople(person: db_person)
+                            self?.updateCast(cast: temp_cast)
                         }
                     } else {
                         print("Cast details fetched from network")
