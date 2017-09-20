@@ -9,5 +9,5 @@
 import Foundation
 
 protocol WatchlistDelegate {
-    func didPerformAddToWatchlist()
+    func didPerformAddToWatchlist(profile : WatchListButtonProfile)
 }

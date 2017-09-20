@@ -8,9 +8,21 @@
 
 import UIKit
 
+enum WatchListButtonProfile {
+    case DISABLED
+    case READY_TO_ADD
+    case READY_TO_REMOVE
+}
+
+
 class MovieView: UIView {
     
     var delegate : WatchlistDelegate?
+    var profile : WatchListButtonProfile? {
+        didSet{
+            updateWatchlistButton()
+        }
+    }
 
     @IBOutlet weak var backdrop: UIImageView!
     
@@ -26,7 +38,21 @@ class MovieView: UIView {
     
     var movie : WMovie? {
         didSet{
-            setNeedsDisplay()
+//            setNeedsDisplay()
+            updateUI()
+        }
+    }
+    
+    private func updateWatchlistButton() {
+        if let buttonProfile = profile {
+            switch buttonProfile {
+            case .DISABLED :  watchlistButton.backgroundColor = UIColor.gray
+                              watchlistButton.setTitle("Add to watchlist", for: UIControlState.normal)
+            case .READY_TO_ADD : watchlistButton.backgroundColor = UIColor.blue
+                                watchlistButton.setTitle("Add to watchlist", for: UIControlState.normal)
+            case .READY_TO_REMOVE : watchlistButton.backgroundColor = UIColor.red
+                                watchlistButton.setTitle("Remove from watchlist", for: UIControlState.normal)
+            }
         }
     }
     
@@ -84,14 +110,20 @@ class MovieView: UIView {
         genre.text = movie?.genre
     }
 
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-        updateUI()
-    }
+//    override func draw(_ rect: CGRect) {
+//        // Drawing code
+//        updateUI()
+//    }
  
     @IBAction func performAddToWatchlist(_ sender: Any) {
-            if movie != nil {
-                delegate?.didPerformAddToWatchlist()
+        
+        if let buttonProfile = profile ,
+            movie != nil {
+            switch buttonProfile {
+                case .DISABLED : delegate?.didPerformAddToWatchlist(profile: .DISABLED)
+                case .READY_TO_ADD : delegate?.didPerformAddToWatchlist(profile: .READY_TO_ADD)
+                case .READY_TO_REMOVE : delegate?.didPerformAddToWatchlist(profile: .READY_TO_REMOVE)
             }
+        }
     }
 }

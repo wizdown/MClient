@@ -9,6 +9,11 @@
 import UIKit
 import CoreData
 
+enum WatchlistAction {
+    case ADD
+    case REMOVE
+}
+
 fileprivate var itemsPerColumn : CGFloat = 1
 fileprivate let sectionInsets = UIEdgeInsets(top: 5.0 , left: 5.0 , bottom: 5.0 , right: 5.0 )
 
@@ -39,8 +44,30 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         getData()
     }
     
+    private func setWatchlistButtonInitialProfile() {
+        if let _ = UserDefaults.standard.string(forKey: Constants.key_account_id) ,
+            let _ = UserDefaults.standard.string(forKey: Constants.key_session_id),
+            let contents = movie
+            {
+                if let context = container?.viewContext,
+                    let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context) {
+                    if db_movie.isInWatchlist {
+                        movieView.profile = .READY_TO_REMOVE
+                    } else {
+                        movieView.profile = .READY_TO_ADD
+                    }
+                } else {
+                    movieView.profile = .DISABLED
+                }
+            }
+        else {
+            movieView.profile = .DISABLED
+        }
+    }
+    
     private func getData() {
         if let contents = movie {
+            setWatchlistButtonInitialProfile()
             movieView.movie = contents
             container?.performBackgroundTask{ [weak self] context in
                 if let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context) {
@@ -189,30 +216,67 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         return cell
     }
     
+    private func updateWatchlistInDb(withMovie movie : WMovie , action: WatchlistAction , newProfile : WatchListButtonProfile  ){
+            container?.performBackgroundTask{ context in
+                let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
+                do {
+                    try context.save()
+                }catch {
+                    print("Error while adding movie to watchlist in DB")
+                    print(error.localizedDescription)
+                }
+                DispatchQueue.main.async { [ weak self ] in
+                    self?.movieView.profile = newProfile
+                }
+            }
+        
+    }
+    
     // Called when AddToWatchlist is clicked
-    func didPerformAddToWatchlist() {
+    func didPerformAddToWatchlist(profile : WatchListButtonProfile) {
         
-        // This setting of default values needs to be removed from here
-        let session_id  = UserDefaults.standard.string(forKey: "sessionId")
-        if session_id == nil {
-            UserDefaults.standard.set("749e8798cc8f35181efb7048b3626328e5f8bee5", forKey: "sessionId")
-        }
+//        // This setting of default values needs to be removed from here
+//        let session_id  = UserDefaults.standard.string(forKey: "sessionId")
+//        if session_id == nil {
+//            UserDefaults.standard.set("749e8798cc8f35181efb7048b3626328e5f8bee5", forKey: "sessionId")
+//        }
+//        
+//        let account_id  = UserDefaults.standard.string(forKey: "accountId")
+//        if account_id == nil {
+//            UserDefaults.standard.set("6653343", forKey: "accountId")
+//        }
         
-        let account_id  = UserDefaults.standard.string(forKey: "accountId")
-        if account_id == nil {
-            UserDefaults.standard.set("6653343", forKey: "accountId")
-        }
-        
-        print("Event Received")
-        if let request = WMRequest.getUpdateWatchlistRequest() {
-            request.updateWatchlist(with: movie!, status: .ADD) {
-                status in
-                print("Voila : \(status)")
+        if let strongMovie = movie {
+            switch profile {
+                case .DISABLED : print("Login to use this")
+                // Add some prompt to show error
+                
+                case .READY_TO_ADD : print("Initiating add to watchlist")
+                    if let request = WMRequest.getUpdateWatchlistRequest() {
+                            request.updateWatchlist(with: strongMovie, status: .ADD) {
+                                success in
+                                if success {
+                                    self.updateWatchlistInDb(withMovie: strongMovie, action: .ADD, newProfile: .READY_TO_REMOVE)
+                                } else {
+                                    print("Failed to add movie to watchlist(network failure) ")
+                                }
+                        }
+                }
+                
+                case .READY_TO_REMOVE : print("Initiating remove from watchlist" )
+                    if let request = WMRequest.getUpdateWatchlistRequest() {
+                            request.updateWatchlist(with: strongMovie, status: .REMOVE) {
+                                success in
+                                if success {
+                                    self.updateWatchlistInDb(withMovie: strongMovie , action: .REMOVE, newProfile: .READY_TO_ADD)
+                                } else {
+                                    print("Failed to remove movie from watchlist(network failure) ")
+                                }
+                    }
+                }
             }
         }
-      
     }
-
 }
 
 extension UIViewController {

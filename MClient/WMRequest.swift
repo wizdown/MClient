@@ -8,10 +8,7 @@
 
 import Foundation
 
-enum WatchlistAction {
-    case ADD
-    case REMOVE
-}
+
 
 class WMRequest : NSObject {
     
@@ -40,6 +37,7 @@ class WMRequest : NSObject {
     private var _urlComponents: URLComponents?
 
     var url: URL? {
+        
 //        get {
 //            if _urlComponents == nil || currentPageNumber == maxPageNumber{
 //                return nil
@@ -207,9 +205,6 @@ class WMRequest : NSObject {
         task.resume()
     }
     
-    
-
-    
      func performRequest(completion: @escaping ([WMovie]) -> Void ){
         let task = URLSession.shared.dataTask(with: url!) {(data, response, error) in
             
@@ -305,23 +300,19 @@ class WMRequest : NSObject {
                         print("status code : \(status_code)")
                         switch status {
                         case .ADD : if status_code == 1 || status_code == 12 {
-                                success = true
-                            }
+                                        success = true
+                                    }
                         case .REMOVE : if status_code == 13 {
-                            success = true
-                            }
+                                            success = true
+                                        }
                         }
+                        completion(success)
                     }
-                    completion(success)
+                    
                 }
-                
             }
             task.resume()
-            
+
         }
-        
     }
-        
-    
-    
 }

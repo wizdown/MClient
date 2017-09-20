@@ -80,11 +80,16 @@ class Movie: NSManagedObject {
         
     }
     
-//    static func addToWatchList(_ movie: WMovie , in context : NSManagedObjectContext ) -> Movie {
-//        let db_movie = try? Movie.findOrCreateMovie(matching: movie, in: context)
-//        db_movie?.isInWatchlist = true
-//        return db_movie!
-//        
-//    }
+    static func updateWatchlistInDb(with movie: WMovie , action : WatchlistAction , in context : NSManagedObjectContext ) -> Movie {
+        
+        let db_movie = try? Movie.findOrCreateMovie(matching: movie, in: context)
+        switch action {
+            case .ADD :
+                db_movie?.isInWatchlist = true
+            case .REMOVE :
+                db_movie?.isInWatchlist = false
+        }
+        return db_movie!
+    }
     
 }
