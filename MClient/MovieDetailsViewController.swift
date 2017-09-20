@@ -41,6 +41,19 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     override func viewDidLoad() {
         super.viewDidLoad()
         movieView.castCollectionView.register(UINib(nibName: "NewCastCell", bundle: nil), forCellWithReuseIdentifier: Constants.castCellReuseIdentifier)
+        
+//        // This setting of default values needs to be removed from here
+//        let session_id  = UserDefaults.standard.string(forKey: "sessionId")
+//        if session_id == nil {
+//            UserDefaults.standard.set("749e8798cc8f35181efb7048b3626328e5f8bee5", forKey: "sessionId")
+//        }
+//        
+//        let account_id  = UserDefaults.standard.string(forKey: "accountId")
+//        if account_id == nil {
+//            UserDefaults.standard.set("6653343", forKey: "accountId")
+//        }
+        
+        
         getData()
     }
     
@@ -216,9 +229,21 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         return cell
     }
     
-    private func updateWatchlistInDb(withMovie movie : WMovie , action: WatchlistAction , newProfile : WatchListButtonProfile  ){
-            container?.performBackgroundTask{ context in
-                let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
+    private func updateWatchlistInDb(withMovie movie : WMovie , action: WatchlistAction , newProfile : WatchListButtonProfile ) {
+//            container?.performBackgroundTask{ context in
+//                let db_movie = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
+//                do {
+//                    try context.save()
+//                }catch {
+//                    print("Error while adding movie to watchlist in DB")
+//                    print(error.localizedDescription)
+//                }
+//                DispatchQueue.main.async { [ weak self ] in
+//                    self?.movieView.profile = newProfile
+//                }
+//            }
+        if let context = container?.viewContext {
+            let db_movie = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
                 do {
                     try context.save()
                 }catch {
@@ -228,23 +253,12 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
                 DispatchQueue.main.async { [ weak self ] in
                     self?.movieView.profile = newProfile
                 }
-            }
+        }
         
     }
     
     // Called when AddToWatchlist is clicked
     func didPerformAddToWatchlist(profile : WatchListButtonProfile) {
-        
-//        // This setting of default values needs to be removed from here
-//        let session_id  = UserDefaults.standard.string(forKey: "sessionId")
-//        if session_id == nil {
-//            UserDefaults.standard.set("749e8798cc8f35181efb7048b3626328e5f8bee5", forKey: "sessionId")
-//        }
-//        
-//        let account_id  = UserDefaults.standard.string(forKey: "accountId")
-//        if account_id == nil {
-//            UserDefaults.standard.set("6653343", forKey: "accountId")
-//        }
         
         if let strongMovie = movie {
             switch profile {

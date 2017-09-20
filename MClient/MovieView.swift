@@ -50,8 +50,11 @@ class MovieView: UIView {
                               watchlistButton.setTitle("Add to watchlist", for: UIControlState.normal)
             case .READY_TO_ADD : watchlistButton.backgroundColor = UIColor.blue
                                 watchlistButton.setTitle("Add to watchlist", for: UIControlState.normal)
+                                watchlistButton.isEnabled = true
             case .READY_TO_REMOVE : watchlistButton.backgroundColor = UIColor.red
                                 watchlistButton.setTitle("Remove from watchlist", for: UIControlState.normal)
+                                watchlistButton.isEnabled = true
+
             }
         }
     }
@@ -122,7 +125,10 @@ class MovieView: UIView {
             switch buttonProfile {
                 case .DISABLED : delegate?.didPerformAddToWatchlist(profile: .DISABLED)
                 case .READY_TO_ADD : delegate?.didPerformAddToWatchlist(profile: .READY_TO_ADD)
+                    watchlistButton.isEnabled = false
                 case .READY_TO_REMOVE : delegate?.didPerformAddToWatchlist(profile: .READY_TO_REMOVE)
+                    watchlistButton.isEnabled = false
+
             }
         }
     }

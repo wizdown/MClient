@@ -98,8 +98,10 @@ class NowPlayingViewController:MoviesCollectionViewController {
         // Deletes or retains old movies as needed
         if let context = container?.viewContext {
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
-            request.predicate = NSPredicate(format: "release_date <= %@", Date() as NSDate)
-            
+            let release_date_predicate =  NSPredicate(format: "release_date <= %@", Date() as NSDate)
+            let not_in_watchlist_predicate = NSPredicate(format: "isInWatchlist = %@", false as CVarArg)
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [release_date_predicate, not_in_watchlist_predicate])
+            // ADd predicate
             do {
                 var delete_count : Int = 0
                 let matches = try context.fetch(request)
