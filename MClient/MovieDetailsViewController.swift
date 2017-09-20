@@ -42,7 +42,8 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         super.viewDidLoad()
         movieView.castCollectionView.register(UINib(nibName: "NewCastCell", bundle: nil), forCellWithReuseIdentifier: Constants.castCellReuseIdentifier)
         
-//        // This setting of default values needs to be removed from here
+//       UserDefaults.standard.removeObject(forKey: Constants.key_account_id)
+        // This setting of default values needs to be removed from here
 //        let session_id  = UserDefaults.standard.string(forKey: "sessionId")
 //        if session_id == nil {
 //            UserDefaults.standard.set("749e8798cc8f35181efb7048b3626328e5f8bee5", forKey: "sessionId")
@@ -53,6 +54,12 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
 //            UserDefaults.standard.set("6653343", forKey: "accountId")
 //        }
         
+        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
+            [weak self]
+            notification in
+//            print(notification.userInfo ?? "")
+            self?.container?.viewContext.mergeChanges(fromContextDidSave: notification)
+        })
         
         getData()
     }
@@ -230,20 +237,8 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     }
     
     private func updateWatchlistInDb(withMovie movie : WMovie , action: WatchlistAction , newProfile : WatchListButtonProfile ) {
-//            container?.performBackgroundTask{ context in
-//                let db_movie = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
-//                do {
-//                    try context.save()
-//                }catch {
-//                    print("Error while adding movie to watchlist in DB")
-//                    print(error.localizedDescription)
-//                }
-//                DispatchQueue.main.async { [ weak self ] in
-//                    self?.movieView.profile = newProfile
-//                }
-//            }
-        if let context = container?.viewContext {
-            let db_movie = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
+            container?.performBackgroundTask{ context in
+                let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
                 do {
                     try context.save()
                 }catch {
@@ -253,7 +248,20 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
                 DispatchQueue.main.async { [ weak self ] in
                     self?.movieView.profile = newProfile
                 }
-        }
+            }
+        
+//        if let context = container?.viewContext {
+//            let db_movie = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
+//                do {
+//                    try context.save()
+//                }catch {
+//                    print("Error while adding movie to watchlist in DB")
+//                    print(error.localizedDescription)
+//                }
+//                DispatchQueue.main.async { [ weak self ] in
+//                    self?.movieView.profile = newProfile
+//                }
+//        }
         
     }
     
@@ -264,6 +272,10 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
             switch profile {
                 case .DISABLED : print("Login to use this")
                 // Add some prompt to show error
+                
+                let alert = UIAlertController(title: "Login Required", message: "Please login to use this feature.", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 
                 case .READY_TO_ADD : print("Initiating add to watchlist")
                     if let request = WMRequest.getUpdateWatchlistRequest() {

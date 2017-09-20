@@ -23,6 +23,8 @@ class MovieView: UIView {
             updateWatchlistButton()
         }
     }
+    
+    var spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
 
     @IBOutlet weak var backdrop: UIImageView!
     
@@ -117,6 +119,8 @@ class MovieView: UIView {
 //        // Drawing code
 //        updateUI()
 //    }
+    
+    
  
     @IBAction func performAddToWatchlist(_ sender: Any) {
         
@@ -126,10 +130,13 @@ class MovieView: UIView {
                 case .DISABLED : delegate?.didPerformAddToWatchlist(profile: .DISABLED)
                 case .READY_TO_ADD : delegate?.didPerformAddToWatchlist(profile: .READY_TO_ADD)
                     watchlistButton.isEnabled = false
+                    watchlistButton.setTitle("Adding...", for: UIControlState.normal)
                 case .READY_TO_REMOVE : delegate?.didPerformAddToWatchlist(profile: .READY_TO_REMOVE)
                     watchlistButton.isEnabled = false
+                watchlistButton.setTitle("Removing...", for: UIControlState.normal)
 
             }
         }
+        
     }
 }
