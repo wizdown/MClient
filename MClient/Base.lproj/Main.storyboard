@@ -484,7 +484,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="O2B-wA-HWd">
-                                <rect key="frame" x="0.0" y="56" width="375" height="554"/>
+                                <rect key="frame" x="0.0" y="57" width="375" height="553"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="UVV-3V-2Ya">
                                     <size key="itemSize" width="50" height="50"/>
@@ -587,7 +587,7 @@
         <!--Tab Bar View Controller-->
         <scene sceneID="gu3-oL-4ef">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="VaN-C5-fdb" customClass="UITabBarViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="startUpTabBarController" automaticallyAdjustsScrollViewInsets="NO" id="VaN-C5-fdb" customClass="UITabBarViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="JUZ-cI-c5A">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
@@ -635,7 +635,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Section Header" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2gz-Wh-olh">
-                                            <rect key="frame" x="12" y="12" width="351" height="26"/>
+                                            <rect key="frame" x="12" y="12" width="643" height="26"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>

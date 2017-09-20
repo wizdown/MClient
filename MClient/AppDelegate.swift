@@ -45,7 +45,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 //        window?.tintColor = themeColor
-
+        let session_id  = UserDefaults.standard.string(forKey: Constants.key_session_id)
+        
+        let account_id  = UserDefaults.standard.string(forKey: Constants.key_account_id)
+        
+        if session_id != nil && account_id != nil {
+            print("Session_Id : \(session_id!)")
+            print("Account_id : \(account_id!)")
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let initialViewController = storyboard.instantiateViewController(withIdentifier: "startUpTabBarController")
+            self.window?.rootViewController = initialViewController
+            self.window?.makeKeyAndVisible()
+        }
+        
         return true
     }
 

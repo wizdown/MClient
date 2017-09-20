@@ -28,6 +28,7 @@ class Constants {
     
     static let key_account_id = "accountId"
     static let key_session_id = "sessionId"
+    static let key_username = "username"
     
     static let notFound = "Not Found"
 

@@ -6,6 +6,12 @@
 //  Copyright © 2017 gupta.a. All rights reserved.
 //
 
+
+//completion: { [weak self ] in
+//    self?.removeMessageLoader()
+//    self?.performSegue(withIdentifier: "startupToTabSegue", sender: nil)
+//})
+
 import UIKit
 
 struct Auth {
@@ -60,10 +66,7 @@ class StartUpViewController: UIViewController {
                 getSessionId(token: token) { id in
                     DispatchQueue.main.async { [weak self ] in
                         if let sessionId = id {
-                            self?.saveSessionId(id: sessionId, completion: { [weak self ] in
-                                self?.removeMessageLoader()
-                                self?.performSegue(withIdentifier: "startupToTabSegue", sender: nil)
-                            })
+                            self?.saveSessionIdAndGetAccountId(id: sessionId)
                         } else {
                             self?.showError()
                         }
@@ -84,7 +87,9 @@ class StartUpViewController: UIViewController {
     private func getSessionId(token : String , completion: @escaping (String?) -> Void) {
         var sessionId: String? = nil
         
-        var urlString: String = "https://api.themoviedb.org/3/authentication/session/new?api_key=71c4e026a81c526c33013f530de0d158&request_token="
+        var urlString: String = "https://api.themoviedb.org/3/authentication/session/new?api_key="
+        urlString.append(Constants.api_key)
+        urlString.append("&request_token=")
         urlString.append(token)
         
         let url: URL = URL(string: urlString)!
@@ -110,12 +115,46 @@ class StartUpViewController: UIViewController {
         // Call completion after procedure irrespective of result
     }
     
-    private func saveSessionId(id: String, completion: ()-> Void){
+    private func saveSessionIdAndGetAccountId(id: String) {
         
         // Save Id here in CoreData here
-        print("SessionID Saved")
+        UserDefaults.standard.set(id, forKey: Constants.key_session_id)
         
-        completion()
+        var urlString: String = "https://api.themoviedb.org/3/account?api_key="
+        urlString.append(Constants.api_key)
+        urlString.append("&session_id=")
+        urlString.append(id)
+        
+        let url = URL(string: urlString)!
+        let task = URLSession.shared.dataTask(with: url){ (data , response , error ) in
+            if error != nil {
+                print("Error during account_id call")
+                print(error!.localizedDescription)
+                DispatchQueue.main.async { [weak self] in
+                    self?.showError()
+                }
+            } else {
+                if let data = data,
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] ,
+                    let account_id = json?["id"] as? Int,
+                    let user_name = json?["username"] as? String {
+                    UserDefaults.standard.set(String(account_id), forKey: Constants.key_account_id)
+                    UserDefaults.standard.set(user_name, forKey: Constants.key_username)
+                    print("Username : \(user_name)")
+                    print("AccountId : \(account_id)")
+                    DispatchQueue.main.async { [weak self ] in
+                        self?.removeMessageLoader()
+                        self?.performSegue(withIdentifier: "startupToTabSegue", sender: nil)
+                    }
+                }
+                else {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.showError()
+                    }
+                }
+            }
+        }
+        task.resume()
     }
     
     

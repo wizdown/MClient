@@ -54,12 +54,12 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
 //            UserDefaults.standard.set("6653343", forKey: "accountId")
 //        }
         
-        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
-            [weak self]
-            notification in
-//            print(notification.userInfo ?? "")
-            self?.container?.viewContext.mergeChanges(fromContextDidSave: notification)
-        })
+//        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
+//            [weak self]
+//            notification in
+////            print(notification.userInfo ?? "")
+//            self?.container?.viewContext.mergeChanges(fromContextDidSave: notification)
+//        })
         
         getData()
     }
@@ -237,21 +237,8 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     }
     
     private func updateWatchlistInDb(withMovie movie : WMovie , action: WatchlistAction , newProfile : WatchListButtonProfile ) {
-            container?.performBackgroundTask{ context in
-                let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
-                do {
-                    try context.save()
-                }catch {
-                    print("Error while adding movie to watchlist in DB")
-                    print(error.localizedDescription)
-                }
-                DispatchQueue.main.async { [ weak self ] in
-                    self?.movieView.profile = newProfile
-                }
-            }
-        
-//        if let context = container?.viewContext {
-//            let db_movie = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
+//            container?.performBackgroundTask{ context in
+//                let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
 //                do {
 //                    try context.save()
 //                }catch {
@@ -261,7 +248,20 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
 //                DispatchQueue.main.async { [ weak self ] in
 //                    self?.movieView.profile = newProfile
 //                }
-//        }
+//            }
+        
+        if let context = container?.viewContext {
+            let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
+                do {
+                    try context.save()
+                }catch {
+                    print("Error while adding movie to watchlist in DB")
+                    print(error.localizedDescription)
+                }
+                DispatchQueue.main.async { [ weak self ] in
+                    self?.movieView.profile = newProfile
+                }
+        }
         
     }
     
@@ -284,7 +284,11 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
                                 if success {
                                     self.updateWatchlistInDb(withMovie: strongMovie, action: .ADD, newProfile: .READY_TO_REMOVE)
                                 } else {
-                                    print("Failed to add movie to watchlist(network failure) ")
+                                      print("Failed to add movie to watchlist(network failure) ")
+                                    DispatchQueue.main.async { [ weak self ] in
+                                        self?.movieView.profile = profile
+                                    }
+                                  
                                 }
                         }
                 }
@@ -297,6 +301,9 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
                                     self.updateWatchlistInDb(withMovie: strongMovie , action: .REMOVE, newProfile: .READY_TO_ADD)
                                 } else {
                                     print("Failed to remove movie from watchlist(network failure) ")
+                                    DispatchQueue.main.async { [ weak self ] in
+                                        self?.movieView.profile = profile
+                                    }
                                 }
                     }
                 }

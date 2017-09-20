@@ -88,7 +88,6 @@ class NowPlayingViewController:MoviesCollectionViewController {
         for current_movie in movies {
             if current_movie.id == Int(db_movie.id) {
                 return true
-
             }
         }
         return false
