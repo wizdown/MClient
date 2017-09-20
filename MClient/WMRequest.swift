@@ -8,12 +8,18 @@
 
 import Foundation
 
+enum WatchlistAction {
+    case ADD
+    case REMOVE
+}
+
 class WMRequest : NSObject {
     
     //    func movieSearchRequest(forMovie keyword: String, page : Int, completion: @escaping ([WMovie]) -> Void )
     private var currentPageNumber: Int = 0
     private var maxPageNumber: Int = 1 // This value will be updated with each subsequent request made
     private var require_paging: Bool
+    private var autoIncrPageNo: Bool
         
     var lastSuccessfulRequestNumber: Int {
         get {
@@ -21,33 +27,64 @@ class WMRequest : NSObject {
         }
     }
     
-    init( urlComponents: URLComponents , require_paging: Bool ) {
+    init( urlComponents: URLComponents , require_paging: Bool , autoIncrPageNo: Bool ) {
         self._urlComponents = urlComponents
         self.require_paging = require_paging
+        self.autoIncrPageNo = autoIncrPageNo
     }
     
-    func setMaxPageNumber(to pageNo: Int) {
+    private func setMaxPageNumber(to pageNo: Int) {
         maxPageNumber = pageNo
     }
     
     private var _urlComponents: URLComponents?
 
     var url: URL? {
+//        get {
+//            if _urlComponents == nil || currentPageNumber == maxPageNumber{
+//                return nil
+//            } else {
+//                var urlComponents = URLComponents()
+//                urlComponents.scheme = _urlComponents!.scheme
+//                urlComponents.host = _urlComponents!.host
+//                urlComponents.path = _urlComponents!.path
+//                var queryItems = _urlComponents!.queryItems!
+//                queryItems.append(URLQueryItem(name: Constants.queryParameter.page.rawValue, value: String(currentPageNumber + 1)))
+//                urlComponents.queryItems = queryItems
+//                if let debug_url = urlComponents.url {
+//                    print(debug_url)
+//                }
+//                return urlComponents.url
+//            }
+//        }
+        
         get {
-            if _urlComponents == nil || currentPageNumber == maxPageNumber{
+            if _urlComponents == nil  {
                 return nil
-            } else {
-                var urlComponents = URLComponents()
-                urlComponents.scheme = _urlComponents!.scheme
-                urlComponents.host = _urlComponents!.host
-                urlComponents.path = _urlComponents!.path
-                var queryItems = _urlComponents!.queryItems!
-                queryItems.append(URLQueryItem(name: Constants.queryParameter.page.rawValue, value: String(currentPageNumber + 1)))
-                urlComponents.queryItems = queryItems
-                if let debug_url = urlComponents.url {
-                    print(debug_url)
+            } else{
+                if self.require_paging {
+                    if currentPageNumber == maxPageNumber {
+                        return nil
+                    } else {
+                        var urlComponents = URLComponents()
+                        urlComponents.scheme = _urlComponents!.scheme
+                        urlComponents.host = _urlComponents!.host
+                        urlComponents.path = _urlComponents!.path
+                        var queryItems = _urlComponents!.queryItems!
+                        queryItems.append(URLQueryItem(name: Constants.queryParameter.page.rawValue, value: String(currentPageNumber + 1)))
+                        urlComponents.queryItems = queryItems
+                        if let debug_url = urlComponents.url {
+                            print(debug_url)
+                        }
+                        return urlComponents.url
+                    }
                 }
-                return urlComponents.url
+                else {
+                    if let debug_url = _urlComponents!.url {
+                        print(debug_url)
+                    }
+                    return _urlComponents!.url
+                }
             }
         }
     }
@@ -81,11 +118,13 @@ class WMRequest : NSObject {
 
         urlComponents.queryItems = [ api_key , language , keyword , adult_content ]
         
-        let request: WMRequest = WMRequest(urlComponents: urlComponents, require_paging: true)
+        let request: WMRequest = WMRequest(urlComponents: urlComponents, require_paging: true , autoIncrPageNo: true )
         return request
+        
     }
     
     static func nowPlayingMoviesRequest() -> WMRequest? {
+        
         var urlComponents = URLComponents()
         urlComponents.scheme = Constants.url_scheme
         urlComponents.host = Constants.base_url
@@ -96,9 +135,10 @@ class WMRequest : NSObject {
         let language = URLQueryItem(name: Constants.queryParameter.language.rawValue, value: "en-US")
         
         urlComponents.queryItems = [ api_key , language ]
-        let request: WMRequest = WMRequest(urlComponents: urlComponents, require_paging: true)
+        let request: WMRequest = WMRequest(urlComponents: urlComponents, require_paging: true ,autoIncrPageNo: true)
         
         return request
+        
     }
     
     static func upcomingMoviesRequest(forDateAfterThis date: Date) -> WMRequest? {
@@ -117,12 +157,10 @@ class WMRequest : NSObject {
         let release_date = URLQueryItem(name: Constants.queryParameter.primary_release_date_gte.rawValue,value: required_date.description.components(separatedBy: " ")[0])
         
         urlComponents.queryItems = [ api_key , language , sort_by, adult_content, include_video, release_date]
-        let request: WMRequest = WMRequest(urlComponents: urlComponents , require_paging : false)
+        let request: WMRequest = WMRequest(urlComponents: urlComponents , require_paging : false , autoIncrPageNo: false)
         
         return request
     }
-    
-  
     
     static func castForMovieRequest(movieId: Int) -> WCRequest? {
         
@@ -202,7 +240,8 @@ class WMRequest : NSObject {
                     }
                 }
                 
-                if self.require_paging {
+                if self.require_paging ,
+                    self.autoIncrPageNo {
                     self.currentPageNumber = self.currentPageNumber + 1
                 }
                 
@@ -213,6 +252,74 @@ class WMRequest : NSObject {
         
         // put handler here
         task.resume()
+    }
+    
+    static func getUpdateWatchlistRequest() -> WMRequest? {
+        guard
+            let url_path = Constants.getUrlPathForWatchlistRequest() ,
+            let session_id = UserDefaults.standard.string( forKey: Constants.key_session_id )
+        else {
+                return nil
+        }
+        var urlComponents = URLComponents()
+        urlComponents.scheme = Constants.url_scheme
+        urlComponents.host = Constants.base_url
+        urlComponents.path = url_path
+        
+        let api_key = URLQueryItem(name: Constants.queryParameter.api_key.rawValue , value: Constants.api_key)
+        let sessionId = URLQueryItem(name: Constants.queryParameter.session_id.rawValue, value: session_id)
+        urlComponents.queryItems = [ api_key, sessionId ]
+        let request: WMRequest = WMRequest(urlComponents: urlComponents, require_paging: false, autoIncrPageNo: false)
+        
+        return request
+        
+    }
+    
+    func updateWatchlist( with movie: WMovie , status : WatchlistAction, completion : @escaping (Bool) -> Void ) {
+        var params : [String: Any] = [:]
+        params["media_type"] = "movie"
+        params["media_id"] = movie.id
+        switch status {
+            case .ADD : params["watchlist"] = true
+            case .REMOVE : params["watchlist"] = false
+        }
+        if let jsonData = try? JSONSerialization.data(withJSONObject: params, options: []),
+            let url = self.url {
+            let postRequest = NSMutableURLRequest(url: url)
+            postRequest.httpMethod = "POST"
+            postRequest.addValue("application/json;charset=utf-8", forHTTPHeaderField: "Content-Type")
+            postRequest.httpBody = jsonData
+            
+
+            let task = URLSession.shared.dataTask(with: postRequest as URLRequest) {
+                data, response , error in
+                if error != nil {
+                    print(error!.localizedDescription)
+                    completion(false)
+                } else {
+                    var success: Bool = false
+                    
+                    if let valid_date = data ,
+                    let json = try? JSONSerialization.jsonObject(with: valid_date, options: [] ) as? [String: Any],
+                    let status_code = json!["status_code"] as? Int {
+                        print("status code : \(status_code)")
+                        switch status {
+                        case .ADD : if status_code == 1 || status_code == 12 {
+                                success = true
+                            }
+                        case .REMOVE : if status_code == 13 {
+                            success = true
+                            }
+                        }
+                    }
+                    completion(success)
+                }
+                
+            }
+            task.resume()
+            
+        }
+        
     }
         
     

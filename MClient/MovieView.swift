@@ -9,8 +9,12 @@
 import UIKit
 
 class MovieView: UIView {
+    
+    var delegate : WatchlistDelegate?
 
     @IBOutlet weak var backdrop: UIImageView!
+    
+    @IBOutlet weak var watchlistButton: UIButton!
     
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var overview: UILabel!
@@ -84,6 +88,10 @@ class MovieView: UIView {
         // Drawing code
         updateUI()
     }
-    
-
+ 
+    @IBAction func performAddToWatchlist(_ sender: Any) {
+            if movie != nil {
+                delegate?.didPerformAddToWatchlist()
+            }
+    }
 }

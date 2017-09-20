@@ -12,7 +12,8 @@ import CoreData
 fileprivate var itemsPerColumn : CGFloat = 1
 fileprivate let sectionInsets = UIEdgeInsets(top: 5.0 , left: 5.0 , bottom: 5.0 , right: 5.0 )
 
-class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , UICollectionViewDataSource {
+class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , UICollectionViewDataSource , WatchlistDelegate {
+    
     
     var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
@@ -24,6 +25,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         didSet{
             movieView.castCollectionView.delegate = self
             movieView.castCollectionView.dataSource = self
+            movieView.delegate = self
         }
     }
     
@@ -169,6 +171,7 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         }
     }
     
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return _cast.count
     }
@@ -184,6 +187,30 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
             cell.cast = cast
         }
         return cell
+    }
+    
+    // Called when AddToWatchlist is clicked
+    func didPerformAddToWatchlist() {
+        
+        // This setting of default values needs to be removed from here
+        let session_id  = UserDefaults.standard.string(forKey: "sessionId")
+        if session_id == nil {
+            UserDefaults.standard.set("749e8798cc8f35181efb7048b3626328e5f8bee5", forKey: "sessionId")
+        }
+        
+        let account_id  = UserDefaults.standard.string(forKey: "accountId")
+        if account_id == nil {
+            UserDefaults.standard.set("6653343", forKey: "accountId")
+        }
+        
+        print("Event Received")
+        if let request = WMRequest.getUpdateWatchlistRequest() {
+            request.updateWatchlist(with: movie!, status: .ADD) {
+                status in
+                print("Voila : \(status)")
+            }
+        }
+      
     }
 
 }

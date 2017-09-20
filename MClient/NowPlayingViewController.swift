@@ -26,7 +26,8 @@ class NowPlayingViewController:MoviesCollectionViewController {
             
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
             request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
-            request.predicate = NSPredicate(format: "release_date <= %@", Date() as NSDate)
+//            request.predicate = NSPredicate(format: "release_date <= %@", Date() as NSDate)
+            request.predicate = NSPredicate(format: "isPlaying = %@", true as CVarArg)
             
             fetchedResultsController = NSFetchedResultsController<Movie>(
                 fetchRequest: request,
@@ -93,8 +94,8 @@ class NowPlayingViewController:MoviesCollectionViewController {
         return false
     }
     
-    private func deleteOldMovies(except movies : [WMovie]) {
-        
+    private func updateOldMovies(except movies : [WMovie]) {
+        // Deletes or retains old movies as needed
         if let context = container?.viewContext {
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
             request.predicate = NSPredicate(format: "release_date <= %@", Date() as NSDate)
@@ -109,7 +110,6 @@ class NowPlayingViewController:MoviesCollectionViewController {
                                 try context.save()
                                 delete_count = delete_count + 1
                         }
-                        
                     }
                 }
                 print("Removed \(delete_count) old movies")
@@ -146,13 +146,14 @@ class NowPlayingViewController:MoviesCollectionViewController {
         if let context = container?.viewContext , movies.count > 0 {
             if _movieRequest?.lastSuccessfulRequestNumber == 1 {
                 
-                deleteOldMovies(except: movies)
+                updateOldMovies(except: movies)
                 deleteOldCast()
                 
             }
             
             for current_movie in movies {
-                _ = try? Movie.findOrCreateMovie(matching: current_movie, in: context)
+                let db_movie = try? Movie.findOrCreateMovie(matching: current_movie, in: context)
+                db_movie?.isPlaying = true
                 try? context.save()
             }
         }

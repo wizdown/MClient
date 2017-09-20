@@ -24,6 +24,9 @@ class Constants {
     static let castCellReuseIdentifier = "castCell"
     static let searchHeaderReuseIdentifier = "searchHeader"
     
+    static let key_account_id = "accountId"
+    static let key_session_id = "sessionId"
+    
     static let notFound = "Not Found"
 
     static let gender = [
@@ -71,6 +74,17 @@ class Constants {
         return url_path
     }
     
+    static func getUrlPathForWatchlistRequest() -> String? {
+        var url_path = "/3/account/"
+        if let accountId = UserDefaults.standard.string(forKey: Constants.key_account_id) {
+            url_path.append(accountId)
+            url_path.append("/watchlist")
+            return url_path
+        } else {
+            return nil
+        }
+    }
+    
     enum requestType : String {
         case movieSearch = "/3/search/movie"
         case nowPlaying =  "/3/movie/now_playing"
@@ -88,6 +102,7 @@ class Constants {
         case include_video = "include_video"
         case primary_release_date_gte = "primary_release_date.gte"
         case sort_by = "sort_by"
+        case session_id = "session_id"
     }
     
 }
