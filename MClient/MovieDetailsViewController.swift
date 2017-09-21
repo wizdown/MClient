@@ -54,30 +54,59 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
 //            UserDefaults.standard.set("6653343", forKey: "accountId")
 //        }
         
-//        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
-//            [weak self]
-//            notification in
-////            print(notification.userInfo ?? "")
-//            self?.container?.viewContext.mergeChanges(fromContextDidSave: notification)
-//        })
+        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
+            [weak self]
+            notification in
+//            print(notification.userInfo ?? "")
+            self?.container?.viewContext.mergeChanges(fromContextDidSave: notification)
+        })
         
         getData()
     }
     
+//    private func setWatchlistButtonInitialProfile() {
+//        if let _ = UserDefaults.standard.string(forKey: Constants.key_account_id) ,
+//            let _ = UserDefaults.standard.string(forKey: Constants.key_session_id),
+//            let contents = movie
+//            {
+//                if let context = container?.viewContext,
+//                    let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context) {
+//                    if db_movie.isInWatchlist {
+//                        movieView.profile = .READY_TO_REMOVE
+//                    } else {
+//                        movieView.profile = .READY_TO_ADD
+//                    }
+//                } else {
+//                    movieView.profile = .DISABLED
+//                }
+//            }
+//        else {
+//            movieView.profile = .DISABLED
+//        }
+//    }
+    
+
     private func setWatchlistButtonInitialProfile() {
         if let _ = UserDefaults.standard.string(forKey: Constants.key_account_id) ,
             let _ = UserDefaults.standard.string(forKey: Constants.key_session_id),
             let contents = movie
             {
-                if let context = container?.viewContext,
-                    let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context) {
-                    if db_movie.isInWatchlist {
-                        movieView.profile = .READY_TO_REMOVE
+                container?.performBackgroundTask{ context in
+                    if let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context) {
+                        if db_movie.isInWatchlist {
+                            DispatchQueue.main.async { [weak self] in
+                                self?.movieView.profile = .READY_TO_REMOVE
+                            }
+                        } else {
+                            DispatchQueue.main.async { [weak self] in
+                                self?.movieView.profile = .READY_TO_ADD
+                            }
+                        }
                     } else {
-                        movieView.profile = .READY_TO_ADD
+                        DispatchQueue.main.async { [weak self] in
+                            self?.movieView.profile = .DISABLED
+                        }
                     }
-                } else {
-                    movieView.profile = .DISABLED
                 }
             }
         else {
@@ -237,21 +266,8 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
     }
     
     private func updateWatchlistInDb(withMovie movie : WMovie , action: WatchlistAction , newProfile : WatchListButtonProfile ) {
-//            container?.performBackgroundTask{ context in
-//                let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
-//                do {
-//                    try context.save()
-//                }catch {
-//                    print("Error while adding movie to watchlist in DB")
-//                    print(error.localizedDescription)
-//                }
-//                DispatchQueue.main.async { [ weak self ] in
-//                    self?.movieView.profile = newProfile
-//                }
-//            }
-        
-        if let context = container?.viewContext {
-            let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
+            container?.performBackgroundTask{ context in
+                let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
                 do {
                     try context.save()
                 }catch {
@@ -261,7 +277,20 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
                 DispatchQueue.main.async { [ weak self ] in
                     self?.movieView.profile = newProfile
                 }
-        }
+            }
+        
+//        if let context = container?.viewContext {
+//            let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
+//                do {
+//                    try context.save()
+//                }catch {
+//                    print("Error while adding movie to watchlist in DB")
+//                    print(error.localizedDescription)
+//                }
+//                DispatchQueue.main.async { [ weak self ] in
+//                    self?.movieView.profile = newProfile
+//                }
+//        }
         
     }
     

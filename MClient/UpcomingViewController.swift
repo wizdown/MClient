@@ -156,6 +156,8 @@ class UpcomingViewController: MoviesCollectionViewController {
         }
         return cell
     }
+    
+ 
 }
 
 

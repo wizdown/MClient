@@ -123,6 +123,7 @@ class NowPlayingViewController:MoviesCollectionViewController {
     
     private func deleteOldCast() {
         // Deleting Casts with no movie Credits Left
+        
         container?.performBackgroundTask{ background_context in
             let cast_request : NSFetchRequest<Person> = Person.fetchRequest()
             cast_request.predicate = NSPredicate(format: "movieCredits.@count == 0 " )  // Issue here

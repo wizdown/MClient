@@ -44,5 +44,7 @@ extension NowPlayingViewController: NSFetchedResultsControllerDelegate {
         //        _collectionView?.reloadData()
     }
     
+    
+    
 
 }

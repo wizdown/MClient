@@ -1,3 +1,5 @@
+
+
 //
 //  AppDelegate.swift
 //  MClient
@@ -52,6 +54,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if session_id != nil && account_id != nil {
             print("Session_Id : \(session_id!)")
             print("Account_id : \(account_id!)")
+            let username = UserDefaults.standard.string(forKey: Constants.key_username)
+            print("Username : \(username ?? "Not found")")
             self.window = UIWindow(frame: UIScreen.main.bounds)
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let initialViewController = storyboard.instantiateViewController(withIdentifier: "startUpTabBarController")
@@ -128,6 +132,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+ 
 
 
 }
