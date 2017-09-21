@@ -111,11 +111,12 @@ class Constants {
 }
 
 struct NeedPersistence {
-    var _required : Bool = false
-     var stepCount : Int = 0
+    private var _required : Bool = false
+     private var stepCount : Int = 0
+    private var maxStepCountNeeded : Int = 2
     var required: Bool {
         get {
-            if _required , stepCount <= 2 {
+            if _required , stepCount <= maxStepCountNeeded {
                 return true
             }
             else {
@@ -126,6 +127,11 @@ struct NeedPersistence {
     
     init(isNeeded : Bool ) {
         _required = isNeeded
+    }
+    
+    init (isNeeded: Bool , maxStepCount : Int) {
+        self._required = isNeeded
+        maxStepCountNeeded = maxStepCount
     }
     
     

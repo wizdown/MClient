@@ -120,7 +120,6 @@ class MoviesCollectionViewController: UIViewController , UICollectionViewDelegat
             print("Reload ==> Movies Found : \(movies.count)")
             
         }
-        print("setting pending query to false")
         _previousQueryPending = false
     }
     

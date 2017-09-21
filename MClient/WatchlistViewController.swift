@@ -113,10 +113,10 @@ class WatchlistViewController: UIViewController , UICollectionViewDelegate , UIC
             let contents = fetchedResultsController?.object(at: indexPath) {
             movieViewController.movie = WMovie(credit: contents)
             
-//            var persistence = NeedPersistence(isNeeded: true)
-//            persistence.incrStepCount()
-//            
-//            movieViewController.needsPersistence = persistence
+            var persistence = NeedPersistence(isNeeded: true, maxStepCount : 1)
+            persistence.incrStepCount()
+            
+            movieViewController.needsPersistence = persistence
         }
     }
     
@@ -180,7 +180,6 @@ class WatchlistViewController: UIViewController , UICollectionViewDelegate , UIC
 }
 
 extension WatchlistViewController : UICollectionViewDelegateFlowLayout {
-    
     
     //    1
     func collectionView(_ collectionView: UICollectionView,

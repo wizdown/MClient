@@ -665,9 +665,7 @@
                             <constraint firstAttribute="trailing" secondItem="f5i-Fe-avr" secondAttribute="trailing" id="yfx-Ea-O4h"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="wPQ-oB-j0r">
-                        <barButtonItem key="rightBarButtonItem" title="Filter" id="qZX-xt-m4r"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="wPQ-oB-j0r"/>
                     <connections>
                         <outlet property="collectionView" destination="f5i-Fe-avr" id="x9F-W1-6uV"/>
                         <outlet property="searchBar" destination="W5l-LU-FiC" id="Il8-7J-ZFH"/>
@@ -826,6 +824,6 @@
         <image name="user" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="U7u-v0-VfX"/>
+        <segue reference="vRD-GY-Txm"/>
     </inferredMetricsTieBreakers>
 </document>
