@@ -114,9 +114,15 @@ class MovieDetailsViewController: UIViewController , UICollectionViewDelegate , 
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if movie != nil {
+            setWatchlistButtonInitialProfile()
+        }
+    }
+    
     private func getData() {
         if let contents = movie {
-            setWatchlistButtonInitialProfile()
+//            setWatchlistButtonInitialProfile()
             movieView.movie = contents
             container?.performBackgroundTask{ [weak self] context in
                 if let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context) {

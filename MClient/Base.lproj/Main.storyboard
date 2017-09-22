@@ -797,11 +797,11 @@
             </objects>
             <point key="canvasLocation" x="1462" y="-170"/>
         </scene>
-        <!--Profile-->
+        <!--Watchlist-->
         <scene sceneID="yz6-A0-ZO9">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="3r7-1G-BhG" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" image="user" id="jq9-Fy-Gzu"/>
+                    <tabBarItem key="tabBarItem" title="Watchlist" image="watchlist" id="jq9-Fy-Gzu"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="MyZ-Et-lU5">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -821,7 +821,7 @@
         <image name="playing" width="25" height="25"/>
         <image name="search" width="25" height="25"/>
         <image name="upcoming" width="25" height="25"/>
-        <image name="user" width="25" height="25"/>
+        <image name="watchlist" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="vRD-GY-Txm"/>

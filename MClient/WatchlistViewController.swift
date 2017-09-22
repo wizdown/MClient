@@ -42,7 +42,7 @@ class WatchlistViewController: UIViewController , UICollectionViewDelegate , UIC
             welcomeMessage.append("watchlist")
         }
         else {
-            welcomeMessage.append("Please login to use this feature")
+            welcomeMessage.append("Login required!")
         }
         welcomeLabel.text = welcomeMessage
     }
@@ -55,13 +55,7 @@ class WatchlistViewController: UIViewController , UICollectionViewDelegate , UIC
         }
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        verifyLogin()
-        
-        updateUserDataInUI()
-        
+    private func setUpNSFRC() {
         if isWatchListEnabled {
             
             collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
@@ -91,13 +85,20 @@ class WatchlistViewController: UIViewController , UICollectionViewDelegate , UIC
                 collectionView.reloadData()
             }
             
-            NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
-                [weak self]
-                notification in
-                //            print(notification.userInfo ?? "")
-                self?.container?.viewContext.mergeChanges(fromContextDidSave: notification)
-            })
         }
+        
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        title = "Watchlist"
+        verifyLogin()
+        
+        updateUserDataInUI()
+        
+        setUpNSFRC()
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

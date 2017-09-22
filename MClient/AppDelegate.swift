@@ -47,11 +47,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 //        window?.tintColor = themeColor
+        
+//        print(application.applicationState)
+        
         let session_id  = UserDefaults.standard.string(forKey: Constants.key_session_id)
         
         let account_id  = UserDefaults.standard.string(forKey: Constants.key_account_id)
         
         if session_id != nil && account_id != nil {
+            
+//            UserDefaults.standard.removeObject(forKey: Constants.key_session_id)
+//            UserDefaults.standard.removeObject(forKey: Constants.key_account_id)
+
             print("Session_Id : \(session_id!)")
             print("Account_id : \(account_id!)")
             let username = UserDefaults.standard.string(forKey: Constants.key_username)
