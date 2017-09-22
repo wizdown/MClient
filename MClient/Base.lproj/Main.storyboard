@@ -24,7 +24,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iv1-tg-P5K">
-                                <rect key="frame" x="0.0" y="64" width="375" height="687"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="780"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wf8-v6-E2e">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="662"/>
@@ -212,7 +212,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HFE-mp-rnX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3596" y="845.57721139430294"/>
+            <point key="canvasLocation" x="5537" y="916"/>
         </scene>
         <!--Cast Detail View Controller-->
         <scene sceneID="QhO-QP-ABW">
@@ -227,7 +227,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fKo-EK-aJE">
-                                <rect key="frame" x="0.0" y="64" width="375" height="687"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="780"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CHz-hr-q5c">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="650"/>
@@ -427,7 +427,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jch-ml-4Ub" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5030" y="787"/>
+            <point key="canvasLocation" x="7167" y="916"/>
         </scene>
         <!--Now Playing View Controller-->
         <scene sceneID="vvn-kB-9af">
@@ -598,7 +598,8 @@
                         <segue destination="nvt-p1-VsR" kind="relationship" relationship="viewControllers" id="CYg-ou-pBV"/>
                         <segue destination="oJ8-w1-vym" kind="relationship" relationship="viewControllers" id="B3S-C7-MI9"/>
                         <segue destination="KtW-ip-rus" kind="relationship" relationship="viewControllers" id="Emr-ID-dSE"/>
-                        <segue destination="3r7-1G-BhG" kind="relationship" relationship="viewControllers" id="KIz-AT-iHh"/>
+                        <segue destination="wQr-H5-M6A" kind="relationship" relationship="viewControllers" id="QO1-zv-Mar"/>
+                        <segue destination="ytM-q1-2ra" kind="show" identifier="tabbarToStartupSegue" id="UBX-bi-ng6"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HXV-1f-l3g" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -608,7 +609,7 @@
         <!--Search View Controller-->
         <scene sceneID="yxV-Rk-6I7">
             <objects>
-                <viewController id="sMF-FR-V0n" customClass="SearchViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="sMF-FR-V0n" customClass="SearchViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ydQ-L8-UXs"/>
                         <viewControllerLayoutGuide type="bottom" id="8Sy-xc-XmF"/>
@@ -636,7 +637,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Section Header" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2gz-Wh-olh">
-                                            <rect key="frame" x="12" y="12" width="643" height="26"/>
+                                            <rect key="frame" x="12" y="12" width="351" height="26"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -714,10 +715,43 @@
             </objects>
             <point key="canvasLocation" x="1462" y="1694"/>
         </scene>
+        <!--User Profile View Controller-->
+        <scene sceneID="aaw-5Z-Zk9">
+            <objects>
+                <viewController id="PGU-yZ-o1o" customClass="UserProfileViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ITW-o8-PJq"/>
+                        <viewControllerLayoutGuide type="bottom" id="MRf-7Z-1ju"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="yIo-cB-OEo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zwk-sx-kIb">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Zwk-sx-kIb" firstAttribute="leading" secondItem="yIo-cB-OEo" secondAttribute="leading" id="FFK-90-UCm"/>
+                            <constraint firstItem="MRf-7Z-1ju" firstAttribute="top" secondItem="Zwk-sx-kIb" secondAttribute="bottom" id="G90-3a-otC"/>
+                            <constraint firstItem="Zwk-sx-kIb" firstAttribute="top" secondItem="ITW-o8-PJq" secondAttribute="bottom" id="K3A-9P-pTJ"/>
+                            <constraint firstAttribute="trailing" secondItem="Zwk-sx-kIb" secondAttribute="trailing" id="z2P-0T-x51"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="RYa-5U-5ys"/>
+                    <connections>
+                        <outlet property="containerView" destination="Zwk-sx-kIb" id="oFZ-YI-LFK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bMD-Oy-0Wc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2401" y="2831"/>
+        </scene>
         <!--Watchlist View Controller-->
         <scene sceneID="085-7d-x9V">
             <objects>
-                <viewController id="Lvj-V4-Hgf" customClass="WatchlistViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="watchlistFound" id="Lvj-V4-Hgf" customClass="WatchlistViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="UcT-rI-mEA"/>
                         <viewControllerLayoutGuide type="bottom" id="UI6-AH-3K9"/>
@@ -727,7 +761,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Y4-a4-KOh">
-                                <rect key="frame" x="0.0" y="64" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xhd-Yv-W7L">
                                         <rect key="frame" x="4" y="14.5" width="367" height="21"/>
@@ -745,7 +779,7 @@
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="H6J-7a-d0c">
-                                <rect key="frame" x="0.0" y="118" width="375" height="500"/>
+                                <rect key="frame" x="0.0" y="74" width="375" height="593"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="uCH-ep-FLZ">
                                     <size key="itemSize" width="50" height="50"/>
@@ -776,7 +810,73 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bbl-bu-zAZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2488.8000000000002" y="2837.6311844077964"/>
+            <point key="canvasLocation" x="3383" y="3527"/>
+        </scene>
+        <!--Watchlist Error View Controller-->
+        <scene sceneID="MS8-Ku-j4P">
+            <objects>
+                <viewController storyboardIdentifier="watchlistError" id="g0g-vp-1xg" customClass="WatchlistErrorViewController" customModule="MClient" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="NPU-ga-asI"/>
+                        <viewControllerLayoutGuide type="bottom" id="vkI-rF-oHx"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tfI-dU-tpi">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d3k-YF-Y6S">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="d1B-cS-Brr">
+                                        <rect key="frame" x="44.5" y="304" width="286.5" height="59.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please login to view your watchlist!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W3U-7d-nPV">
+                                                <rect key="frame" x="0.0" y="0.0" width="286.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="NeM-nf-Viu">
+                                                <rect key="frame" x="113.5" y="29.5" width="60" height="30"/>
+                                                <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="60" id="Lqd-Gf-OXi"/>
+                                                </constraints>
+                                                <state key="normal" title="LOGIN">
+                                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="performLoginAction:" destination="g0g-vp-1xg" eventType="touchUpInside" id="fXG-st-AV4"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="W3U-7d-nPV" firstAttribute="top" secondItem="d1B-cS-Brr" secondAttribute="top" id="Ahg-YC-ovA"/>
+                                            <constraint firstAttribute="bottom" secondItem="NeM-nf-Viu" secondAttribute="bottom" id="AoG-0t-9CS"/>
+                                            <constraint firstItem="W3U-7d-nPV" firstAttribute="leading" secondItem="d1B-cS-Brr" secondAttribute="leading" id="ih9-GK-CYx"/>
+                                            <constraint firstAttribute="trailing" secondItem="W3U-7d-nPV" secondAttribute="trailing" id="jHI-Ht-9ZZ"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="d1B-cS-Brr" firstAttribute="top" secondItem="d3k-YF-Y6S" secondAttribute="top" constant="304" id="4GZ-qO-chd"/>
+                                    <constraint firstItem="d1B-cS-Brr" firstAttribute="centerX" secondItem="d3k-YF-Y6S" secondAttribute="centerX" id="FnO-Hu-2rN"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="vkI-rF-oHx" firstAttribute="top" secondItem="d3k-YF-Y6S" secondAttribute="bottom" id="Jf3-Ae-b2Z"/>
+                            <constraint firstItem="d3k-YF-Y6S" firstAttribute="top" secondItem="tfI-dU-tpi" secondAttribute="top" id="OIi-CG-g59"/>
+                            <constraint firstAttribute="trailing" secondItem="d3k-YF-Y6S" secondAttribute="trailing" id="c9m-Lt-faG"/>
+                            <constraint firstItem="d3k-YF-Y6S" firstAttribute="leading" secondItem="tfI-dU-tpi" secondAttribute="leading" id="tF9-t7-Gbf"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tBj-kl-Vyf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2401" y="3878"/>
         </scene>
         <!--Search-->
         <scene sceneID="uuL-VJ-q7H">
@@ -798,23 +898,23 @@
             <point key="canvasLocation" x="1462" y="-170"/>
         </scene>
         <!--Watchlist-->
-        <scene sceneID="yz6-A0-ZO9">
+        <scene sceneID="D9u-Tq-rcg">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="3r7-1G-BhG" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Watchlist" image="watchlist" id="jq9-Fy-Gzu"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="wQr-H5-M6A" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Watchlist" image="watchlist" id="7yG-QI-fTv"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="MyZ-Et-lU5">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="930-Ep-3PI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="Lvj-V4-Hgf" kind="relationship" relationship="rootViewController" id="4Tw-ha-sBo"/>
+                        <segue destination="PGU-yZ-o1o" kind="relationship" relationship="rootViewController" id="O55-hH-d19"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="IIf-0Q-LHh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xq7-fX-1jr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1462" y="2838"/>
+            <point key="canvasLocation" x="1445.5999999999999" y="2831.3343328335836"/>
         </scene>
     </scenes>
     <resources>
@@ -824,6 +924,7 @@
         <image name="watchlist" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="vRD-GY-Txm"/>
+        <segue reference="p3d-bS-CA6"/>
+        <segue reference="UBX-bi-ng6"/>
     </inferredMetricsTieBreakers>
 </document>

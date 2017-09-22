@@ -19,7 +19,6 @@ class WatchlistViewController: UIViewController , UICollectionViewDelegate , UIC
     
     @IBOutlet weak var welcomeLabel: UILabel!
     
-    private var isWatchListEnabled : Bool = false
     
     var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
@@ -34,66 +33,51 @@ class WatchlistViewController: UIViewController , UICollectionViewDelegate , UIC
 //        userImage.clipsToBounds = true
         
         var welcomeMessage = ""
-        if isWatchListEnabled {
-            let username = UserDefaults.standard.string(forKey: Constants.key_username)
-            if username != nil {
-                welcomeMessage.append("\(username!)'s ")
-            }
-            welcomeMessage.append("watchlist")
+        let username = UserDefaults.standard.string(forKey: Constants.key_username)
+        if username != nil {
+            welcomeMessage.append("\(username!)'s ")
         }
-        else {
-            welcomeMessage.append("Login required!")
-        }
+        welcomeMessage.append("watchlist")
         welcomeLabel.text = welcomeMessage
     }
     
-    private func verifyLogin() {
-        let account_id = UserDefaults.standard.string(forKey: Constants.key_account_id)
-        let session_id = UserDefaults.standard.string(forKey: Constants.key_session_id)
-        if account_id != nil && session_id != nil {
-            isWatchListEnabled = true
-        }
-    }
+   
     
     private func setUpNSFRC() {
-        if isWatchListEnabled {
+        
+        collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        if let context = container?.viewContext {
             
-            collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
-            collectionView.delegate = self
-            collectionView.dataSource = self
+            let request: NSFetchRequest<Movie> = Movie.fetchRequest()
+            request.predicate = NSPredicate(format: "isInWatchlist = %@", true as CVarArg)
+            request.sortDescriptors = [NSSortDescriptor(key : "timestamp" , ascending: true )]
+            fetchedResultsController = NSFetchedResultsController<Movie>(
+                fetchRequest: request,
+                managedObjectContext: context,
+                sectionNameKeyPath: nil,
+                cacheName: nil
+            )
             
-            if let context = container?.viewContext {
-                
-                let request: NSFetchRequest<Movie> = Movie.fetchRequest()
-                request.predicate = NSPredicate(format: "isInWatchlist = %@", true as CVarArg)
-                request.sortDescriptors = [NSSortDescriptor(key : "timestamp" , ascending: true )]
-                fetchedResultsController = NSFetchedResultsController<Movie>(
-                    fetchRequest: request,
-                    managedObjectContext: context,
-                    sectionNameKeyPath: nil,
-                    cacheName: nil
-                )
-                
-                fetchedResultsController?.delegate = self
-                
-                do {
-                    try fetchedResultsController?.performFetch()
-                    //                print("Fetch request success")
-                } catch {
-                    print(error.localizedDescription)
-                }
-                collectionView.reloadData()
+            fetchedResultsController?.delegate = self
+            
+            do {
+                try fetchedResultsController?.performFetch()
+                //                print("Fetch request success")
+            } catch {
+                print(error.localizedDescription)
             }
-            
+            collectionView.reloadData()
         }
+            
+        
         
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        title = "Watchlist"
-        verifyLogin()
         
         updateUserDataInUI()
         
