@@ -167,11 +167,11 @@ class StartUpViewController: UIViewController {
     
     private func displayMessageLoader(message: String , addSpinner : Bool ) {
         
-        effectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+        effectView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
         strLabel = UILabel(frame: CGRect(x: 50, y: 0, width: 160, height: 46))
         strLabel.text = message
         strLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
-        strLabel.textColor = UIColor(white: 0.9, alpha: 0.7)
+        strLabel.textColor = UIColor(white: 0.1 , alpha: 0.7)
         
         //        print("View dimensions : \(view.frame.width) , \(view.frame.height)")
         //        print("View mids : \(view.frame.midX) , \(view.frame.midY)")

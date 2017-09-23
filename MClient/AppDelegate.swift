@@ -56,7 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if session_id != nil && account_id != nil {
             
-//            UserDefaults.standard.removeObject(forKey: Constants.key_session_id)
+            UserDefaults.standard.removeObject(forKey: Constants.key_session_id)
 //            UserDefaults.standard.removeObject(forKey: Constants.key_account_id)
 
             print("Session_Id : \(session_id!)")
