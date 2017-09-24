@@ -12,14 +12,12 @@ import CoreData
 
 
 // UIScrollViewDelegate and UICollectionViewDelegate are inherited from the superclass.
-class NowPlayingViewController: MoviesCollectionViewController, UICollectionViewDataSource    {
+class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource    {
     
     var _count: Int = 1
     var _previousQueryPending: Bool = false
     var _segueIdentifierForMovieDetails: String?
     var _movieRequest: WMRequest?
-
-    
 
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -256,3 +254,38 @@ class NowPlayingViewController: MoviesCollectionViewController, UICollectionView
         return cell
     }
 }
+
+
+fileprivate var _items : CGFloat = 2
+fileprivate var _sectionInsets = UIEdgeInsets(top: 10.0 , left: 10.0 , bottom: 10.0 , right: 10.0 )
+
+extension NowPlayingViewController : UICollectionViewDelegateFlowLayout {
+    
+    
+    //    1
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        //2
+        let paddingSpace = _sectionInsets.left * (_items + 1)
+        let availableWidth = collectionView.frame.width - paddingSpace
+        let widthPerItem = availableWidth / _items
+        return CGSize(width: widthPerItem, height: widthPerItem )
+    }
+    
+    //3
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return _sectionInsets
+    }
+    
+    // 4
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return _sectionInsets.left
+    }
+}
+
+

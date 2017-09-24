@@ -11,7 +11,6 @@
 		0F38FD3C1F5FC2EE00F12834 /* UpcomingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F38FD3B1F5FC2EE00F12834 /* UpcomingViewController.swift */; };
 		0F38FD4C1F60106B00F12834 /* MovieDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F38FD4B1F60106B00F12834 /* MovieDetailsViewController.swift */; };
 		0F38FD4E1F60120C00F12834 /* MovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F38FD4D1F60120C00F12834 /* MovieView.swift */; };
-		0F38FD501F6067CF00F12834 /* MoviesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F38FD4F1F6067CF00F12834 /* MoviesCollectionViewController.swift */; };
 		0F38FD561F614E7600F12834 /* WCastPeople.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F38FD551F614E7600F12834 /* WCastPeople.swift */; };
 		0F38FD581F61530F00F12834 /* WCRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F38FD571F61530F00F12834 /* WCRequest.swift */; };
 		0F38FD5B1F6166A500F12834 /* NewCastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F38FD591F6166A500F12834 /* NewCastCell.swift */; };
@@ -50,7 +49,6 @@
 		0F38FD3B1F5FC2EE00F12834 /* UpcomingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpcomingViewController.swift; sourceTree = "<group>"; };
 		0F38FD4B1F60106B00F12834 /* MovieDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDetailsViewController.swift; sourceTree = "<group>"; };
 		0F38FD4D1F60120C00F12834 /* MovieView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieView.swift; sourceTree = "<group>"; };
-		0F38FD4F1F6067CF00F12834 /* MoviesCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviesCollectionViewController.swift; sourceTree = "<group>"; };
 		0F38FD551F614E7600F12834 /* WCastPeople.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCastPeople.swift; sourceTree = "<group>"; };
 		0F38FD571F61530F00F12834 /* WCRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCRequest.swift; sourceTree = "<group>"; };
 		0F38FD591F6166A500F12834 /* NewCastCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewCastCell.swift; sourceTree = "<group>"; };
@@ -104,7 +102,6 @@
 				0F431C2C1F67E072008DF236 /* StartUpViewController.swift */,
 				0F431C2E1F67E08C008DF236 /* LoginViewController.swift */,
 				0F38FD391F5FAC2E00F12834 /* UITabBarViewController.swift */,
-				0F38FD4F1F6067CF00F12834 /* MoviesCollectionViewController.swift */,
 				0FB5C2D31F5E894B005708AA /* NowPlayingViewController.swift */,
 				0F4A17091F6BB9C400E93B3F /* NowPlayingViewController+NSFRCDelegate.swift */,
 				0F38FD3B1F5FC2EE00F12834 /* UpcomingViewController.swift */,
@@ -358,7 +355,6 @@
 				0FB5C2CC1F5D3FBE005708AA /* SearchHeaderCell.swift in Sources */,
 				0F431C2D1F67E072008DF236 /* StartUpViewController.swift in Sources */,
 				0F38FD4E1F60120C00F12834 /* MovieView.swift in Sources */,
-				0F38FD501F6067CF00F12834 /* MoviesCollectionViewController.swift in Sources */,
 				0F431C271F6644F0008DF236 /* CastView.swift in Sources */,
 				0FB30E371F74F9620078B3CF /* WatchlistErrorViewController.swift in Sources */,
 				0F38FD5B1F6166A500F12834 /* NewCastCell.swift in Sources */,

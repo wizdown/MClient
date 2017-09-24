@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 
-class UpcomingViewController: MoviesCollectionViewController, UICollectionViewDataSource {
+class UpcomingViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -208,6 +208,39 @@ class UpcomingViewController: MoviesCollectionViewController, UICollectionViewDa
     }
     
  
+}
+
+
+fileprivate var _items : CGFloat = 2
+fileprivate var _sectionInsets = UIEdgeInsets(top: 10.0 , left: 10.0 , bottom: 10.0 , right: 10.0 )
+
+extension UpcomingViewController : UICollectionViewDelegateFlowLayout {
+    
+    
+    //    1
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        //2
+        let paddingSpace = _sectionInsets.left * (_items + 1)
+        let availableWidth = collectionView.frame.width - paddingSpace
+        let widthPerItem = availableWidth / _items
+        return CGSize(width: widthPerItem, height: widthPerItem )
+    }
+    
+    //3
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return _sectionInsets
+    }
+    
+    // 4
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return _sectionInsets.left
+    }
 }
 
 

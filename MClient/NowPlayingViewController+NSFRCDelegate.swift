@@ -43,8 +43,6 @@ extension NowPlayingViewController: NSFetchedResultsControllerDelegate {
         //        print("Content Updated")
         //        _collectionView?.reloadData()
     }
-    
-    
-    
-
 }
+
+

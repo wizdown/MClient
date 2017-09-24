@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class CastDetailViewController: MoviesCollectionViewController , UICollectionViewDataSource  {
+class CastDetailViewController: UIViewController, UICollectionViewDelegate , UICollectionViewDataSource  {
     
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
@@ -28,9 +28,6 @@ class CastDetailViewController: MoviesCollectionViewController , UICollectionVie
         super.viewDidLoad()
         
         castView.collectionView.register(UINib(nibName: "newMovieCell", bundle: nil) , forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
-        
-        _items = 1
-        _sectionInsets = UIEdgeInsets(top: 5.0 , left: 5.0 , bottom: 5.0 , right: 5.0 )
         
         castView.collectionView.delegate = self
         castView.collectionView.dataSource = self
@@ -311,16 +308,36 @@ class CastDetailViewController: MoviesCollectionViewController , UICollectionVie
 //                print("Setting movie for MovieDetailsViewController")
         }
     }
-    override func collectionView(_ collectionView: UICollectionView,
-                                 layout collectionViewLayout: UICollectionViewLayout,
-                                 sizeForItemAt indexPath: IndexPath) -> CGSize {
+}
+
+fileprivate var _items : CGFloat = 1
+fileprivate var _sectionInsets = UIEdgeInsets(top: 5.0 , left: 5.0 , bottom: 5.0 , right: 5.0 )
+
+extension CastDetailViewController : UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         //2
         let paddingSpace = _sectionInsets.left * ( _items + 1 )
-        let availableHeight = castView.collectionView.frame.height - paddingSpace
+        let availableHeight = collectionView.frame.height - paddingSpace
         let HeightPerItem = availableHeight / _items
         return CGSize(width: HeightPerItem, height: HeightPerItem )
     }
     
+    //3
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return _sectionInsets
+    }
+    
+    // 4
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return _sectionInsets.left
+    }
 }
 
 

@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class SearchViewController: MoviesCollectionViewController, UICollectionViewDataSource , UISearchBarDelegate {
+class SearchViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource , UISearchBarDelegate {
     
     var _segueIdentifierForMovieDetails: String?
     var _movieRequest: WMRequest?
@@ -42,7 +42,7 @@ class SearchViewController: MoviesCollectionViewController, UICollectionViewData
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+//        super.viewWillAppear(animated)
         collectionView?.collectionViewLayout.invalidateLayout()
 
     }
@@ -74,6 +74,7 @@ class SearchViewController: MoviesCollectionViewController, UICollectionViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         _previousQueryPending = false
         _count = 1
 
@@ -231,5 +232,38 @@ class SearchViewController: MoviesCollectionViewController, UICollectionViewData
     }
     
    
+}
+
+
+fileprivate var _items : CGFloat = 2
+fileprivate var _sectionInsets = UIEdgeInsets(top: 10.0 , left: 10.0 , bottom: 10.0 , right: 10.0 )
+
+extension SearchViewController : UICollectionViewDelegateFlowLayout {
+    
+    
+    //    1
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        //2
+        let paddingSpace = _sectionInsets.left * (_items + 1)
+        let availableWidth = collectionView.frame.width - paddingSpace
+        let widthPerItem = availableWidth / _items
+        return CGSize(width: widthPerItem, height: widthPerItem )
+    }
+    
+    //3
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return _sectionInsets
+    }
+    
+    // 4
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return _sectionInsets.left
+    }
 }
 

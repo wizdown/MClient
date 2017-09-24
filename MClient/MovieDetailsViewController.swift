@@ -14,7 +14,7 @@ enum WatchlistAction {
     case REMOVE
 }
 
-class MovieDetailsViewController: MoviesCollectionViewController , UICollectionViewDataSource , WatchlistDelegate {
+class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , UICollectionViewDataSource , WatchlistDelegate {
     
     
     var container: NSPersistentContainer? =
@@ -39,8 +39,8 @@ class MovieDetailsViewController: MoviesCollectionViewController , UICollectionV
         super.viewDidLoad()
         movieView.castCollectionView.register(UINib(nibName: "NewCastCell", bundle: nil), forCellWithReuseIdentifier: Constants.castCellReuseIdentifier)
         
-        _items = 1
-        _sectionInsets = UIEdgeInsets(top: 5.0 , left: 5.0 , bottom: 5.0 , right: 5.0 )
+//        _items = 1
+//        _sectionInsets = UIEdgeInsets(top: 5.0 , left: 5.0 , bottom: 5.0 , right: 5.0 )
         
        
         
@@ -348,16 +348,6 @@ class MovieDetailsViewController: MoviesCollectionViewController , UICollectionV
             }
         }
     }
-    
-    override func collectionView(_ collectionView: UICollectionView,
-                                 layout collectionViewLayout: UICollectionViewLayout,
-                                 sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //2
-        let paddingSpace = _sectionInsets.left * ( _items + 1 )
-        let availableHeight = movieView.castCollectionView.frame.height - paddingSpace
-        let HeightPerItem = availableHeight / _items
-        return CGSize(width: HeightPerItem, height: HeightPerItem )
-    }
 }
 
 extension UIViewController {
@@ -367,6 +357,36 @@ extension UIViewController {
         } else {
             return self
         }
+    }
+}
+
+fileprivate var _items : CGFloat = 1
+fileprivate var _sectionInsets = UIEdgeInsets(top: 5.0 , left: 5.0 , bottom: 5.0 , right: 5.0 )
+
+extension MovieDetailsViewController : UICollectionViewDelegateFlowLayout {
+    
+     func collectionView(_ collectionView: UICollectionView,
+                                 layout collectionViewLayout: UICollectionViewLayout,
+                                 sizeForItemAt indexPath: IndexPath) -> CGSize {
+        //2
+        let paddingSpace = _sectionInsets.left * ( _items + 1 )
+        let availableHeight = collectionView.frame.height - paddingSpace
+        let HeightPerItem = availableHeight / _items
+        return CGSize(width: HeightPerItem, height: HeightPerItem )
+    }
+    
+    //3
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return _sectionInsets
+    }
+    
+    // 4
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return _sectionInsets.left
     }
 }
 
