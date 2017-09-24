@@ -23,6 +23,9 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
 //        { didSet{ updateUI() } }
     
+    var privateContext : NSManagedObjectContext =
+        (UIApplication.shared.delegate as! AppDelegate).pContext
+    
     var fetchedResultsController: NSFetchedResultsController<Movie>?
     
     
@@ -87,7 +90,11 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
         collectionView.delegate = self
         collectionView.dataSource = self
         updateUI()
-        
+        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
+            notification in
+            //            print(notification.userInfo ?? "")
+            self.container?.viewContext.mergeChanges(fromContextDidSave: notification)
+        })
         // Adding check here so that it does not fetch movies that are coming in next 180 days in the initial request
         let max_required_date = (NSCalendar.current.date(byAdding: Calendar.Component.day, value: 180, to: Date() as Date))!
         if let context = container?.viewContext {
@@ -112,13 +119,21 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     private func updateDb(_ movies: [WMovie]) {
-        if let context = container?.viewContext {
-                for current_movie in movies {
-                _ = try? Movie.findOrCreateMovie(matching: current_movie, in: context)
-                try? context.save()
-                }
-            
+        privateContext.perform {
+            for current_movie in movies {
+                _ = Movie.create(using: current_movie, in: self.privateContext)
+                try? self.privateContext.save()
+            }
         }
+        
+//        if let context = container?.viewContext {
+//                for current_movie in movies {
+//                _ = try? Movie.findOrCreateMovie(matching: current_movie, in: context)
+//                try? context.save()
+//                }
+//            
+//        }
+        
         _previousQueryPending = false
         
     }
@@ -139,9 +154,7 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
             if let request = WMRequest.upcomingMoviesRequest(forDateAfterThis: date) {
                 request.performRequest(completion: { [weak self ]
                     (movies : [WMovie]) in
-                    DispatchQueue.main.async {
                         self?.updateDb(movies)
-                    }
                 })
             } else {
                 _previousQueryPending = false

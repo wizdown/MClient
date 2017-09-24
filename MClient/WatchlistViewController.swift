@@ -19,6 +19,10 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
     var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     
+    
+    var privateContext : NSManagedObjectContext =
+        (UIApplication.shared.delegate as! AppDelegate).pContext
+    
     var fetchedResultsController: NSFetchedResultsController<Movie>?
     
     var _watchlistRequest: WMRequest?
@@ -72,20 +76,14 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     private func updateWatchlistInDb(movies: [WMovie]) {
-        if let context = container?.viewContext {
+        
+        privateContext.performAndWait {
             for current_movie in movies {
-                let _ = Movie.updateWatchlistInDb(with: current_movie, action: .ADD , in: context)
-                try? context.save()
+                let _ = Movie.updateWatchlistInDb(with: current_movie, action: .ADD , in: self.privateContext)
+                try? self.privateContext.save()
                 
             }
         }
-//        container?.performBackgroundTask{ context in
-//            for current_movie in movies {
-//                let _ = Movie.updateWatchlistInDb(with: current_movie, action: .ADD , in: context)
-//                try? context.save()
-//
-//            }
-//        }
     }
     
     private func getData() {
@@ -110,12 +108,11 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
         collectionView.dataSource = self
         collectionView.alwaysBounceVertical = true
         
-//        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
-//            [weak self]
-//            notification in
-//            //            print(notification.userInfo ?? "")
-//            self?.container?.viewContext.mergeChanges(fromContextDidSave: notification)
-//        })
+        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
+            notification in
+            //            print(notification.userInfo ?? "")
+            self.container?.viewContext.mergeChanges(fromContextDidSave: notification)
+        })
         
         _watchlistRequest = WMRequest.getWatchlistRequest()
         

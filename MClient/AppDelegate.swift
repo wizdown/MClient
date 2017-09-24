@@ -17,6 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
+     let pContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+    
+     
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         print("url: \(url)")
@@ -50,7 +53,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        window?.tintColor = themeColor
         
 //        print(application.applicationState)
-
+        
+        pContext.persistentStoreCoordinator = persistentContainer.persistentStoreCoordinator
         
         let session_id  = UserDefaults.standard.string(forKey: Constants.key_session_id)
         
@@ -141,9 +145,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
- 
-
-
 }
 

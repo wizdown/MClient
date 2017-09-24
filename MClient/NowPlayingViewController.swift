@@ -24,6 +24,9 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     
+    var privateContext : NSManagedObjectContext =
+        (UIApplication.shared.delegate as! AppDelegate).pContext
+    
     var fetchedResultsController: NSFetchedResultsController<Movie>?
     
     private func updateUI() {
@@ -57,7 +60,7 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
         super.viewWillAppear(animated)
 
 //        print("Now Playing will appear")
-        if _movieRequest?.lastSuccessfulRequestNumber == 0{
+        if _movieRequest?.lastSuccessfulRequestNumber == 0 {
             getResults()
         }
         collectionView?.collectionViewLayout.invalidateLayout()
@@ -81,6 +84,11 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
         collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
+        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
+            notification in
+            //            print(notification.userInfo ?? "")
+            self.container?.viewContext.mergeChanges(fromContextDidSave: notification)
+        })
         updateUI()
         getResults()
 
@@ -113,7 +121,7 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     
     private func updateOldMovies(except movies : [WMovie]) {
         // Deletes or retains old movies as needed
-        if let context = container?.viewContext {
+        privateContext.perform {
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
             let release_date_predicate =  NSPredicate(format: "release_date <= %@", Date() as NSDate)
             let not_in_watchlist_predicate = NSPredicate(format: "isInWatchlist = %@", false as CVarArg)
@@ -121,13 +129,13 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
             // ADd predicate
             do {
                 var delete_count : Int = 0
-                let matches = try context.fetch(request)
+                let matches = try self.privateContext.fetch(request)
                 if matches.count > 0 {
                     for current_match in matches {
-                        if !doNetworkQueryResults(movies, contain: current_match) {
-                                context.delete(current_match)
-                                try context.save()
-                                delete_count = delete_count + 1
+                        if !self.doNetworkQueryResults(movies, contain: current_match) {
+                            self.privateContext.delete(current_match)
+                            try self.privateContext.save()
+                            delete_count = delete_count + 1
                         }
                     }
                 }
@@ -142,16 +150,16 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     private func deleteOldCast() {
         // Deleting Casts with no movie Credits Left
         
-        container?.performBackgroundTask{ background_context in
+        privateContext.perform {
             let cast_request : NSFetchRequest<Person> = Person.fetchRequest()
             cast_request.predicate = NSPredicate(format: "movieCredits.@count == 0 " )  // Issue here
             do {
-                let matches = try background_context.fetch(cast_request)
+                let matches = try self.privateContext.fetch(cast_request)
                 if matches.count > 0 {
                     for current_match in matches {
-                        background_context.delete(current_match)
+                        self.privateContext.delete(current_match)
+                        try self.privateContext.save()
                     }
-                    try background_context.save()
                     print("Deleted \(matches.count) People with no movieCredits")
                 }
             }
@@ -163,18 +171,19 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     private func updateDb(movies: [WMovie]) {
-        if let context = container?.viewContext , movies.count > 0 {
+        if movies.count > 0 {
             if _movieRequest?.lastSuccessfulRequestNumber == 1 {
                 
                 updateOldMovies(except: movies)
                 deleteOldCast()
                 
             }
-            
-            for current_movie in movies {
-                let db_movie = try? Movie.findOrCreateMovie(matching: current_movie, in: context)
-                db_movie?.isPlaying = true
-                try? context.save()
+            privateContext.perform {
+                for current_movie in movies {
+                    let db_movie = Movie.create(using: current_movie, in: self.privateContext)
+                    db_movie?.isPlaying = true
+                    try? self.privateContext.save()
+                }
             }
         }
         _previousQueryPending = false

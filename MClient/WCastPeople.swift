@@ -19,7 +19,16 @@ struct WCastPeople {
     let place_of_birth: String
     let gender: String
     
-
+    var hasCompleteInfo : Bool {
+        if self.date_of_birth == nil ,
+            self.biography == Constants.notFound,
+            self.place_of_birth == Constants.notFound
+        {
+            
+            return false
+        }
+        return true
+    }
     
     func getFullProfileImageURL() -> URL? {
         var baseImageURL: String = Constants.baseCastProfileImageUrl

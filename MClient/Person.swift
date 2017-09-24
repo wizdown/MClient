@@ -11,22 +11,32 @@ import CoreData
 
 class Person: NSManagedObject {
     
-    static func findOrCreatePerson(matching person: WCastPeople , in context: NSManagedObjectContext) throws -> Person {
-    let request : NSFetchRequest<Person> = Person.fetchRequest()
-        request.returnsObjectsAsFaults = false
-
+    static func find(matching person: WCastPeople , in context: NSManagedObjectContext) -> Person? {
+        
+        let request : NSFetchRequest<Person> = Person.fetchRequest()
+//        request.returnsObjectsAsFaults = false
+        
         request.predicate = NSPredicate(format: "id = %ld", Int64(person.id))
         do {
             let matches = try context.fetch(request)
             if matches.count > 0 {
                 assert(matches.count == 1 , "person.findOrCreatePerson -- DB Inconsistency")
-//                print(matches[0])
+                //                print(matches[0])
                 return matches[0]
             }
         } catch {
-            throw error
+            print("Error while finding person with id : \(person.id)")
+            print(error.localizedDescription)
         }
+        return nil
+    }
+    
+    static func create(matching person: WCastPeople , in context: NSManagedObjectContext) -> Person? {
         
+        let db_person = Person.find(matching: person, in: context)
+        if db_person != nil {
+            return db_person
+        }
         let _person = Person(context: context)
         _person.id = Int64(person.id)
         _person.gender = person.gender
@@ -52,41 +62,31 @@ class Person: NSManagedObject {
     }
     
    
-    static func addAditionalPersonDetails(matching person: WCastPeople, in context: NSManagedObjectContext) throws -> Person {
+    static func addAditionalDetails(_ person: WCastPeople, in context: NSManagedObjectContext) throws -> Person? {
        // This fn saves extra details of the person that weren't saved in its previous call
-        var _person: Person
-        do {
-            _person = try Person.findOrCreatePerson(matching: person, in: context)
-            _person.date_of_birth = person.date_of_birth as NSDate?
-            _person.biography = person.biography
-            _person.place_of_birth = person.place_of_birth
-        } catch{
-            throw error
+        var _person: Person? = Person.find(matching: person, in: context)
+        if _person == nil {
+            _person = Person.create(matching: person, in: context)
+        }
+        if _person != nil {
+            _person!.date_of_birth = person.date_of_birth as NSDate?
+            _person!.biography = person.biography
+            _person!.place_of_birth = person.place_of_birth
         }
         return _person
     }
-
     
-    static func findOrCreateMovieCredits(matching person: WCastPeople, movies: [WMovie] , in context: NSManagedObjectContext ) throws -> Person {
+    static func addMovieCredits(_ movies : [WMovie] , matching person : WCastPeople , in context : NSManagedObjectContext) -> Person? {
         
-        let request: NSFetchRequest<Person> = Person.fetchRequest()
-        request.predicate = NSPredicate(format: "id = %ld" , Int64(person.id))
-        var matches: [Person]
-        do {
-            matches = try context.fetch(request)
-            assert(matches.count == 1, "Person.findOrCreateMovieCredits -- DB InConsistency")
-        }
-        catch {
-            throw error
-        }
-        for current_movie in movies {
-            do{
-                let new_movie = try Movie.findOrCreateMovie(matching: current_movie, in: context)
-                matches[0].addToMovieCredits(new_movie)
-            }catch{
-                print(error.localizedDescription)
+        let _person  = Person.find(matching: person, in: context)
+        if _person != nil {
+            for current_movie in movies {
+                let new_movie =  Movie.create(using: current_movie, in: context)
+                if new_movie != nil {
+                    _person!.addToMovieCredits(new_movie!)
+                }
             }
         }
-        return matches[0]
+        return _person
     }
 }
