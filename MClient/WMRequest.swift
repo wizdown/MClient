@@ -320,8 +320,8 @@ class WMRequest : NSObject {
                 } else {
                     var success: Bool = false
                     
-                    if let valid_date = data ,
-                    let json = try? JSONSerialization.jsonObject(with: valid_date, options: [] ) as? [String: Any],
+                    if let valid_data = data ,
+                    let json = try? JSONSerialization.jsonObject(with: valid_data, options: [] ) as? [String: Any],
                     let status_code = json!["status_code"] as? Int {
                         print("status code : \(status_code)")
                         switch status {

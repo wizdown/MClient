@@ -16,6 +16,7 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         print("url: \(url)")
@@ -49,6 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        window?.tintColor = themeColor
         
 //        print(application.applicationState)
+
         
         let session_id  = UserDefaults.standard.string(forKey: Constants.key_session_id)
         

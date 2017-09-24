@@ -61,12 +61,12 @@ extension WCastPeople {
         self.id = id
         
         if let genderId = json["gender"] as? Int,
-            let gender = Constants.gender[genderId]{
+            let gender = Constants.gender[genderId] {
             self.gender = gender
         } else {
             self.gender = Constants.notFound
         }
-//        
+//
         if let biography = json["biography"] as? String ,
             biography.characters.count > 0 {
             self.biography = biography

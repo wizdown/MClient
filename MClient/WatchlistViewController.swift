@@ -72,13 +72,20 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     private func updateWatchlistInDb(movies: [WMovie]) {
-        container?.performBackgroundTask{ context in
+        if let context = container?.viewContext {
             for current_movie in movies {
                 let _ = Movie.updateWatchlistInDb(with: current_movie, action: .ADD , in: context)
                 try? context.save()
-
+                
             }
         }
+//        container?.performBackgroundTask{ context in
+//            for current_movie in movies {
+//                let _ = Movie.updateWatchlistInDb(with: current_movie, action: .ADD , in: context)
+//                try? context.save()
+//
+//            }
+//        }
     }
     
     private func getData() {
@@ -103,12 +110,12 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
         collectionView.dataSource = self
         collectionView.alwaysBounceVertical = true
         
-        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
-            [weak self]
-            notification in
-            //            print(notification.userInfo ?? "")
-            self?.container?.viewContext.mergeChanges(fromContextDidSave: notification)
-        })
+//        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
+//            [weak self]
+//            notification in
+//            //            print(notification.userInfo ?? "")
+//            self?.container?.viewContext.mergeChanges(fromContextDidSave: notification)
+//        })
         
         _watchlistRequest = WMRequest.getWatchlistRequest()
         

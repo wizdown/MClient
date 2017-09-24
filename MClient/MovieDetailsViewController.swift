@@ -61,7 +61,9 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
             [weak self]
             notification in
 //            print(notification.userInfo ?? "")
-            self?.container?.viewContext.mergeChanges(fromContextDidSave: notification)
+            if let strongSelf = self {
+                strongSelf.container?.viewContext.mergeChanges(fromContextDidSave: notification)
+            }
         })
         
         getData()
@@ -89,33 +91,63 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
 //    }
     
 
+//    private func setWatchlistButtonInitialProfile() {
+//        if let _ = UserDefaults.standard.string(forKey: Constants.key_account_id) ,
+//            let _ = UserDefaults.standard.string(forKey: Constants.key_session_id),
+//            let contents = movie
+//            {
+//                privateContext.perform {
+//                    if let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: self.privateContext) {
+//                        if db_movie.isInWatchlist {
+//                            DispatchQueue.main.async { [weak self] in
+//                                self?.movieView.profile = .READY_TO_REMOVE
+//                            }
+//                        } else {
+//                            DispatchQueue.main.async { [weak self] in
+//                                self?.movieView.profile = .READY_TO_ADD
+//                            }
+//                        }
+//                    } else {
+//                        DispatchQueue.main.async { [weak self] in
+//                            self?.movieView.profile = .DISABLED
+//                        }
+//                    }
+//                }
+//            }
+//        else {
+//            movieView.profile = .DISABLED
+//        }
+//    }
+//    
     private func setWatchlistButtonInitialProfile() {
         if let _ = UserDefaults.standard.string(forKey: Constants.key_account_id) ,
             let _ = UserDefaults.standard.string(forKey: Constants.key_session_id),
             let contents = movie
-            {
-                container?.performBackgroundTask{ context in
-                    if let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context) {
-                        if db_movie.isInWatchlist {
-                            DispatchQueue.main.async { [weak self] in
-                                self?.movieView.profile = .READY_TO_REMOVE
-                            }
-                        } else {
-                            DispatchQueue.main.async { [weak self] in
-                                self?.movieView.profile = .READY_TO_ADD
-                            }
+        {
+            if let context = container?.viewContext {
+                if let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context) {
+                    if db_movie.isInWatchlist {
+                        DispatchQueue.main.async { [weak self] in
+                            self?.movieView.profile = .READY_TO_REMOVE
                         }
                     } else {
                         DispatchQueue.main.async { [weak self] in
-                            self?.movieView.profile = .DISABLED
+                            self?.movieView.profile = .READY_TO_ADD
                         }
+                    }
+                } else {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.movieView.profile = .DISABLED
                     }
                 }
             }
+        }
         else {
             movieView.profile = .DISABLED
         }
     }
+    
+    
     
     override func viewWillAppear(_ animated: Bool) {
         if movie != nil {
@@ -127,25 +159,44 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         if let contents = movie {
 //            setWatchlistButtonInitialProfile()
             movieView.movie = contents
-            container?.performBackgroundTask{ [weak self] context in
+            
+            if let context = container?.viewContext {
                 if let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context) {
-                    if (self?.needsPersistence.required)! {  // Why did xcode force me to unwrap this ?
+                    if needsPersistence.required {  // Why did xcode force me to unwrap this ?
                         try? context.save()
                         print("Attempting to save Movie to DB")
                     }
                     if let db_cast = db_movie.cast,
                         db_cast.count > 0 {
-                        self?.displayCastUsingDb(forDbMovie: db_movie, context: context)
+                        displayCastUsingDb(forDbMovie: db_movie)
                     } else {
-                        self?.getAndDisplayCastFromNetwork(forDbMovie: db_movie, context: context)
-
+                        getAndDisplayCastFromNetwork(forDbMovie: db_movie)
+                        
                     }
                 }
+
             }
+            
+//            privateContext.perform { [weak self ] in
+//                if let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: (self?.privateContext)!) {
+//                    if (self?.needsPersistence.required)! {  // Why did xcode force me to unwrap this ?
+//                        try? self?.privateContext.save()
+//                        print("Attempting to save Movie to DB")
+//                    }
+//                    if let db_cast = db_movie.cast,
+//                        db_cast.count > 0 {
+//                        self?.displayCastUsingDb(forDbMovie: db_movie)
+//                    } else {
+//                        self?.getAndDisplayCastFromNetwork(forDbMovie: db_movie)
+//                        
+//                    }
+//                }
+//            }
+            
         }
     }
     
-    private func getAndDisplayCastFromNetwork(forDbMovie db_movie : Movie , context: NSManagedObjectContext ) {
+    private func getAndDisplayCastFromNetwork(forDbMovie db_movie : Movie) {
         
         print("Getting Cast from Network")
         if let request = WMRequest.castForMovieRequest(movieId: Int(db_movie.id)) {
@@ -154,10 +205,10 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
                 (cast: [WCastPeople]) in
                 if cast.count == 0 {
                     print("Couldn't fetch cast from network")
-                    self?.displayCastUsingDb(forDbMovie: db_movie, context: context)
+//                    self?.displayCastUsingDb(forDbMovie: db_movie, context: context)
                 } else {
                     print("\(cast.count) cast found")
-                    self?.saveCastToDb(cast: cast, forMovie: WMovie(credit:db_movie) ,  context: context)
+                    self?.saveCastToDb(cast: cast, forMovie: WMovie(credit:db_movie))
                     DispatchQueue.main.async { [weak self] in
                         self?.insertCast(cast)
                     }
@@ -167,19 +218,24 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         
     }
     
-    private func saveCastToDb(cast : [WCastPeople] ,forMovie movie : WMovie, context: NSManagedObjectContext){
+    private func saveCastToDb(cast : [WCastPeople] ,forMovie movie : WMovie){
         if needsPersistence.required {
             print("Saving Cast to DB")
-            context.perform {
+            if let context = container?.viewContext {
                 _ = try? Movie.findOrCreateCast(matching: movie, cast: cast, in: context)
                 try? context.save()
-                
+
             }
+//            privateContext.perform {
+//                _ = try? Movie.findOrCreateCast(matching: movie, cast: cast, in: self.privateContext)
+//                try? self.privateContext.save()
+//                
+//            }
         }
     }
     
-    private func displayCastUsingDb(forDbMovie db_movie: Movie, context: NSManagedObjectContext) {
-        context.perform {
+    private func displayCastUsingDb(forDbMovie db_movie: Movie) {
+        if let _ = container?.viewContext {
             print("Displaying Cast from DB")
             if let db_cast = db_movie.cast?.sortedArray(using:[NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
                 var temp_cast = [WCastPeople]()
@@ -192,21 +248,49 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
             }
         }
         
+//        privateContext.perform {
+//            print("Displaying Cast from DB")
+//            if let db_cast = db_movie.cast?.sortedArray(using:[NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
+//                var temp_cast = [WCastPeople]()
+//                for current_person in db_cast {
+//                    temp_cast.append(WCastPeople(person: current_person))
+//                }
+//                DispatchQueue.main.async { [weak self ] in
+//                    self?.insertCast(temp_cast)
+//                }
+//            }
+//        }
+        
     }
     
     private func updateCastInDB(_ cast : [WCastPeople]) {
-        container?.performBackgroundTask { context in
+        if let context = container?.viewContext {
             print("Saving Cast to DB")
             _ = try? Movie.findOrCreateCast(matching: self.movie!, cast: cast, in: context)
-//            print(db_movie?.cast!)
+            //            print(db_movie?.cast!)
             do {
                 try context.save()
                 print("Cast and Movie Saved")
             }catch {
                 print(error.localizedDescription)
-//                throw error
+                //                throw error
             }
+
         }
+        
+        
+//        privateContext.perform {
+//            print("Saving Cast to DB")
+//            _ = try? Movie.findOrCreateCast(matching: self.movie!, cast: cast, in: self.privateContext)
+//            //            print(db_movie?.cast!)
+//            do {
+//                try self.privateContext.save()
+//                print("Cast and Movie Saved")
+//            }catch {
+//                print(error.localizedDescription)
+//                //                throw error
+//            }
+//        }
     }
     
     
@@ -275,8 +359,20 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
     }
     
     private func updateWatchlistInDb(withMovie movie : WMovie , action: WatchlistAction , newProfile : WatchListButtonProfile ) {
-            container?.performBackgroundTask{ context in
-                let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
+//        privateContext.perform {
+//            let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: self.privateContext)
+//            do {
+//                try self.privateContext.save()
+//            }catch {
+//                print("Error while adding movie to watchlist in DB")
+//                print(error.localizedDescription)
+//            }
+//            DispatchQueue.main.async { [ weak self ] in
+//                self?.movieView.profile = newProfile
+//            }
+//        }
+        if let context = container?.viewContext {
+            let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
                 do {
                     try context.save()
                 }catch {
@@ -286,20 +382,7 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
                 DispatchQueue.main.async { [ weak self ] in
                     self?.movieView.profile = newProfile
                 }
-            }
-        
-//        if let context = container?.viewContext {
-//            let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
-//                do {
-//                    try context.save()
-//                }catch {
-//                    print("Error while adding movie to watchlist in DB")
-//                    print(error.localizedDescription)
-//                }
-//                DispatchQueue.main.async { [ weak self ] in
-//                    self?.movieView.profile = newProfile
-//                }
-//        }
+        }
         
     }
     
