@@ -108,7 +108,7 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
         collectionView.dataSource = self
         collectionView.alwaysBounceVertical = true
         
-        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
+        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: privateContext, queue: nil, using: {
             notification in
             //            print(notification.userInfo ?? "")
             self.container?.viewContext.mergeChanges(fromContextDidSave: notification)

@@ -42,68 +42,15 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         movieView.castCollectionView.register(UINib(nibName: "NewCastCell", bundle: nil), forCellWithReuseIdentifier: Constants.castCellReuseIdentifier)
         
         
-        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
-            [weak self]
-            notification in
-//            print(notification.userInfo ?? "")
-            if let strongSelf = self {
-                strongSelf.container?.viewContext.mergeChanges(fromContextDidSave: notification)
-            }
+        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: privateContext, queue: nil, using: {
+                notification in
+//                  print(notification.userInfo ?? "")
+                self.container?.viewContext.mergeChanges(fromContextDidSave: notification)
         })
-        
         getData()
+        
     }
-    
-//    private func setWatchlistButtonInitialProfile() {
-//        if let _ = UserDefaults.standard.string(forKey: Constants.key_account_id) ,
-//            let _ = UserDefaults.standard.string(forKey: Constants.key_session_id),
-//            let contents = movie
-//            {
-//                if let context = container?.viewContext,
-//                    let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context) {
-//                    if db_movie.isInWatchlist {
-//                        movieView.profile = .READY_TO_REMOVE
-//                    } else {
-//                        movieView.profile = .READY_TO_ADD
-//                    }
-//                } else {
-//                    movieView.profile = .DISABLED
-//                }
-//            }
-//        else {
-//            movieView.profile = .DISABLED
-//        }
-//    }
-    
 
-//    private func setWatchlistButtonInitialProfile() {
-//        if let _ = UserDefaults.standard.string(forKey: Constants.key_account_id) ,
-//            let _ = UserDefaults.standard.string(forKey: Constants.key_session_id),
-//            let contents = movie
-//            {
-//                privateContext.perform {
-//                    if let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: self.privateContext) {
-//                        if db_movie.isInWatchlist {
-//                            DispatchQueue.main.async { [weak self] in
-//                                self?.movieView.profile = .READY_TO_REMOVE
-//                            }
-//                        } else {
-//                            DispatchQueue.main.async { [weak self] in
-//                                self?.movieView.profile = .READY_TO_ADD
-//                            }
-//                        }
-//                    } else {
-//                        DispatchQueue.main.async { [weak self] in
-//                            self?.movieView.profile = .DISABLED
-//                        }
-//                    }
-//                }
-//            }
-//        else {
-//            movieView.profile = .DISABLED
-//        }
-//    }
-//    
     private func setWatchlistButtonInitialProfile() {
         
         if let _ = UserDefaults.standard.string(forKey: Constants.key_account_id) ,
@@ -123,7 +70,7 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
                     }
                 } else {
                     DispatchQueue.main.async { [weak self] in
-                        self?.movieView.profile = .DISABLED
+                        self?.movieView.profile = .READY_TO_ADD
                     }
                 }
             } else {
@@ -150,13 +97,13 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
             
             if let context = container?.viewContext {
                 if let db_movie = Movie.find(matching: contents, in: context) {
-                    if needsPersistence.required {
-                        privateContext.perform {
-                            let _ = Movie.create(using: contents, in: self.privateContext)
-                            try? context.save()
-                            print("Attempting to save Movie to DB")
-                        }
-                    }
+//                    if needsPersistence.required {
+//                        privateContext.performAndWait {
+//                            let _ = Movie.create(using: contents, in: self.privateContext)
+//                            try? context.save()
+//                            print("Attempting to save Movie to DB")
+//                        }
+//                    }
                     if let db_cast = db_movie.cast,
                         db_cast.count > 0 {
                         displayCastUsingDb(forDbMovie: db_movie)
@@ -167,23 +114,6 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
                 }
 
             }
-            
-//            privateContext.perform { [weak self ] in
-//                if let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: (self?.privateContext)!) {
-//                    if (self?.needsPersistence.required)! {  // Why did xcode force me to unwrap this ?
-//                        try? self?.privateContext.save()
-//                        print("Attempting to save Movie to DB")
-//                    }
-//                    if let db_cast = db_movie.cast,
-//                        db_cast.count > 0 {
-//                        self?.displayCastUsingDb(forDbMovie: db_movie)
-//                    } else {
-//                        self?.getAndDisplayCastFromNetwork(forDbMovie: db_movie)
-//                        
-//                    }
-//                }
-//            }
-            
         }
     }
     
@@ -211,18 +141,14 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
     
     private func saveCastToDb(cast : [WCastPeople] ,forMovie movie : WMovie){
         if needsPersistence.required {
-            
-            privateContext.perform {
+            privateContext.performAndWait {
                 print("Saving Cast to DB")
-                _ = try? Movie.addCast(for : movie , cast : cast, in: self.privateContext)
+                let db_movie = try? Movie.addCast(for : movie , cast : cast, in: self.privateContext)
+                if db_movie != nil {
                     try? self.privateContext.save()
+                }
             }
            
-//            privateContext.perform {
-//                _ = try? Movie.findOrCreateCast(matching: movie, cast: cast, in: self.privateContext)
-//                try? self.privateContext.save()
-//                
-//            }
         }
     }
     
@@ -240,37 +166,6 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
             }
         }
     }
-    
-//    private func updateCastInDB(_ cast : [WCastPeople]) {
-//        if let context = container?.viewContext {
-//            print("Saving Cast to DB")
-//            _ = try? Movie.findOrCreateCast(matching: self.movie!, cast: cast, in: context)
-//            //            print(db_movie?.cast!)
-//            do {
-//                try context.save()
-//                print("Cast and Movie Saved")
-//            }catch {
-//                print(error.localizedDescription)
-//                //                throw error
-//            }
-//
-//        }
-//        
-    
-//        privateContext.perform {
-//            print("Saving Cast to DB")
-//            _ = try? Movie.findOrCreateCast(matching: self.movie!, cast: cast, in: self.privateContext)
-//            //            print(db_movie?.cast!)
-//            do {
-//                try self.privateContext.save()
-//                print("Cast and Movie Saved")
-//            }catch {
-//                print(error.localizedDescription)
-//                //                throw error
-//            }
-//        }
-//    }
-    
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         performSegue(withIdentifier: "castDetailSegue", sender: indexPath)
@@ -336,7 +231,7 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
     }
     
     private func updateWatchlistInDb(withMovie movie : WMovie , action: WatchlistAction , newProfile : WatchListButtonProfile ) {
-        privateContext.perform {
+        privateContext.performAndWait {
             let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: self.privateContext)
             do {
                 try self.privateContext.save()
@@ -348,18 +243,6 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
                 self?.movieView.profile = newProfile
             }
         }
-//        if let context = container?.viewContext {
-//            let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
-//                do {
-//                    try context.save()
-//                }catch {
-//                    print("Error while adding movie to watchlist in DB")
-//                    print(error.localizedDescription)
-//                }
-//                DispatchQueue.main.async { [ weak self ] in
-//                    self?.movieView.profile = newProfile
-//                }
-//        }
         
     }
     

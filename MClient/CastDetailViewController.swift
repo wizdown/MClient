@@ -41,13 +41,13 @@ class CastDetailViewController: UIViewController, UICollectionViewDelegate , UIC
         castView.clearDefaults()
         if let contents = _cast {
             spinner.startAnimating()
-            if needsPersistence.required {
-                privateContext.perform {
-                    let _ = Person.create(matching: contents, in: self.privateContext)
-                    try? self.privateContext.save()
-                    print("Attempting to save cast to DB")
-                }
-            }
+//            if needsPersistence.required {
+//                privateContext.performAndWait {
+//                    let _ = Person.create(matching: contents, in: self.privateContext)
+//                    try? self.privateContext.save()
+//                    print("Attempting to save cast to DB")
+//                }
+//            }
             getAndDisplayCastAndMovieCredits()
                 
             
@@ -130,7 +130,7 @@ class CastDetailViewController: UIViewController, UICollectionViewDelegate , UIC
 
     private func updateCompleteCastInDb(forPerson person: WCastPeople) {
         if needsPersistence.required {
-            privateContext.perform {
+            privateContext.performAndWait {
                 print("Updating cast details in DB")
                 do {
                     _ = try Person.addAditionalDetails(person, in: self.privateContext)

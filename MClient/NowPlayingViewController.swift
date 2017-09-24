@@ -84,7 +84,7 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
         collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
-        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
+        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: privateContext, queue: nil, using: {
             notification in
             //            print(notification.userInfo ?? "")
             self.container?.viewContext.mergeChanges(fromContextDidSave: notification)
@@ -121,7 +121,7 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     
     private func updateOldMovies(except movies : [WMovie]) {
         // Deletes or retains old movies as needed
-        privateContext.perform {
+        privateContext.performAndWait {
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
             let release_date_predicate =  NSPredicate(format: "release_date <= %@", Date() as NSDate)
             let not_in_watchlist_predicate = NSPredicate(format: "isInWatchlist = %@", false as CVarArg)
@@ -150,7 +150,7 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     private func deleteOldCast() {
         // Deleting Casts with no movie Credits Left
         
-        privateContext.perform {
+        privateContext.performAndWait {
             let cast_request : NSFetchRequest<Person> = Person.fetchRequest()
             cast_request.predicate = NSPredicate(format: "movieCredits.@count == 0 " )  // Issue here
             do {
@@ -178,7 +178,7 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
                 deleteOldCast()
                 
             }
-            privateContext.perform {
+            privateContext.performAndWait {
                 for current_movie in movies {
                     let db_movie = Movie.create(using: current_movie, in: self.privateContext)
                     db_movie?.isPlaying = true

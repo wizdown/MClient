@@ -90,7 +90,7 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
         collectionView.delegate = self
         collectionView.dataSource = self
         updateUI()
-        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
+        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: privateContext, queue: nil, using: {
             notification in
             //            print(notification.userInfo ?? "")
             self.container?.viewContext.mergeChanges(fromContextDidSave: notification)
@@ -119,7 +119,7 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     private func updateDb(_ movies: [WMovie]) {
-        privateContext.perform {
+        privateContext.performAndWait {
             for current_movie in movies {
                 _ = Movie.create(using: current_movie, in: self.privateContext)
                 try? self.privateContext.save()
