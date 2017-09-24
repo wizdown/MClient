@@ -71,7 +71,7 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
             } catch {
                 print(error.localizedDescription)
             }
-//            collectionView.reloadData()
+            collectionView.reloadData()
         }
     }
     
@@ -81,7 +81,6 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
             for current_movie in movies {
                 let _ = Movie.updateWatchlistInDb(with: current_movie, action: .ADD , in: self.privateContext)
                 try? self.privateContext.save()
-                
             }
         }
     }
@@ -91,7 +90,9 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
             (movies : [WMovie]) in
             if movies.count > 0 {
                 self.updateWatchlistInDb(movies: movies)
-                self.getData()
+                if  !self._watchlistRequest!.hasCompleted {
+                    self.getData()
+                }
             } else {
                 print("Watchlist: Refresh ends!")
             }

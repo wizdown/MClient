@@ -24,6 +24,16 @@ class WMRequest : NSObject {
         }
     }
     
+    var hasCompleted : Bool {
+        get {
+            if currentPageNumber == maxPageNumber {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+    
     init( urlComponents: URLComponents , require_paging: Bool , autoIncrPageNo: Bool ) {
         self._urlComponents = urlComponents
         self.require_paging = require_paging

@@ -35,7 +35,7 @@ class Movie: NSManagedObject {
             return db_movie
         }
         let _movie = Movie(context: context)
-        _movie.id = Int64(movie.id)
+        _movie.id = Int32(movie.id)
         _movie.popularity = movie.popularity
         _movie.backdrop_path = movie.backdrop_path
         _movie.genre = movie.genre

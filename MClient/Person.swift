@@ -38,7 +38,7 @@ class Person: NSManagedObject {
             return db_person
         }
         let _person = Person(context: context)
-        _person.id = Int64(person.id)
+        _person.id = Int32(person.id)
         _person.gender = person.gender
         _person.name = person.name
         _person.profile_path = person.profile_path

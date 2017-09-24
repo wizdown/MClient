@@ -140,6 +140,7 @@ class StartUpViewController: UIViewController {
                     let user_name = json?["username"] as? String {
                     UserDefaults.standard.set(String(account_id), forKey: Constants.key_account_id)
                     UserDefaults.standard.set(user_name, forKey: Constants.key_username)
+                    UserDefaults.standard.synchronize()
                     print("Username : \(user_name)")
                     print("AccountId : \(account_id)")
                     DispatchQueue.main.async { [weak self ] in
