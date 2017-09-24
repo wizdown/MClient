@@ -53,8 +53,8 @@ class NewCastCell: UICollectionViewCell {
 
         poster.image = UIImage(named: "loading")
         
-//        getAndSetImageFromNetwork()
-        getAndSetImageFromCache()
+        getAndSetImageFromNetwork()
+//        getAndSetImageFromCache()
         
     }
 }

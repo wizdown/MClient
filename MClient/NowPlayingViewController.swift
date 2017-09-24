@@ -52,7 +52,7 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
             } catch {
                 print(error.localizedDescription)
             }
-            collectionView.reloadData()
+//            collectionView.reloadData()
         }
     }
     

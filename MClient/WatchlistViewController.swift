@@ -71,7 +71,7 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
             } catch {
                 print(error.localizedDescription)
             }
-            collectionView.reloadData()
+//            collectionView.reloadData()
         }
     }
     

@@ -51,8 +51,8 @@ class newMovieCell: UICollectionViewCell {
     private func updateUI() {
         title.text = movie?.title
         poster.image = UIImage(named: "thumbnail")
-//        getAndSetImageFromNetwork()
-        getAndSetImageFromCache()
+        getAndSetImageFromNetwork()
+//        getAndSetImageFromCache()
         
     }
 

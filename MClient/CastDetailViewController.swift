@@ -39,7 +39,7 @@ class CastDetailViewController: UIViewController, UICollectionViewDelegate , UIC
     
     private func getData(){
         castView.clearDefaults()
-        if let contents = _cast {
+        if let _ = _cast {
             spinner.startAnimating()
 //            if needsPersistence.required {
 //                privateContext.performAndWait {
@@ -72,13 +72,13 @@ class CastDetailViewController: UIViewController, UICollectionViewDelegate , UIC
                 getAndDisplayMovieCreditsFromNetwork()
             }
             else {
-                getAndDisplayCastFromNetwork()
+                getAndDisplayCompleteCastFromNetwork()
                 // Above method calls getMovieCreditsFromNetwork to synchronously fetch them
             }
         }
     }
     
-    private func getAndDisplayCastFromNetwork() {
+    private func getAndDisplayCompleteCastFromNetwork() {
         print("Getting Cast Details from network")
         if let contents = _cast {
             let request = WCRequest.castDetailsRequest(castId: contents.id)

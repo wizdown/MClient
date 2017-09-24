@@ -56,7 +56,7 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
             } catch {
                 print(error.localizedDescription)
             }
-            collectionView.reloadData()
+//            collectionView.reloadData()
             
         }
         

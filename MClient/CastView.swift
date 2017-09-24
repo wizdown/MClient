@@ -62,27 +62,27 @@ class CastView: UIView {
         }
     }
     
-//    private func getAndDisplayProfileImageFromNetwork() {
-//        let castId = cast?.id
-//        var imageURL: URL?
-//        imageURL = cast?.getFullBackdropImageURL()
-//        
-//        DispatchQueue.global(qos: .userInteractive ).async { [weak self] in
-//            if let url = imageURL ,
-//                let imageData = try? Data(contentsOf: url) {
-//                DispatchQueue.main.async { [weak self ] in
-//                    if castId == self?.cast?.id {
-//                        self?.poster.image = UIImage(data: imageData)
-//                    }
-//                }
-//            } else {
-//                DispatchQueue.main.async { [weak self ] in
-//                    self?.poster.image = UIImage(named: "imageNotFound")
-//                }
-//            }
-//            
-//        }
-//    }
+    private func getAndDisplayProfileImageFromNetwork() {
+        let castId = cast?.id
+        var imageURL: URL?
+        imageURL = cast?.getFullBackdropImageURL()
+        
+        DispatchQueue.global(qos: .userInteractive ).async { [weak self] in
+            if let url = imageURL ,
+                let imageData = try? Data(contentsOf: url) {
+                DispatchQueue.main.async { [weak self ] in
+                    if castId == self?.cast?.id {
+                        self?.poster.image = UIImage(data: imageData)
+                    }
+                }
+            } else {
+                DispatchQueue.main.async { [weak self ] in
+                    self?.poster.image = UIImage(named: "imageNotFound")
+                }
+            }
+            
+        }
+    }
     
     private func updateUI() {
         
@@ -90,7 +90,8 @@ class CastView: UIView {
             setDefaults()
             poster.image = UIImage(named: "loading")
             
-            getAndDisplayProfileImageFromCache()
+//            getAndDisplayProfileImageFromCache()
+            getAndDisplayProfileImageFromNetwork()
             
             if let dob = person.date_of_birth?.description.components(separatedBy: " ")[0] {
                 date_of_birth.text = dob

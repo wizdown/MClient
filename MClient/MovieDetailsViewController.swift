@@ -95,8 +95,8 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
 //            setWatchlistButtonInitialProfile()
             movieView.movie = contents
             
-            if let context = container?.viewContext {
-                if let db_movie = Movie.find(matching: contents, in: context) {
+            if let context = container?.viewContext,
+                let db_movie = Movie.find(matching: contents, in: context) {
 //                    if needsPersistence.required {
 //                        privateContext.performAndWait {
 //                            let _ = Movie.create(using: contents, in: self.privateContext)
@@ -106,21 +106,24 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
 //                    }
                     if let db_cast = db_movie.cast,
                         db_cast.count > 0 {
-                        displayCastUsingDb(forDbMovie: db_movie)
+                        displayCastUsingDb()
                     } else {
-                        getAndDisplayCastFromNetwork(forDbMovie: db_movie)
+                        getAndDisplayCastFromNetwork()
                         
                     }
-                }
-
+            } else {
+                getAndDisplayCastFromNetwork()
             }
+
+            
         }
     }
     
-    private func getAndDisplayCastFromNetwork(forDbMovie db_movie : Movie) {
+    private func getAndDisplayCastFromNetwork() {
         
         print("Getting Cast from Network")
-        if let request = WMRequest.castForMovieRequest(movieId: Int(db_movie.id)) {
+        if let contents = movie ,
+            let request = WMRequest.castForMovieRequest(movieId: Int(contents.id)) {
             
             WMRequest.performGetCastForAMovieRequest(request: request) {  [weak self]
                 (cast: [WCastPeople]) in
@@ -129,7 +132,7 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
 //                    self?.displayCastUsingDb(forDbMovie: db_movie, context: context)
                 } else {
                     print("\(cast.count) cast found")
-                    self?.saveCastToDb(cast: cast, forMovie: WMovie(credit:db_movie))
+                    self?.saveCastToDb(cast: cast, forMovie: contents)
                     DispatchQueue.main.async { [weak self] in
                         self?.insertCast(cast)
                     }
@@ -152,17 +155,20 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         }
     }
     
-    private func displayCastUsingDb(forDbMovie db_movie: Movie) {
-        if let _ = container?.viewContext {
+    private func displayCastUsingDb() {
+        if let context = container?.viewContext ,
+            let contents = movie {
             print("Displaying Cast from DB")
-            if let db_cast = db_movie.cast?.sortedArray(using:[NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
-                var temp_cast = [WCastPeople]()
-                for current_person in db_cast {
-                    temp_cast.append(WCastPeople(person: current_person))
-                }
-                DispatchQueue.main.async { [weak self ] in
-                    self?.insertCast(temp_cast)
-                }
+            if let db_movie = Movie.find(matching: contents, in: context) ,
+                let db_cast = db_movie.cast?.sortedArray(using:[NSSortDescriptor(key: "id", ascending: true)]) as? [Person]
+            {
+                    var temp_cast = [WCastPeople]()
+                    for current_person in db_cast {
+                        temp_cast.append(WCastPeople(person: current_person))
+                    }
+                    DispatchQueue.main.async { [weak self ] in
+                        self?.insertCast(temp_cast)
+                    }
             }
         }
     }
