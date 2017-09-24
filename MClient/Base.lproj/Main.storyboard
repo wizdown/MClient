@@ -24,7 +24,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iv1-tg-P5K">
-                                <rect key="frame" x="0.0" y="20" width="375" height="780"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="687"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wf8-v6-E2e">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="662"/>
@@ -227,7 +227,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fKo-EK-aJE">
-                                <rect key="frame" x="0.0" y="20" width="375" height="780"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="687"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CHz-hr-q5c">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="650"/>
@@ -844,7 +844,7 @@
                                                 <rect key="frame" x="103" y="29.5" width="60" height="30"/>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="60" id="Lqd-Gf-OXi"/>
+                                                    <constraint firstAttribute="width" constant="60" id="gOw-cT-MX8"/>
                                                 </constraints>
                                                 <state key="normal" title="LOGIN">
                                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -854,27 +854,21 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstItem="W3U-7d-nPV" firstAttribute="top" secondItem="d1B-cS-Brr" secondAttribute="top" id="Ahg-YC-ovA"/>
-                                            <constraint firstAttribute="bottom" secondItem="NeM-nf-Viu" secondAttribute="bottom" id="AoG-0t-9CS"/>
-                                            <constraint firstItem="W3U-7d-nPV" firstAttribute="leading" secondItem="d1B-cS-Brr" secondAttribute="leading" id="ih9-GK-CYx"/>
-                                            <constraint firstAttribute="trailing" secondItem="W3U-7d-nPV" secondAttribute="trailing" id="jHI-Ht-9ZZ"/>
-                                        </constraints>
                                     </stackView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="d1B-cS-Brr" firstAttribute="top" secondItem="d3k-YF-Y6S" secondAttribute="top" constant="304" id="4GZ-qO-chd"/>
-                                    <constraint firstItem="d1B-cS-Brr" firstAttribute="centerX" secondItem="d3k-YF-Y6S" secondAttribute="centerX" id="FnO-Hu-2rN"/>
+                                    <constraint firstItem="d1B-cS-Brr" firstAttribute="centerY" secondItem="d3k-YF-Y6S" secondAttribute="centerY" id="FBJ-Sm-ege"/>
+                                    <constraint firstItem="d1B-cS-Brr" firstAttribute="centerX" secondItem="d3k-YF-Y6S" secondAttribute="centerX" id="rKe-Sk-79n"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="vkI-rF-oHx" firstAttribute="top" secondItem="d3k-YF-Y6S" secondAttribute="bottom" id="Jf3-Ae-b2Z"/>
-                            <constraint firstItem="d3k-YF-Y6S" firstAttribute="top" secondItem="tfI-dU-tpi" secondAttribute="top" id="OIi-CG-g59"/>
-                            <constraint firstAttribute="trailing" secondItem="d3k-YF-Y6S" secondAttribute="trailing" id="c9m-Lt-faG"/>
-                            <constraint firstItem="d3k-YF-Y6S" firstAttribute="leading" secondItem="tfI-dU-tpi" secondAttribute="leading" id="tF9-t7-Gbf"/>
+                            <constraint firstAttribute="trailing" secondItem="d3k-YF-Y6S" secondAttribute="trailing" id="5fk-H4-xjO"/>
+                            <constraint firstItem="d3k-YF-Y6S" firstAttribute="top" secondItem="tfI-dU-tpi" secondAttribute="top" id="HZY-PX-RFX"/>
+                            <constraint firstItem="vkI-rF-oHx" firstAttribute="top" secondItem="d3k-YF-Y6S" secondAttribute="bottom" id="T3D-qf-nQW"/>
+                            <constraint firstItem="d3k-YF-Y6S" firstAttribute="leading" secondItem="tfI-dU-tpi" secondAttribute="leading" id="tfh-0g-x1S"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -928,7 +922,7 @@
         <image name="watchlist" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="p3d-bS-CA6"/>
         <segue reference="UBX-bi-ng6"/>
+        <segue reference="4wT-5N-GOk"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -9,10 +9,17 @@
 import UIKit
 import CoreData
 
-fileprivate var itemsPerRow: CGFloat = 2
-fileprivate let sectionInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
 
-class NowPlayingViewController:MoviesCollectionViewController {
+
+// UIScrollViewDelegate and UICollectionViewDelegate are inherited from the superclass.
+class NowPlayingViewController: MoviesCollectionViewController, UICollectionViewDataSource    {
+    
+    var _count: Int = 1
+    var _previousQueryPending: Bool = false
+    var _segueIdentifierForMovieDetails: String?
+    var _movieRequest: WMRequest?
+
+    
 
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -44,28 +51,41 @@ class NowPlayingViewController:MoviesCollectionViewController {
             } catch {
                 print(error.localizedDescription)
             }
-            _collectionView?.reloadData()
+            collectionView.reloadData()
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
 //        print("Now Playing will appear")
-        if _movieRequest?.lastSuccessfulRequestNumber == 0 {
+        if _movieRequest?.lastSuccessfulRequestNumber == 0{
             getResults()
         }
-    }
-    
-    override func showData() {
-        updateUI()
-        getResults()
-    }
+        collectionView?.collectionViewLayout.invalidateLayout()
 
+    }
     
-    override func initialize() {
-        _collectionView = collectionView
-        _navigationViewControllerTitle = "Now Playing"
+     private func loadMore() {
+        print("Loading More(\(_count))")
+        _count = _count + 1
+        getResults()
+        
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = "Now Playing"
         _segueIdentifierForMovieDetails = "NowPlayingToMovieDetailSegue"
         _movieRequest = WMRequest.nowPlayingMoviesRequest()
+        
+        
+        collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        updateUI()
+        getResults()
+
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -163,7 +183,7 @@ class NowPlayingViewController:MoviesCollectionViewController {
     }
 
     
-    override func getResults() {
+     func getResults() {
         if _previousQueryPending == false {
             _previousQueryPending = true
             if let request = _movieRequest {
@@ -180,12 +200,43 @@ class NowPlayingViewController:MoviesCollectionViewController {
         }
     }
     
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
+        performSegue(withIdentifier: _segueIdentifierForMovieDetails!, sender: indexPath )
+    }
+    
+    
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        
+        if UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) {
+            _items = 2
+        } else {
+            _items = 3
+        }
+        collectionView?.collectionViewLayout.invalidateLayout()
+    }
+    
+    private var _timeSinceLastMovieResultsFetch: Date = Date()
+    private let _reloadTimeLag : Double = 1.0 // seconds
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentDate = Date()
+        
+        if _previousQueryPending == false ,
+            currentDate.timeIntervalSince1970 - _timeSinceLastMovieResultsFetch.timeIntervalSince1970 > _reloadTimeLag ,
+            scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
+            loadMore()
+            _timeSinceLastMovieResultsFetch = currentDate
+        }
+    }
+    
+     func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return fetchedResultsController?.sections?.count ?? 1
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
         if let sections = fetchedResultsController?.sections, sections.count > 0 {
             return sections[section].numberOfObjects
@@ -194,7 +245,7 @@ class NowPlayingViewController:MoviesCollectionViewController {
         }
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.movieCellReuseIdentifier, for: indexPath)
         
         if let movie = fetchedResultsController?.object(at: indexPath) ,
@@ -204,6 +255,4 @@ class NowPlayingViewController:MoviesCollectionViewController {
         }
         return cell
     }
-
-    
 }

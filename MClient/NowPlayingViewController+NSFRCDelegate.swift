@@ -19,8 +19,8 @@ extension NowPlayingViewController: NSFetchedResultsControllerDelegate {
     
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch type {
-        case .insert: _collectionView?.insertSections([sectionIndex])
-        case .delete: _collectionView?.deleteSections([sectionIndex])
+        case .insert: collectionView.insertSections([sectionIndex])
+        case .delete: collectionView.deleteSections([sectionIndex])
         default: break
         }
     }
@@ -28,14 +28,14 @@ extension NowPlayingViewController: NSFetchedResultsControllerDelegate {
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            _collectionView?.insertItems(at: [newIndexPath!])
+            collectionView.insertItems(at: [newIndexPath!])
         case .delete:
-            _collectionView?.deleteItems(at: [indexPath!])
+            collectionView.deleteItems(at: [indexPath!])
         case .update:
-            _collectionView?.reloadItems(at: [indexPath!])
+            collectionView.reloadItems(at: [indexPath!])
         case .move:
-            _collectionView?.deleteItems(at: [indexPath!])
-            _collectionView?.insertItems(at: [newIndexPath!])
+            collectionView.deleteItems(at: [indexPath!])
+            collectionView.insertItems(at: [newIndexPath!])
         }
     }
     

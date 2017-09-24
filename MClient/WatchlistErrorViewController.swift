@@ -19,8 +19,4 @@ class WatchlistErrorViewController: UIViewController {
         parent?.tabBarController?.performSegue(withIdentifier: "tabbarToStartupSegue", sender: nil )
 //        navigationController?.popToRootViewController(animated: true)
     }
-    
-    
-    
-    
 }

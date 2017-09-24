@@ -9,11 +9,8 @@
 import UIKit
 import CoreData
 
-fileprivate var itemsPerRow : CGFloat = 2
-fileprivate let sectionInsets = UIEdgeInsets(top: 10.0 , left: 10.0 , bottom: 10.0 , right: 10.0 )
 
-
-class WatchlistViewController: UIViewController , UICollectionViewDelegate , UICollectionViewDataSource , NSFetchedResultsControllerDelegate {
+class WatchlistViewController:MoviesCollectionViewController , UICollectionViewDataSource , NSFetchedResultsControllerDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -83,6 +80,11 @@ class WatchlistViewController: UIViewController , UICollectionViewDelegate , UIC
         
         setUpNSFRC()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        collectionView.collectionViewLayout.invalidateLayout()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -162,32 +164,27 @@ class WatchlistViewController: UIViewController , UICollectionViewDelegate , UIC
         }
         return cell
     }
-}
-
-extension WatchlistViewController : UICollectionViewDelegateFlowLayout {
     
-    //    1
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        
+        if UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) {
+            _items = 2
+        } else {
+            _items = 3
+        }
+        collectionView?.collectionViewLayout.invalidateLayout()
+    }
+    
+    override //    1
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         //2
-        let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
+        let paddingSpace = _sectionInsets.left * (_items + 1)
         let availableWidth = view.frame.width - paddingSpace
-        let widthPerItem = availableWidth / itemsPerRow
+        let widthPerItem = availableWidth / _items
         return CGSize(width: widthPerItem, height: widthPerItem )
     }
-    
-    //3
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
-        return sectionInsets
-    }
-    
-    // 4
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return sectionInsets.left
-    }
 }
+

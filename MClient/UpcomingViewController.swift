@@ -9,12 +9,15 @@
 import UIKit
 import CoreData
 
-fileprivate var itemsPerRow : CGFloat = 2
-fileprivate let sectionInsets = UIEdgeInsets(top: 10.0 , left: 10.0 , bottom: 10.0 , right: 10.0 )
 
-class UpcomingViewController: MoviesCollectionViewController {
+class UpcomingViewController: MoviesCollectionViewController, UICollectionViewDataSource {
 
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    var _count: Int = 1
+    var _previousQueryPending: Bool = false
+    var _segueIdentifierForMovieDetails: String?
+    var _movieRequest: WMRequest?
     
     var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
@@ -34,7 +37,8 @@ class UpcomingViewController: MoviesCollectionViewController {
             
             
             request.predicate = NSPredicate(format: "release_date >= %@", required_date! as NSDate)
-            
+            collectionView?.collectionViewLayout.invalidateLayout()
+
             fetchedResultsController = NSFetchedResultsController<Movie>(
                 fetchRequest: request,
                 managedObjectContext: context,
@@ -49,7 +53,7 @@ class UpcomingViewController: MoviesCollectionViewController {
             } catch {
                 print(error.localizedDescription)
             }
-            _collectionView?.reloadData()
+            collectionView.reloadData()
             
         }
         
@@ -71,19 +75,19 @@ class UpcomingViewController: MoviesCollectionViewController {
         }
         
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        if let context = container?.viewContext{
-            let latest_date = Movie.getLatestDate(in: context)
-            if latest_date <= Date() {
-                getResults()
-            }
-        }
-    }
     
-    override func showData() {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = "Upcoming Movies"
+        _segueIdentifierForMovieDetails = "UpcomingToMovieDetailSegue"
+        _movieRequest = WMRequest.nowPlayingMoviesRequest()
+        
+        
+        collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
+        collectionView.delegate = self
+        collectionView.dataSource = self
         updateUI()
-
+        
         // Adding check here so that it does not fetch movies that are coming in next 180 days in the initial request
         let max_required_date = (NSCalendar.current.date(byAdding: Calendar.Component.day, value: 180, to: Date() as Date))!
         if let context = container?.viewContext {
@@ -92,12 +96,19 @@ class UpcomingViewController: MoviesCollectionViewController {
                 getResults()
             }
         }
+        
     }
-    
-    override func initialize() {
-        _collectionView = collectionView
-        _navigationViewControllerTitle = "Upcoming Movies"
-        _segueIdentifierForMovieDetails = "UpcomingToMovieDetailSegue"
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let context = container?.viewContext{
+            let latest_date = Movie.getLatestDate(in: context)
+            if latest_date <= Date() {
+                getResults()
+            }
+        }
+        collectionView?.collectionViewLayout.invalidateLayout()
+
     }
     
     private func updateDb(_ movies: [WMovie]) {
@@ -112,7 +123,14 @@ class UpcomingViewController: MoviesCollectionViewController {
         
     }
     
-    override func getResults() {
+    private func loadMore() {
+        print("Loading More(\(_count))")
+        _count = _count + 1
+        getResults()
+        
+    }
+    
+     func getResults() {
         
         if _previousQueryPending == false ,
             let context = container?.viewContext {
@@ -132,12 +150,44 @@ class UpcomingViewController: MoviesCollectionViewController {
         }
     }
     
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
+        performSegue(withIdentifier: _segueIdentifierForMovieDetails!, sender: indexPath )
+    }
+    
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        
+        if UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) {
+            _items = 2
+        } else {
+            _items = 3
+        }
+        collectionView?.collectionViewLayout.invalidateLayout()
+    }
+    
+    
+    private var _timeSinceLastMovieResultsFetch: Date = Date()
+    private let _reloadTimeLag : Double = 1.0 // seconds
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentDate = Date()
+        
+        if _previousQueryPending == false ,
+            currentDate.timeIntervalSince1970 - _timeSinceLastMovieResultsFetch.timeIntervalSince1970 > _reloadTimeLag ,
+            scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
+            loadMore()
+            _timeSinceLastMovieResultsFetch = currentDate
+        }
+    }
+    
+
+     func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return fetchedResultsController?.sections?.count ?? 1
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
         if let sections = fetchedResultsController?.sections, sections.count > 0 {
             return sections[section].numberOfObjects
@@ -146,7 +196,7 @@ class UpcomingViewController: MoviesCollectionViewController {
         }
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.movieCellReuseIdentifier, for: indexPath)
         
         if let movie = fetchedResultsController?.object(at: indexPath) ,
