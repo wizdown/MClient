@@ -185,10 +185,14 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
         if _previousQueryPending == false {
             _previousQueryPending = true
             if let request = _movieRequest {
-                request.performRequest() { [weak self]
+                request.performRequest() {
                     (movies: [WMovie]) in
                     DispatchQueue.main.async{
-                        self?.updateDb(movies: movies)
+                        if movies.count > 0 {
+                            self.updateDb(movies: movies)
+                        } else {
+                            self._previousQueryPending = false
+                        }
                     }
                 }
 

@@ -206,52 +206,54 @@ class WMRequest : NSObject {
     }
     
      func performRequest(completion: @escaping ([WMovie]) -> Void ){
-        let task = URLSession.shared.dataTask(with: url!) {(data, response, error) in
-            
-            var movies: [WMovie] = []
-            
-            if error != nil {
-                print(error!.localizedDescription)
-            } else {
+        var movies: [WMovie] = []
+
+        if let request_url = url {
+            let task = URLSession.shared.dataTask(with: request_url) {(data, response, error) in
                 
-                var count = 1
-                if let data = data ,
-                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                
+                if error != nil {
+                    print(error!.localizedDescription)
+                } else {
                     
-                    if let jsonArr = json!["results"] as? [[String: Any]] {
-                        for case let result in jsonArr {
-                            //                            print("Movie \(count)")
-                            //                            print(result)
-                            count = count + 1
-                            if let movie = WMovie(json: result) {
-                                movies.append(movie)
+                    var count = 1
+                    if let data = data ,
+                        let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                        
+                        if let jsonArr = json!["results"] as? [[String: Any]] {
+                            for case let result in jsonArr {
+                                //                            print("Movie \(count)")
+                                //                            print(result)
+                                count = count + 1
+                                if let movie = WMovie(json: result) {
+                                    movies.append(movie)
+                                }
                             }
+                        }
+                        
+                        if let page_count = json!["total_pages"] as? Int {
+                            print("Number of pages : \(page_count)")
+                            self.setMaxPageNumber(to: page_count)
                         }
                     }
                     
-                    if let page_count = json!["total_pages"] as? Int {
-                        print("Number of pages : \(page_count)")
-                        self.setMaxPageNumber(to: page_count)
+                    if self.require_paging ,
+                        self.autoIncrPageNo {
+                        self.currentPageNumber = self.currentPageNumber + 1
                     }
+                    
                 }
-                
-                if self.require_paging ,
-                    self.autoIncrPageNo {
-                    self.currentPageNumber = self.currentPageNumber + 1
-                }
-                
+                completion(movies)
             }
-            
-            completion(movies)
+            // put handler here
+            task.resume()
         }
         
-        // put handler here
-        task.resume()
     }
     
     static func getUpdateWatchlistRequest() -> WMRequest? {
         guard
-            let url_path = Constants.getUrlPathForWatchlistRequest() ,
+            let url_path = Constants.getUrlPathForWatchlistUpdateRequest() ,
             let session_id = UserDefaults.standard.string( forKey: Constants.key_session_id )
         else {
                 return nil
@@ -266,6 +268,30 @@ class WMRequest : NSObject {
         urlComponents.queryItems = [ api_key, sessionId ]
         let request: WMRequest = WMRequest(urlComponents: urlComponents, require_paging: false, autoIncrPageNo: false)
         
+        return request
+        
+    }
+    
+    static func getWatchlistRequest() -> WMRequest? {
+        guard
+            let url_path = Constants.getUrlPathForWatchlistRequest() ,
+            let session_id = UserDefaults.standard.string(forKey: Constants.key_session_id)
+         else {
+            return nil
+        }
+        var urlComponents = URLComponents()
+        urlComponents.scheme = Constants.url_scheme
+        urlComponents.host = Constants.base_url
+        urlComponents.path = url_path
+        
+        let api_key = URLQueryItem(name: Constants.queryParameter.api_key.rawValue , value: Constants.api_key)
+        let sessionId = URLQueryItem(name: Constants.queryParameter.session_id.rawValue, value: session_id)
+        let lang = URLQueryItem(name: Constants.queryParameter.language.rawValue, value: "en-US" )
+        let sort_criteria = URLQueryItem(name: Constants.queryParameter.sort_by.rawValue, value: "created_at.asc")
+        
+        urlComponents.queryItems = [api_key, lang, sessionId, sort_criteria]
+        
+        let request : WMRequest = WMRequest(urlComponents: urlComponents, require_paging: true, autoIncrPageNo: true)
         return request
         
     }

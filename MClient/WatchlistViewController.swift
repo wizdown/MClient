@@ -16,11 +16,12 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
     
     @IBOutlet weak var welcomeLabel: UILabel!
     
-    
     var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     
     var fetchedResultsController: NSFetchedResultsController<Movie>?
+    
+    var _watchlistRequest: WMRequest?
     
     private func updateUserDataInUI() {
 //        userImage.layer.borderWidth = 1
@@ -68,11 +69,30 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
             }
             collectionView.reloadData()
         }
-            
-        
-        
     }
     
+    private func updateWatchlistInDb(movies: [WMovie]) {
+        container?.performBackgroundTask{ context in
+            for current_movie in movies {
+                let _ = Movie.updateWatchlistInDb(with: current_movie, action: .ADD , in: context)
+                try? context.save()
+
+            }
+        }
+    }
+    
+    private func getData() {
+        _watchlistRequest?.performRequest() {
+            (movies : [WMovie]) in
+            if movies.count > 0 {
+                self.updateWatchlistInDb(movies: movies)
+                self.getData()
+            } else {
+                print("Watchlist: Refresh ends!")
+            }
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -81,6 +101,18 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
         setUpNSFRC()
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.alwaysBounceVertical = true
+        
+        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
+            [weak self]
+            notification in
+            //            print(notification.userInfo ?? "")
+            self?.container?.viewContext.mergeChanges(fromContextDidSave: notification)
+        })
+        
+        _watchlistRequest = WMRequest.getWatchlistRequest()
+        
+        getData()
         
     }
     

@@ -157,9 +157,9 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
                     self?.displayCastUsingDb(forDbMovie: db_movie, context: context)
                 } else {
                     print("\(cast.count) cast found")
+                    self?.saveCastToDb(cast: cast, forMovie: WMovie(credit:db_movie) ,  context: context)
                     DispatchQueue.main.async { [weak self] in
                         self?.insertCast(cast)
-                        self?.saveCastToDb(cast: cast, forMovie: WMovie(credit:db_movie) ,  context: context)
                     }
                 }
             }

@@ -77,11 +77,22 @@ class Constants {
         return url_path
     }
     
-    static func getUrlPathForWatchlistRequest() -> String? {
+    static func getUrlPathForWatchlistUpdateRequest() -> String? {
         var url_path = "/3/account/"
         if let accountId = UserDefaults.standard.string(forKey: Constants.key_account_id) {
             url_path.append(accountId)
             url_path.append("/watchlist")
+            return url_path
+        } else {
+            return nil
+        }
+    }
+    
+    static func getUrlPathForWatchlistRequest() -> String? {
+        var url_path = "/3/account/"
+        if let accountId = UserDefaults.standard.string(forKey: Constants.key_account_id) {
+            url_path.append(accountId)
+            url_path.append("/watchlist/movies")
             return url_path
         } else {
             return nil

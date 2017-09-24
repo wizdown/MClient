@@ -44,6 +44,7 @@ struct WCastPeople {
 extension WCastPeople {
     init?(json: [String: Any]) {
         guard let name = json["name"] as? String,
+            name.characters.count > 0,
             let id = json["id"] as? Int
             else {
                 return nil
