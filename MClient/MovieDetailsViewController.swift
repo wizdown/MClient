@@ -57,14 +57,14 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
 //            UserDefaults.standard.set("6653343", forKey: "accountId")
 //        }
         
-        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
-            [weak self]
-            notification in
-//            print(notification.userInfo ?? "")
-            if let strongSelf = self {
-                strongSelf.container?.viewContext.mergeChanges(fromContextDidSave: notification)
-            }
-        })
+//        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil, using: {
+//            [weak self]
+//            notification in
+////            print(notification.userInfo ?? "")
+//            if let strongSelf = self {
+//                strongSelf.container?.viewContext.mergeChanges(fromContextDidSave: notification)
+//            }
+//        })
         
         getData()
     }
@@ -208,8 +208,8 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
 //                    self?.displayCastUsingDb(forDbMovie: db_movie, context: context)
                 } else {
                     print("\(cast.count) cast found")
-                    self?.saveCastToDb(cast: cast, forMovie: WMovie(credit:db_movie))
                     DispatchQueue.main.async { [weak self] in
+                        self?.saveCastToDb(cast: cast, forMovie: WMovie(credit:db_movie))
                         self?.insertCast(cast)
                     }
                 }
@@ -224,7 +224,6 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
             if let context = container?.viewContext {
                 _ = try? Movie.findOrCreateCast(matching: movie, cast: cast, in: context)
                 try? context.save()
-
             }
 //            privateContext.perform {
 //                _ = try? Movie.findOrCreateCast(matching: movie, cast: cast, in: self.privateContext)
@@ -263,21 +262,21 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         
     }
     
-    private func updateCastInDB(_ cast : [WCastPeople]) {
-        if let context = container?.viewContext {
-            print("Saving Cast to DB")
-            _ = try? Movie.findOrCreateCast(matching: self.movie!, cast: cast, in: context)
-            //            print(db_movie?.cast!)
-            do {
-                try context.save()
-                print("Cast and Movie Saved")
-            }catch {
-                print(error.localizedDescription)
-                //                throw error
-            }
-
-        }
-        
+//    private func updateCastInDB(_ cast : [WCastPeople]) {
+//        if let context = container?.viewContext {
+//            print("Saving Cast to DB")
+//            _ = try? Movie.findOrCreateCast(matching: self.movie!, cast: cast, in: context)
+//            //            print(db_movie?.cast!)
+//            do {
+//                try context.save()
+//                print("Cast and Movie Saved")
+//            }catch {
+//                print(error.localizedDescription)
+//                //                throw error
+//            }
+//
+//        }
+    
         
 //        privateContext.perform {
 //            print("Saving Cast to DB")
@@ -291,7 +290,7 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
 //                //                throw error
 //            }
 //        }
-    }
+//    }
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -321,25 +320,25 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         
     }
     
-    private func getResults(){
-        print("Getting Cast results from network")
-        if let id = movie?.id {
-            let request = WMRequest.castForMovieRequest(movieId: id)
-            if request != nil {
-                WMRequest.performGetCastForAMovieRequest(request: request!) {
-                    [weak self]
-                    (cast: [WCastPeople]) in
-                    DispatchQueue.main.async { [weak self] in
-                        self?.insertCast(cast)
-                        self?.updateCastInDB(cast)  // This call be removed from main thread // Do it later
-                    }
-                }
-            }
-        } else {
-            print("CastCollectionView: Unable to fetch data")
-        }
-    }
-    
+//    private func getResults(){
+//        print("Getting Cast results from network")
+//        if let id = movie?.id {
+//            let request = WMRequest.castForMovieRequest(movieId: id)
+//            if request != nil {
+//                WMRequest.performGetCastForAMovieRequest(request: request!) {
+//                    [weak self]
+//                    (cast: [WCastPeople]) in
+//                    DispatchQueue.main.async { [weak self] in
+//                        self?.insertCast(cast)
+//                        self?.updateCastInDB(cast)  // This call be removed from main thread // Do it later
+//                    }
+//                }
+//            }
+//        } else {
+//            print("CastCollectionView: Unable to fetch data")
+//        }
+//    }
+
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return _cast.count
