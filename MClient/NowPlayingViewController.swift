@@ -161,10 +161,10 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     
     private func updateDb(movies: [WMovie]) {
         if let context = self.container?.viewContext , movies.count > 0 {
-            if self.cleanupRequired {
-                self.cleanupRequired = false
-                self.updateOldMovies(except: movies)
-                self.deleteOldCast()
+            if cleanupRequired {
+                cleanupRequired = false
+                updateOldMovies(except: movies)
+                deleteOldCast()
             }
             
             for current_movie in movies {

@@ -484,7 +484,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="O2B-wA-HWd">
-                                <rect key="frame" x="0.0" y="57" width="375" height="553"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="546"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="UVV-3V-2Ya">
                                     <size key="itemSize" width="50" height="50"/>
@@ -500,7 +500,7 @@
                             <constraint firstAttribute="trailing" secondItem="O2B-wA-HWd" secondAttribute="trailing" id="2Jm-6r-JnR"/>
                             <constraint firstItem="O2B-wA-HWd" firstAttribute="leading" secondItem="zjl-XD-SWh" secondAttribute="leading" id="3OR-q4-Sgt"/>
                             <constraint firstItem="P11-ZO-xVY" firstAttribute="top" secondItem="O2B-wA-HWd" secondAttribute="bottom" constant="8" symbolic="YES" id="Pmq-xD-Exz"/>
-                            <constraint firstItem="O2B-wA-HWd" firstAttribute="centerY" secondItem="zjl-XD-SWh" secondAttribute="centerY" id="uul-l0-kF9"/>
+                            <constraint firstItem="O2B-wA-HWd" firstAttribute="top" secondItem="xOE-qK-DRJ" secondAttribute="bottom" id="fhm-c3-0Xs"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Lex-sZ-QsI"/>
@@ -922,7 +922,7 @@
         <image name="watchlist" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Ik3-cF-w38"/>
+        <segue reference="4wT-5N-GOk"/>
         <segue reference="UBX-bi-ng6"/>
     </inferredMetricsTieBreakers>
 </document>
