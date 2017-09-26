@@ -120,8 +120,6 @@ class MovieView: UIView {
 //        updateUI()
 //    }
     
-    
- 
     @IBAction func performAddToWatchlist(_ sender: Any) {
         
         if let buttonProfile = profile ,
@@ -133,10 +131,8 @@ class MovieView: UIView {
                     watchlistButton.setTitle("Adding...", for: UIControlState.normal)
                 case .READY_TO_REMOVE : delegate?.didPerformAddToWatchlist(profile: .READY_TO_REMOVE)
                     watchlistButton.isEnabled = false
-                watchlistButton.setTitle("Removing...", for: UIControlState.normal)
-
+                    watchlistButton.setTitle("Removing...", for: UIControlState.normal)
             }
         }
-        
     }
 }

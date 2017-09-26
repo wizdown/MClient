@@ -180,7 +180,6 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
         _previousQueryPending = false
     }
 
-    
      func getResults() {
         if _previousQueryPending == false {
             _previousQueryPending = true

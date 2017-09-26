@@ -38,24 +38,6 @@ class WMRequest : NSObject {
 
     var url: URL? {
         
-//        get {
-//            if _urlComponents == nil || currentPageNumber == maxPageNumber{
-//                return nil
-//            } else {
-//                var urlComponents = URLComponents()
-//                urlComponents.scheme = _urlComponents!.scheme
-//                urlComponents.host = _urlComponents!.host
-//                urlComponents.path = _urlComponents!.path
-//                var queryItems = _urlComponents!.queryItems!
-//                queryItems.append(URLQueryItem(name: Constants.queryParameter.page.rawValue, value: String(currentPageNumber + 1)))
-//                urlComponents.queryItems = queryItems
-//                if let debug_url = urlComponents.url {
-//                    print(debug_url)
-//                }
-//                return urlComponents.url
-//            }
-//        }
-        
         get {
             if _urlComponents == nil  {
                 return nil
@@ -87,16 +69,6 @@ class WMRequest : NSObject {
         }
     }
   
-//    static func movieSearchRequest(forMovie keyword: String) -> WMRequest? {
-//        if keyword.characters.count == 0 {
-//            return nil
-//        }
-//        var queryString : String = Constants.base_url
-//        queryString.append("\(Constants.searchMovie)")
-//        queryString.append("?api_key=\(Constants.api_key)&language=en-US&query=\(keyword)&include_adult=false")
-//        let request: WMRequest = WMRequest(urlString: queryString)
-//        return request
-//    }
     static func movieSearchRequest(forMovie keyword: String) -> WMRequest? {
         
         if keyword.characters.count == 0 {
@@ -172,37 +144,49 @@ class WMRequest : NSObject {
         return WCRequest(urlComponents: urlComponents)
     }
     
-    static func performGetCastForAMovieRequest(request: WCRequest, completion: @escaping ([WCastPeople]) -> Void ){
-        
-        var cast: [WCastPeople] = []
-        let url: URL = request.url!
-        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
-            if error != nil {
-                print(error!.localizedDescription)
-            } else {
-                
-                var count = 1
-                if let valid_data = data ,
-                    let json = try? JSONSerialization.jsonObject(with: valid_data, options: []) as? [String: Any] {
-                    
-                    if let jsonArr = json!["cast"] as? [[String: Any]] {
-                        for case let result in jsonArr {
-                            //                            print("Cast \(count)")
-                            //                            print(result)
-                            count = count + 1
-                            if let person = WCastPeople(json: result) {
-                                cast.append(person)
-                            }
-                        }
-                    }
-                }
-            }
-            completion(cast)
-
+    static func getUpdateWatchlistRequest() -> WMRequest? {
+        guard
+            let url_path = Constants.getUrlPathForWatchlistUpdateRequest() ,
+            let session_id = UserDefaults.standard.string( forKey: Constants.key_session_id )
+            else {
+                return nil
         }
+        var urlComponents = URLComponents()
+        urlComponents.scheme = Constants.url_scheme
+        urlComponents.host = Constants.base_url
+        urlComponents.path = url_path
         
-        // put handler here
-        task.resume()
+        let api_key = URLQueryItem(name: Constants.queryParameter.api_key.rawValue , value: Constants.api_key)
+        let sessionId = URLQueryItem(name: Constants.queryParameter.session_id.rawValue, value: session_id)
+        urlComponents.queryItems = [ api_key, sessionId ]
+        let request: WMRequest = WMRequest(urlComponents: urlComponents, require_paging: false, autoIncrPageNo: false)
+        
+        return request
+        
+    }
+    
+    static func getWatchlistRequest() -> WMRequest? {
+        guard
+            let url_path = Constants.getUrlPathForWatchlistRequest() ,
+            let session_id = UserDefaults.standard.string(forKey: Constants.key_session_id)
+            else {
+                return nil
+        }
+        var urlComponents = URLComponents()
+        urlComponents.scheme = Constants.url_scheme
+        urlComponents.host = Constants.base_url
+        urlComponents.path = url_path
+        
+        let api_key = URLQueryItem(name: Constants.queryParameter.api_key.rawValue , value: Constants.api_key)
+        let sessionId = URLQueryItem(name: Constants.queryParameter.session_id.rawValue, value: session_id)
+        let lang = URLQueryItem(name: Constants.queryParameter.language.rawValue, value: "en-US" )
+        let sort_criteria = URLQueryItem(name: Constants.queryParameter.sort_by.rawValue, value: "created_at.asc")
+        
+        urlComponents.queryItems = [api_key, lang, sessionId, sort_criteria]
+        
+        let request : WMRequest = WMRequest(urlComponents: urlComponents, require_paging: true, autoIncrPageNo: true)
+        return request
+        
     }
     
      func performRequest(completion: @escaping ([WMovie]) -> Void ){
@@ -251,50 +235,40 @@ class WMRequest : NSObject {
         
     }
     
-    static func getUpdateWatchlistRequest() -> WMRequest? {
-        guard
-            let url_path = Constants.getUrlPathForWatchlistUpdateRequest() ,
-            let session_id = UserDefaults.standard.string( forKey: Constants.key_session_id )
-        else {
-                return nil
+    static func performGetCastForAMovieRequest(request: WCRequest, completion: @escaping ([WCastPeople]) -> Void ){
+        
+        var cast: [WCastPeople] = []
+        let url: URL = request.url!
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+            } else {
+                
+                var count = 1
+                if let valid_data = data ,
+                    let json = try? JSONSerialization.jsonObject(with: valid_data, options: []) as? [String: Any] {
+                    
+                    if let jsonArr = json!["cast"] as? [[String: Any]] {
+                        for case let result in jsonArr {
+                            //                            print("Cast \(count)")
+                            //                            print(result)
+                            count = count + 1
+                            if let person = WCastPeople(json: result) {
+                                cast.append(person)
+                            }
+                        }
+                    }
+                }
+            }
+            completion(cast)
+            
         }
-        var urlComponents = URLComponents()
-        urlComponents.scheme = Constants.url_scheme
-        urlComponents.host = Constants.base_url
-        urlComponents.path = url_path
         
-        let api_key = URLQueryItem(name: Constants.queryParameter.api_key.rawValue , value: Constants.api_key)
-        let sessionId = URLQueryItem(name: Constants.queryParameter.session_id.rawValue, value: session_id)
-        urlComponents.queryItems = [ api_key, sessionId ]
-        let request: WMRequest = WMRequest(urlComponents: urlComponents, require_paging: false, autoIncrPageNo: false)
-        
-        return request
-        
+        // put handler here
+        task.resume()
     }
     
-    static func getWatchlistRequest() -> WMRequest? {
-        guard
-            let url_path = Constants.getUrlPathForWatchlistRequest() ,
-            let session_id = UserDefaults.standard.string(forKey: Constants.key_session_id)
-         else {
-            return nil
-        }
-        var urlComponents = URLComponents()
-        urlComponents.scheme = Constants.url_scheme
-        urlComponents.host = Constants.base_url
-        urlComponents.path = url_path
-        
-        let api_key = URLQueryItem(name: Constants.queryParameter.api_key.rawValue , value: Constants.api_key)
-        let sessionId = URLQueryItem(name: Constants.queryParameter.session_id.rawValue, value: session_id)
-        let lang = URLQueryItem(name: Constants.queryParameter.language.rawValue, value: "en-US" )
-        let sort_criteria = URLQueryItem(name: Constants.queryParameter.sort_by.rawValue, value: "created_at.asc")
-        
-        urlComponents.queryItems = [api_key, lang, sessionId, sort_criteria]
-        
-        let request : WMRequest = WMRequest(urlComponents: urlComponents, require_paging: true, autoIncrPageNo: true)
-        return request
-        
-    }
+ 
     
     func updateWatchlist( with movie: WMovie , status : WatchlistAction, completion : @escaping (Bool) -> Void ) {
         var params : [String: Any] = [:]

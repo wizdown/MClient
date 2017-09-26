@@ -96,7 +96,6 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
                 getResults()
             }
         }
-        
     }
 
     override func viewWillAppear(_ animated: Bool) {

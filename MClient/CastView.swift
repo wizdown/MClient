@@ -100,15 +100,10 @@ class CastView: UIView {
             }
             
             name.text = person.name
-            
             gender.text = person.gender
-            
             place_of_birth.text = person.place_of_birth
-            
             biography.text = person.biography
-
         }
-        
     }
     
     override func draw(_ rect: CGRect) {

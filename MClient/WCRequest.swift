@@ -104,7 +104,4 @@ class WCRequest {
         // put handler here
         task.resume()
     }
-
-   
-    
 }

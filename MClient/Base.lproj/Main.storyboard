@@ -24,7 +24,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iv1-tg-P5K">
-                                <rect key="frame" x="0.0" y="20" width="375" height="780"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="687"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wf8-v6-E2e">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="662"/>
@@ -227,7 +227,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fKo-EK-aJE">
-                                <rect key="frame" x="0.0" y="20" width="375" height="780"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="687"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CHz-hr-q5c">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="650"/>
@@ -922,7 +922,7 @@
         <image name="watchlist" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="Ik3-cF-w38"/>
         <segue reference="UBX-bi-ng6"/>
-        <segue reference="U7u-v0-VfX"/>
     </inferredMetricsTieBreakers>
 </document>
