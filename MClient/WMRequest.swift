@@ -68,6 +68,31 @@ class WMRequest : NSObject {
             }
         }
     }
+    
+    static func castDetailsRequest(castId: Int ) -> WMRequest? {
+        
+        var url_path = Constants.requestType.castDetails.rawValue
+        url_path.append(String(castId))
+        var urlComponents = URLComponents()
+        urlComponents.scheme = Constants.url_scheme
+        urlComponents.host = Constants.base_url
+        urlComponents.path = url_path
+        urlComponents.queryItems = [URLQueryItem(name: Constants.queryParameter.api_key.rawValue, value: Constants.api_key ), URLQueryItem(name: Constants.queryParameter.language.rawValue, value:
+            "en-US")]
+        return WMRequest(urlComponents: urlComponents, require_paging: false , autoIncrPageNo: false )
+        
+    }
+    
+    static func movieCreditsRequest( castId : Int ) ->WMRequest? {
+        let url_path = Constants.getUrlPathForMovieCreditsRequest(castId: castId)
+        var urlComponents = URLComponents()
+        urlComponents.scheme = Constants.url_scheme
+        urlComponents.host = Constants.base_url
+        urlComponents.path = url_path
+        urlComponents.queryItems = [URLQueryItem(name: Constants.queryParameter.api_key.rawValue, value: Constants.api_key ), URLQueryItem(name: Constants.queryParameter.language.rawValue, value:
+            "en-US")]
+        return WMRequest(urlComponents: urlComponents, require_paging : false , autoIncrPageNo : false )
+    }
   
     static func movieSearchRequest(forMovie keyword: String) -> WMRequest? {
         
@@ -132,7 +157,7 @@ class WMRequest : NSObject {
         return request
     }
     
-    static func castForMovieRequest(movieId: Int) -> WCRequest? {
+    static func castForMovieRequest(movieId: Int) -> WMRequest? {
         
         let url_path = Constants.getUrlPathForCastForMovieRequest(movieId: movieId)
         
@@ -141,7 +166,7 @@ class WMRequest : NSObject {
         urlComponents.host = Constants.base_url
         urlComponents.path = url_path
         urlComponents.queryItems = [URLQueryItem(name: Constants.queryParameter.api_key.rawValue, value: Constants.api_key )]
-        return WCRequest(urlComponents: urlComponents)
+        return WMRequest(urlComponents: urlComponents , require_paging : false , autoIncrPageNo : false )
     }
     
     static func getUpdateWatchlistRequest() -> WMRequest? {
@@ -190,11 +215,10 @@ class WMRequest : NSObject {
     }
     
      func performRequest(completion: @escaping ([WMovie]) -> Void ){
-        var movies: [WMovie] = []
 
         if let request_url = url {
             let task = URLSession.shared.dataTask(with: request_url) {(data, response, error) in
-                
+                var movies: [WMovie] = []
                 
                 if error != nil {
                     print(error!.localizedDescription)
@@ -235,10 +259,10 @@ class WMRequest : NSObject {
         
     }
     
-    static func performGetCastForAMovieRequest(request: WCRequest, completion: @escaping ([WCastPeople]) -> Void ){
+    func performGetCastForAMovieRequest(completion: @escaping ([WCastPeople]) -> Void ){
         
         var cast: [WCastPeople] = []
-        let url: URL = request.url!
+        let url: URL = self.url!
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
             if error != nil {
                 print(error!.localizedDescription)
@@ -314,5 +338,62 @@ class WMRequest : NSObject {
             task.resume()
 
         }
+    }
+    
+    
+    
+    func performGetCastDetailsRequest( completion: @escaping (WCastPeople?) -> Void ){
+        let url: URL = self.url!
+        var cast: WCastPeople? = nil
+        
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+            } else {
+                
+                if let data = data ,
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] ,
+                    let result = json {
+                    if let person = WCastPeople(json: result) {
+                        cast = person
+                    }
+                }
+            }
+            completion(cast)
+        }
+        // put handler here
+        task.resume()
+    }
+    
+    func performMovieCreditsRequest( completion: @escaping ([WMovie]) -> Void ){
+        let url: URL = self.url!
+        var movies: [WMovie] = []
+        
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+            } else {
+                
+                var count = 1
+                if let data = data ,
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    
+                    if let jsonArr = json!["cast"] as? [[String: Any]] {
+                        for case let result in jsonArr {
+                            //                            print("Movie \(count)")
+                            //                            print(result)
+                            count = count + 1
+                            if let movie = WMovie(json: result) {
+                                movies.append(movie)
+                            }
+                        }
+                    }
+                }
+            }
+            completion(movies)
+        }
+        
+        // put handler here
+        task.resume()
     }
 }

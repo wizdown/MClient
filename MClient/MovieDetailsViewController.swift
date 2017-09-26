@@ -42,7 +42,6 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         getData()
     }
 
-   
     private func setWatchlistButtonInitialProfile() {
         if let _ = UserDefaults.standard.string(forKey: Constants.key_account_id) ,
             let _ = UserDefaults.standard.string(forKey: Constants.key_session_id),
@@ -109,7 +108,7 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         print("Getting Cast from Network")
         if let request = WMRequest.castForMovieRequest(movieId: Int(db_movie.id)) {
             
-            WMRequest.performGetCastForAMovieRequest(request: request) {  [weak self]
+            request.performGetCastForAMovieRequest() {  [weak self]
                 (cast: [WCastPeople]) in
                 if cast.count == 0 {
                     print("Couldn't fetch cast from network")
@@ -149,7 +148,6 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
                 }
             }
         }
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

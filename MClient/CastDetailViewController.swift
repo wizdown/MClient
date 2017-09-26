@@ -80,7 +80,7 @@ class CastDetailViewController: UIViewController, UICollectionViewDelegate , UIC
             print("Getting Cast Details from network")
             let temp_cast = WCastPeople(person: db_person)
             if let id = self._cast?.id {
-                let request = WCRequest.castDetailsRequest(castId: id)
+                let request = WMRequest.castDetailsRequest(castId: id)
                 request?.performGetCastDetailsRequest{
                     (person: WCastPeople?) in
                     if person == nil {
@@ -109,7 +109,7 @@ class CastDetailViewController: UIViewController, UICollectionViewDelegate , UIC
     private func getAndDisplayMovieCreditsFromNetwork(forDbPerson db_person: Person, context: NSManagedObjectContext ) {
         if let id = _cast?.id {
             print("Fetching Movie Credits from Network")
-            let request = WCRequest.movieCreditsRequest(castId: id)
+            let request = WMRequest.movieCreditsRequest(castId: id)
             request?.performMovieCreditsRequest() { [weak self ]
                 (movieCredits: [WMovie]) in
                     if movieCredits.count > 0{
