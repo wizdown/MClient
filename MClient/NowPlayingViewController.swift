@@ -15,9 +15,7 @@ import CoreData
 class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource    {
     
     var cleanupRequired : Bool = true
-    private var networkManager = NetworkManager()
-    private var _count: Int = 1
-    private var _previousQueryPending: Bool = false
+    private let networkManager = NetworkManager()
     private var _segueIdentifierForMovieDetails: String?
 
     @IBOutlet weak var collectionView: UICollectionView!
@@ -32,7 +30,6 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
             
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
             request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
-//            request.predicate = NSPredicate(format: "release_date <= %@", Date() as NSDate)
             request.predicate = NSPredicate(format: "isPlaying = %@", true as CVarArg)
             
             fetchedResultsController = NSFetchedResultsController<Movie>(
@@ -46,7 +43,6 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
             
             do {
                 try fetchedResultsController?.performFetch()
-//                print("Fetch request success")
             } catch {
                 print(error.localizedDescription)
             }
@@ -58,8 +54,6 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
         DispatchQueue.main.async{
             if movies.count > 0 {
                 self.updateDb(movies: movies)
-            } else {
-                self._previousQueryPending = false
             }
         }
     }
@@ -67,17 +61,13 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-//        print("Now Playing will appear")
         getResults(.INITIAL)
         collectionView?.collectionViewLayout.invalidateLayout()
 
     }
     
      private func loadMore() {
-        print("Loading More(\(_count))")
-        _count = _count + 1
         getResults(.MORE)
-        
     }
     
     override func viewDidLoad() {
@@ -170,11 +160,11 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     private func updateDb(movies: [WMovie]) {
-        if let context = container?.viewContext , movies.count > 0 {
-            if cleanupRequired {
-                cleanupRequired = false
-                updateOldMovies(except: movies)
-                deleteOldCast()
+        if let context = self.container?.viewContext , movies.count > 0 {
+            if self.cleanupRequired {
+                self.cleanupRequired = false
+                self.updateOldMovies(except: movies)
+                self.deleteOldCast()
             }
             
             for current_movie in movies {
@@ -183,14 +173,11 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
                 try? context.save()
             }
         }
-        _previousQueryPending = false
+//        self._previousQueryPending = false
     }
 
     func getResults(_ action : RequestAction ) {
-        if _previousQueryPending == false {
-            _previousQueryPending = true
-            networkManager.getNowPlayingMovies(action: action, completion: completionHandler)
-        }
+        networkManager.getNowPlayingMovies(action: action, completion: completionHandler)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -216,8 +203,7 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentDate = Date()
         
-        if _previousQueryPending == false ,
-            currentDate.timeIntervalSince1970 - _timeSinceLastMovieResultsFetch.timeIntervalSince1970 > _reloadTimeLag ,
+          if  currentDate.timeIntervalSince1970 - _timeSinceLastMovieResultsFetch.timeIntervalSince1970 > _reloadTimeLag ,
             scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
             loadMore()
             _timeSinceLastMovieResultsFetch = currentDate

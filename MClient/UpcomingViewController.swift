@@ -14,10 +14,9 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var _count: Int = 1
-    var _previousQueryPending: Bool = false
-    var _segueIdentifierForMovieDetails: String?
-    var _movieRequest: WMRequest?
+    private let networkManager : NetworkManager = NetworkManager()
+    private var _segueIdentifierForMovieDetails: String?
+    
     
     var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
@@ -26,7 +25,7 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
     var fetchedResultsController: NSFetchedResultsController<Movie>?
     
     
-    private func updateUI() {
+    private func setUpNSFRC() {
         
         if let context = container?.viewContext {
             
@@ -80,13 +79,12 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
         super.viewDidLoad()
         title = "Upcoming Movies"
         _segueIdentifierForMovieDetails = "UpcomingToMovieDetailSegue"
-        _movieRequest = WMRequest.nowPlayingMoviesRequest()
         
         
         collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
-        updateUI()
+        setUpNSFRC()
         
         // Adding check here so that it does not fetch movies that are coming in next 180 days in the initial request
         let max_required_date = (NSCalendar.current.date(byAdding: Calendar.Component.day, value: 180, to: Date() as Date))!
@@ -116,36 +114,26 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
                 _ = try? Movie.findOrCreateMovie(matching: current_movie, in: context)
                 try? context.save()
                 }
-            
         }
-        _previousQueryPending = false
-        
     }
     
     private func loadMore() {
-        print("Loading More(\(_count))")
-        _count = _count + 1
         getResults()
         
     }
     
-     func getResults() {
+    private func completionHandler(_ movies : [WMovie] ) {
+        DispatchQueue.main.async {
+            self.updateDb(movies)
+        }
+    }
+    
+     private func getResults() {
         
-        if _previousQueryPending == false ,
-            let context = container?.viewContext {
-            _previousQueryPending = true
+        if let context = container?.viewContext {
             let date = Movie.getLatestDate(in: context)
-            if let request = WMRequest.upcomingMoviesRequest(forDateAfterThis: date) {
-                request.performRequest(completion: { [weak self ]
-                    (movies : [WMovie]) in
-                    DispatchQueue.main.async {
-                        self?.updateDb(movies)
-                    }
-                })
-            } else {
-                _previousQueryPending = false
-            }
-            
+            networkManager.getUpcomingMovies(afterDate: date, completion : completionHandler)
+           
         }
     }
     
@@ -172,8 +160,7 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentDate = Date()
         
-        if _previousQueryPending == false ,
-            currentDate.timeIntervalSince1970 - _timeSinceLastMovieResultsFetch.timeIntervalSince1970 > _reloadTimeLag ,
+        if currentDate.timeIntervalSince1970 - _timeSinceLastMovieResultsFetch.timeIntervalSince1970 > _reloadTimeLag ,
             scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
             loadMore()
             _timeSinceLastMovieResultsFetch = currentDate

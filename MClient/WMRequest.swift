@@ -21,7 +21,9 @@ class WMRequest : NSObject {
     private var maxPageNumber: Int = 1 // This value will be updated with each subsequent request made
     private var require_paging: Bool
     private var autoIncrPageNo: Bool
-        
+    private var require_blocking : Bool = false // Assuming noone needs blocking
+    private var requestPending : Bool = false
+    
     var lastSuccessfulRequestNumber: Int {
         get {
             return currentPageNumber
@@ -33,6 +35,13 @@ class WMRequest : NSObject {
         self.require_paging = require_paging
         self.autoIncrPageNo = autoIncrPageNo
     }
+    init( urlComponents: URLComponents , require_paging: Bool , autoIncrPageNo: Bool , require_blocking : Bool )  {
+        self._urlComponents = urlComponents
+        self.require_paging = require_paging
+        self.autoIncrPageNo = autoIncrPageNo
+        self.require_blocking = require_blocking
+    }
+    
     
     private func setMaxPageNumber(to pageNo: Int) {
         maxPageNumber = pageNo
@@ -134,7 +143,7 @@ class WMRequest : NSObject {
         let language = URLQueryItem(name: Constants.queryParameter.language.rawValue, value: "en-US")
         
         urlComponents.queryItems = [ api_key , language ]
-        let request: WMRequest = WMRequest(urlComponents: urlComponents, require_paging: true ,autoIncrPageNo: true)
+        let request: WMRequest = WMRequest(urlComponents: urlComponents, require_paging: true ,autoIncrPageNo: true, require_blocking : true)
         
         return request
         
@@ -156,7 +165,7 @@ class WMRequest : NSObject {
         let release_date = URLQueryItem(name: Constants.queryParameter.primary_release_date_gte.rawValue,value: required_date.description.components(separatedBy: " ")[0])
         
         urlComponents.queryItems = [ api_key , language , sort_by, adult_content, include_video, release_date]
-        let request: WMRequest = WMRequest(urlComponents: urlComponents , require_paging : false , autoIncrPageNo: false)
+        let request: WMRequest = WMRequest(urlComponents: urlComponents , require_paging : false , autoIncrPageNo: false , require_blocking : true)
         
         return request
     }
@@ -219,12 +228,14 @@ class WMRequest : NSObject {
     }
     
      func performRequest(completion: @escaping ([WMovie]) -> Void ){
-        
-        var movies: [WMovie] = []
-
+        if require_blocking ,
+            requestPending {
+            return
+        }
         if let request_url = url {
+            
             let task = URLSession.shared.dataTask(with: request_url) {(data, response, error) in
-                
+                var movies: [WMovie] = []
                 if error != nil {
                     print(error!.localizedDescription)
                 } else {
@@ -257,13 +268,12 @@ class WMRequest : NSObject {
                     
                 }
                 completion(movies)
+                self.requestPending = false
             }
             // put handler here
             task.resume()
-        } else {
-            completion(movies)
+            self.requestPending = true
         }
-        
     }
     
     func performGetCastForAMovieRequest(completion: @escaping ([WCastPeople]) -> Void ){
