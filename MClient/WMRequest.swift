@@ -8,6 +8,10 @@
 
 import Foundation
 
+enum RequestAction {
+    case INITIAL
+    case MORE
+}
 
 
 class WMRequest : NSObject {
@@ -215,10 +219,11 @@ class WMRequest : NSObject {
     }
     
      func performRequest(completion: @escaping ([WMovie]) -> Void ){
+        
+        var movies: [WMovie] = []
 
         if let request_url = url {
             let task = URLSession.shared.dataTask(with: request_url) {(data, response, error) in
-                var movies: [WMovie] = []
                 
                 if error != nil {
                     print(error!.localizedDescription)
@@ -255,6 +260,8 @@ class WMRequest : NSObject {
             }
             // put handler here
             task.resume()
+        } else {
+            completion(movies)
         }
         
     }
@@ -367,22 +374,19 @@ class WMRequest : NSObject {
     
     func performMovieCreditsRequest( completion: @escaping ([WMovie]) -> Void ){
         let url: URL = self.url!
-        var movies: [WMovie] = []
         
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            var movies: [WMovie] = []
             if error != nil {
                 print(error!.localizedDescription)
             } else {
                 
-                var count = 1
                 if let data = data ,
                     let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                     
                     if let jsonArr = json!["cast"] as? [[String: Any]] {
                         for case let result in jsonArr {
-                            //                            print("Movie \(count)")
-                            //                            print(result)
-                            count = count + 1
+                          
                             if let movie = WMovie(json: result) {
                                 movies.append(movie)
                             }

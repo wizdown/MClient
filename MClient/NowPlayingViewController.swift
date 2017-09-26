@@ -14,10 +14,11 @@ import CoreData
 // UIScrollViewDelegate and UICollectionViewDelegate are inherited from the superclass.
 class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource    {
     
-    var _count: Int = 1
-    var _previousQueryPending: Bool = false
-    var _segueIdentifierForMovieDetails: String?
-    var _movieRequest: WMRequest?
+    var cleanupRequired : Bool = true
+    private var networkManager = NetworkManager()
+    private var _count: Int = 1
+    private var _previousQueryPending: Bool = false
+    private var _segueIdentifierForMovieDetails: String?
 
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -26,7 +27,7 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     
     var fetchedResultsController: NSFetchedResultsController<Movie>?
     
-    private func updateUI() {
+    private func setUpNSFRC() {
         if let context = container?.viewContext {
             
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
@@ -53,13 +54,21 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
         }
     }
     
+    private func completionHandler(_ movies : [WMovie]) {
+        DispatchQueue.main.async{
+            if movies.count > 0 {
+                self.updateDb(movies: movies)
+            } else {
+                self._previousQueryPending = false
+            }
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
 //        print("Now Playing will appear")
-        if _movieRequest?.lastSuccessfulRequestNumber == 0{
-            getResults()
-        }
+        getResults(.INITIAL)
         collectionView?.collectionViewLayout.invalidateLayout()
 
     }
@@ -67,7 +76,7 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
      private func loadMore() {
         print("Loading More(\(_count))")
         _count = _count + 1
-        getResults()
+        getResults(.MORE)
         
     }
     
@@ -75,14 +84,12 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
         super.viewDidLoad()
         title = "Now Playing"
         _segueIdentifierForMovieDetails = "NowPlayingToMovieDetailSegue"
-        _movieRequest = WMRequest.nowPlayingMoviesRequest()
         
         
         collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
-        updateUI()
-        getResults()
+        setUpNSFRC()
 
     }
     
@@ -164,11 +171,10 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     
     private func updateDb(movies: [WMovie]) {
         if let context = container?.viewContext , movies.count > 0 {
-            if _movieRequest?.lastSuccessfulRequestNumber == 1 {
-                
+            if cleanupRequired {
+                cleanupRequired = false
                 updateOldMovies(except: movies)
                 deleteOldCast()
-                
             }
             
             for current_movie in movies {
@@ -180,24 +186,10 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
         _previousQueryPending = false
     }
 
-     func getResults() {
+    func getResults(_ action : RequestAction ) {
         if _previousQueryPending == false {
             _previousQueryPending = true
-            if let request = _movieRequest {
-                request.performRequest() {
-                    (movies: [WMovie]) in
-                    DispatchQueue.main.async{
-                        if movies.count > 0 {
-                            self.updateDb(movies: movies)
-                        } else {
-                            self._previousQueryPending = false
-                        }
-                    }
-                }
-
-            } else {
-                _previousQueryPending = false
-            }
+            networkManager.getNowPlayingMovies(action: action, completion: completionHandler)
         }
     }
     

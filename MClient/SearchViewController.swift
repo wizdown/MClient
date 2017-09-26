@@ -123,15 +123,13 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
                     if request == self?._movieRequest {
                         if movies.count == 0 {
                             self?.didSearchReturnNoResults = true
+                            self?._previousQueryPending = false
                         }
                         DispatchQueue.main.async{
                             if request == self?._movieRequest {
                                 self?.insertMovies(movies)
                             }
                         }
-                    }
-                    else {
-                        self?._previousQueryPending = false
                     }
                 }
             }
