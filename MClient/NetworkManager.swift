@@ -12,7 +12,7 @@ import Foundation
 class NetworkManager {
     private var _request : WMRequest?
     
-    static var previousRequest: WMRequest?
+    private var _previousRequest: WMRequest?
     
     func getNowPlayingMovies(action : RequestAction , completion: @escaping ([WMovie]) -> Void ) {
         switch action {
@@ -37,6 +37,23 @@ class NetworkManager {
     func getUpcomingMovies(afterDate date : Date , completion: @escaping ([WMovie]) -> Void  ) {
         _request = WMRequest.upcomingMoviesRequest(forDateAfterThis: date)
         _request?.performRequest(completion: completion)
+    }
+    
+    func getSearchResults(for keyword : String, action : RequestAction,  completion: @escaping ([WMovie]) -> Void ) {
+        
+        switch action {
+            case .INITIAL :
+                _request = WMRequest.movieSearchRequest(forMovie: keyword)
+                _previousRequest = _request
+            case .MORE : break
+        }
+        
+        _request?.performRequest{ (movies: [WMovie]) in
+            if self._request == self._previousRequest {
+                completion(movies)
+            }
+        }
+        
     }
 
     

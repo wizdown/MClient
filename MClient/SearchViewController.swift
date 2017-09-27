@@ -11,12 +11,11 @@ import CoreData
 
 class SearchViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource , UISearchBarDelegate {
     
-    var _segueIdentifierForMovieDetails: String?
-    var _movieRequest: WMRequest?
+    private var _segueIdentifierForMovieDetails: String?
+    
+    private let networkManager = NetworkManager()
     
     var _results = [[WMovie]]()
-        var _count: Int = 1
-        var _previousQueryPending: Bool = false
 
     @IBOutlet  var collectionView: UICollectionView!
    
@@ -30,13 +29,10 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     private var searchText: String? {
         didSet {
-            _previousQueryPending = false
             searchBar.resignFirstResponder()
             _results.removeAll()
-            _movieRequest = nil
             didSearchReturnNoResults = false
-            getResults()
-            _count = 1
+            getResults(.INITIAL)
             collectionView.reloadData()
         }
     }
@@ -57,8 +53,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentDate = Date()
 
-        if _previousQueryPending == false ,
-            currentDate.timeIntervalSince1970 - _timeSinceLastMovieResultsFetch.timeIntervalSince1970 > _reloadTimeLag ,
+        if currentDate.timeIntervalSince1970 - _timeSinceLastMovieResultsFetch.timeIntervalSince1970 > _reloadTimeLag ,
             scrollView.contentOffset.y + scrollView.frame.size.height - scrollView.contentSize.height > 50 {
                 loadMore()
                 _timeSinceLastMovieResultsFetch = currentDate
@@ -66,17 +61,11 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
 
     private func loadMore() {
-        print("Loading More(\(_count))")
-        _count = _count + 1
-        getResults()
-        
+        getResults(.MORE)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        _previousQueryPending = false
-        _count = 1
 
         title = "Search"
         _segueIdentifierForMovieDetails = "SearchToMovieDetailSegue"
@@ -106,69 +95,50 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
 //        }
 //        return search_results
 //    }
-
-
-      func getResults() {
-        if _previousQueryPending == false {
-            _previousQueryPending = true
-            
-            let request: WMRequest? = _movieRequest ?? WMRequest.movieSearchRequest(forMovie: searchText!)
-            
-            if  request != nil {
-                _movieRequest = request
-                
-                request?.performRequest() { [weak self]
-                    (movies: [WMovie]) in
-                    
-                    if request == self?._movieRequest {
-                        if movies.count == 0 {
-                            self?.didSearchReturnNoResults = true
-                            self?._previousQueryPending = false
-                        }
-                        DispatchQueue.main.async{
-                            if request == self?._movieRequest {
-                                self?.insertMovies(movies)
-                            }
-                        }
-                    }
-                }
-            }
-            else {
-                _previousQueryPending = false
-            }
-            
-           
-        }
+    
+    func getResults(_ action : RequestAction) {
+        networkManager.getSearchResults(for: searchText!, action: action, completion: completionHandler)
+        
     }
-    
-        func insertMovies( _ movies: [WMovie] ) {
-            if _results.count == 0 {
-                self._results.insert(movies,at : 0) //2
-                self.collectionView.insertSections([0]) // 3
-                print("Load ==> Movies Found : \(movies.count)")
-    
+
+    private func completionHandler(_ movies : [WMovie]) {
+        if movies.count == 0 {
+            self.didSearchReturnNoResults = true
+        }
+        self.insertMovies(movies)
+    }
+
+    func insertMovies( _ movies: [WMovie] ) {
+        if _results.count == 0 {
+            self._results.insert(movies,at : 0) //2
+            DispatchQueue.main.async{ [ weak self ] in
+                self?.collectionView.insertSections([0]) // 3
             }
-            else
-            {
-                if(movies.count > 0) {
-                    let oldCount = _results[0].count
-                    self._results[0].append(contentsOf: movies)
-                    let newCount = _results[0].count
-                    self.collectionView.performBatchUpdates({
+            print("Load ==> Movies Found : \(movies.count)")
+
+        }
+        else
+        {
+            if(movies.count > 0) {
+                let oldCount = _results[0].count
+                self._results[0].append(contentsOf: movies)
+                let newCount = _results[0].count
+                DispatchQueue.main.async{ [ weak self ] in
+                    self?.collectionView.performBatchUpdates({
                         var currentItem = oldCount
                         while currentItem < newCount {
-                            self.collectionView.insertItems(at: [IndexPath(row: currentItem ,section: 0)])
+                            self?.collectionView.insertItems(at: [IndexPath(row: currentItem ,section: 0)])
                             currentItem = currentItem + 1
                         }
                     }, completion: { animationDidComplete  in
                         print("\(newCount - oldCount) items added!")
                     })
                 }
-                print("Reload ==> Movies Found : \(movies.count)")
-    
             }
-            _previousQueryPending = false
+            print("Reload ==> Movies Found : \(movies.count)")
+
         }
+    }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)

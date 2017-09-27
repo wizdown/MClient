@@ -126,7 +126,7 @@ class WMRequest : NSObject {
 
         urlComponents.queryItems = [ api_key , language , keyword , adult_content ]
         
-        let request: WMRequest = WMRequest(urlComponents: urlComponents, require_paging: true , autoIncrPageNo: true )
+        let request: WMRequest = WMRequest(urlComponents: urlComponents, require_paging: true , autoIncrPageNo: true , require_blocking : true)
         return request
         
     }
