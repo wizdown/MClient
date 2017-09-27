@@ -80,6 +80,11 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
     
     private func getCast() {
         
+        /// There is an issue here
+        // Replace findOrCreate with find and initiate getCastFromNetwork if cast is not in DB
+        
+        
+        
         if let contents = movie {
 //            setWatchlistButtonInitialProfile()
             movieView.movie = contents
@@ -94,35 +99,33 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
                         db_cast.count > 0 {
                         displayCastUsingDb(forDbMovie: db_movie)
                     } else {
-                        getAndDisplayCastFromNetwork(forDbMovie: db_movie)
+                        getAndDisplayCastFromNetwork(forMovie: contents)
                     }
                 }
             }
         }
     }
     
-    
-    
-    private func getAndDisplayCastFromNetwork(forDbMovie db_movie : Movie) {
-        
-        print("Getting Cast from Network")
-        if let request = WMRequest.castForMovieRequest(movieId: Int(db_movie.id)) {
-            
-            request.performGetCastForAMovieRequest() {  [weak self]
-                (cast: [WCastPeople]) in
-                // Need to add spinner here
-                if cast.count == 0 {
-                    print("Couldn't fetch cast from network")
-//                    self?.displayCastUsingDb(forDbMovie: db_movie, context: context)
-                } else {
-                    print("\(cast.count) cast found")
-                    DispatchQueue.main.async { [weak self] in
-                        self?.saveCastToDb(cast: cast, forMovie: WMovie(credit:db_movie))
-                        self?.insertCast(cast)
-                    }
+    // Handler to handle when Movie's cast request returns
+    private func movieCastCompletionHandler(_ cast : [WCastPeople]) {
+        if cast.count == 0 {
+            print("Cast Not Found!")
+            //                    self?.displayCastUsingDb(forDbMovie: db_movie, context: context)
+        } else {
+            print("\(cast.count) cast found")
+            DispatchQueue.main.async { [weak self] in
+//                self?.saveCastToDb(cast: cast, forMovie: WMovie(credit:db_movie))
+                self?.insertCast(cast)
+                if let strongMovie = self?.movie {
+                    self?.saveCastToDb(cast: cast, forMovie: strongMovie)
                 }
             }
         }
+    }
+    
+    private func getAndDisplayCastFromNetwork(forMovie movie : WMovie) {
+        print("Getting Cast from Network")
+        networkManager.getMovieCast(forMovie: movie, completion: movieCastCompletionHandler(_:))
         
     }
     
@@ -161,7 +164,7 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
     }
     
     private func updateWatchlistInDb(withMovie movie : WMovie , action: WatchlistAction) {
-
+        
         if let context = container?.viewContext {
             let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
                 do {
@@ -171,7 +174,6 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
                     print(error.localizedDescription)
                 }
         }
-        
     }
     
     private func watchlistHandler(success : Bool , movie : WMovie , action : WatchlistAction) {
@@ -196,12 +198,6 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         }
     }
     
-    private func showDisabledAlertMessage() {
-        let alert = UIAlertController(title: "Login Required", message: "Please login to use this feature.", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
     // Called when AddToWatchlist is clicked
     func didPerformAddToWatchlist(profile : WatchListButtonProfile) {
         
@@ -217,6 +213,12 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
                   networkManager.updateWatchlist(withMovie: strongMovie, action: .REMOVE, completion: watchlistHandler(success:movie:action:))
             }
         }
+    }
+    
+    private func showDisabledAlertMessage() {
+        let alert = UIAlertController(title: "Login Required", message: "Please login to use this feature.", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

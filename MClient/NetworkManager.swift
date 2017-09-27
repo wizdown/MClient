@@ -57,8 +57,9 @@ class NetworkManager {
     
     // Following two methods are to be used in MovieDetailsViewController
     
-    func getCast(forMovieId id : Int , completion: @escaping ([WCastPeople]) -> Void  ) {
-        _request = WMRequest.castForMovieRequest(movieId: id)
+    func getMovieCast(forMovie movie : WMovie , completion: @escaping ([WCastPeople]) -> Void  ) {
+         // Persist cast only if movie is already in DB
+        _request = WMRequest.castForMovieRequest(movieId: movie.id)
         _request?.performGetCastForAMovieRequest(completion: completion)
     }
     
