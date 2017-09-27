@@ -311,7 +311,7 @@ class WMRequest : NSObject {
     
  
     
-    func updateWatchlist( with movie: WMovie , status : WatchlistAction, completion : @escaping (Bool) -> Void ) {
+    func updateWatchlist( withMovie movie : WMovie , status : WatchlistAction, completion : @escaping (Bool, WMovie, WatchlistAction) -> Void ) {
         var params : [String: Any] = [:]
         params["media_type"] = "movie"
         params["media_id"] = movie.id
@@ -329,11 +329,11 @@ class WMRequest : NSObject {
 
             let task = URLSession.shared.dataTask(with: postRequest as URLRequest) {
                 data, response , error in
+                var success: Bool = false
+                
                 if error != nil {
                     print(error!.localizedDescription)
-                    completion(false)
                 } else {
-                    var success: Bool = false
                     
                     if let valid_data = data ,
                     let json = try? JSONSerialization.jsonObject(with: valid_data, options: [] ) as? [String: Any],
@@ -347,10 +347,10 @@ class WMRequest : NSObject {
                                             success = true
                                         }
                         }
-                        completion(success)
                     }
                     
                 }
+                completion(success , movie , status)
             }
             task.resume()
 

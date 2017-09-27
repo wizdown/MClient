@@ -53,7 +53,18 @@ class NetworkManager {
                 completion(movies)
             }
         }
-        
+    }
+    
+    // Following two methods are to be used in MovieDetailsViewController
+    
+    func getCast(forMovieId id : Int , completion: @escaping ([WCastPeople]) -> Void  ) {
+        _request = WMRequest.castForMovieRequest(movieId: id)
+        _request?.performGetCastForAMovieRequest(completion: completion)
+    }
+    
+    func updateWatchlist(withMovie movie : WMovie , action : WatchlistAction , completion: @escaping (Bool, WMovie, WatchlistAction) -> Void){
+        _request = WMRequest.getUpdateWatchlistRequest()
+        _request?.updateWatchlist(withMovie: movie, status: action, completion: completion)
     }
 
     

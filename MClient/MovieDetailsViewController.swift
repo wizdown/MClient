@@ -16,6 +16,7 @@ enum WatchlistAction {
 
 class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , UICollectionViewDataSource , WatchlistDelegate {
     
+    private let networkManager = NetworkManager()
     
     var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
@@ -39,7 +40,7 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         super.viewDidLoad()
         movieView.castCollectionView.register(UINib(nibName: "NewCastCell", bundle: nil), forCellWithReuseIdentifier: Constants.castCellReuseIdentifier)
         
-        getData()
+        getCast()
     }
 
     private func setWatchlistButtonInitialProfile() {
@@ -70,15 +71,15 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         }
     }
     
-    
-    
     override func viewWillAppear(_ animated: Bool) {
+        
         if movie != nil {
             setWatchlistButtonInitialProfile()
         }
     }
     
-    private func getData() {
+    private func getCast() {
+        
         if let contents = movie {
 //            setWatchlistButtonInitialProfile()
             movieView.movie = contents
@@ -94,14 +95,13 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
                         displayCastUsingDb(forDbMovie: db_movie)
                     } else {
                         getAndDisplayCastFromNetwork(forDbMovie: db_movie)
-                        
                     }
                 }
-
             }
-            
         }
     }
+    
+    
     
     private func getAndDisplayCastFromNetwork(forDbMovie db_movie : Movie) {
         
@@ -110,6 +110,7 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
             
             request.performGetCastForAMovieRequest() {  [weak self]
                 (cast: [WCastPeople]) in
+                // Need to add spinner here
                 if cast.count == 0 {
                     print("Couldn't fetch cast from network")
 //                    self?.displayCastUsingDb(forDbMovie: db_movie, context: context)
@@ -150,6 +151,74 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         }
     }
     
+    private func insertCast(_ cast: [WCastPeople]) {
+        self._cast.removeAll()
+        self._cast.insert(cast,at : 0) //2
+        movieView.castCollectionView.reloadData()
+//        movieView.castCollectionView.insertSections([0])
+        print("Load ==> Cast Count Found : \(cast.count)")
+        
+    }
+    
+    private func updateWatchlistInDb(withMovie movie : WMovie , action: WatchlistAction) {
+
+        if let context = container?.viewContext {
+            let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
+                do {
+                    try context.save()
+                }catch {
+                    print("Error while adding movie to watchlist in DB")
+                    print(error.localizedDescription)
+                }
+        }
+        
+    }
+    
+    private func watchlistHandler(success : Bool , movie : WMovie , action : WatchlistAction) {
+        var newProfile : WatchListButtonProfile
+        if success {
+            self.updateWatchlistInDb(withMovie: movie, action: action)
+            // Need to remove it here
+            switch action {
+                case .ADD : newProfile = .READY_TO_REMOVE
+                case .REMOVE : newProfile = .READY_TO_ADD
+            }
+        } else {
+            print("Failed to add movie to watchlist(network failure) ")
+            switch action {
+                case .ADD : newProfile = .READY_TO_ADD
+                case .REMOVE : newProfile = .READY_TO_REMOVE
+            }
+        }
+        
+        DispatchQueue.main.async { [ weak self ] in
+            self?.movieView.profile = newProfile
+        }
+    }
+    
+    private func showDisabledAlertMessage() {
+        let alert = UIAlertController(title: "Login Required", message: "Please login to use this feature.", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    // Called when AddToWatchlist is clicked
+    func didPerformAddToWatchlist(profile : WatchListButtonProfile) {
+        
+        if let strongMovie = movie {
+            switch profile {
+                case .DISABLED : print("Login to use this")
+                    showDisabledAlertMessage()
+                
+                case .READY_TO_ADD : print("Initiating add to watchlist")
+                    networkManager.updateWatchlist(withMovie: strongMovie, action: .ADD, completion: watchlistHandler(success:movie:action:))
+                
+                case .READY_TO_REMOVE : print("Initiating remove from watchlist" )
+                  networkManager.updateWatchlist(withMovie: strongMovie, action: .REMOVE, completion: watchlistHandler(success:movie:action:))
+            }
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         performSegue(withIdentifier: "castDetailSegue", sender: indexPath)
     }
@@ -168,16 +237,7 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         }
     }
     
-    private func insertCast(_ cast: [WCastPeople]) {
-        self._cast.removeAll()
-        self._cast.insert(cast,at : 0) //2
-        movieView.castCollectionView.reloadData()
-//        movieView.castCollectionView.insertSections([0])
-        print("Load ==> Cast Count Found : \(cast.count)")
-        
-    }
     
-
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return _cast.count
     }
@@ -193,69 +253,6 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
             cell.cast = cast
         }
         return cell
-    }
-    
-    private func updateWatchlistInDb(withMovie movie : WMovie , action: WatchlistAction , newProfile : WatchListButtonProfile ) {
-
-        if let context = container?.viewContext {
-            let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
-                do {
-                    try context.save()
-                }catch {
-                    print("Error while adding movie to watchlist in DB")
-                    print(error.localizedDescription)
-                }
-                DispatchQueue.main.async { [ weak self ] in
-                    self?.movieView.profile = newProfile
-                }
-        }
-        
-    }
-    
-    // Called when AddToWatchlist is clicked
-    func didPerformAddToWatchlist(profile : WatchListButtonProfile) {
-        
-        if let strongMovie = movie {
-            switch profile {
-                case .DISABLED : print("Login to use this")
-                // Add some prompt to show error
-                
-                let alert = UIAlertController(title: "Login Required", message: "Please login to use this feature.", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                
-                case .READY_TO_ADD : print("Initiating add to watchlist")
-                    if let request = WMRequest.getUpdateWatchlistRequest() {
-                            request.updateWatchlist(with: strongMovie, status: .ADD) {
-                                success in
-                                if success {
-                                    self.updateWatchlistInDb(withMovie: strongMovie, action: .ADD, newProfile: .READY_TO_REMOVE)
-                                } else {
-                                      print("Failed to add movie to watchlist(network failure) ")
-                                    DispatchQueue.main.async { [ weak self ] in
-                                        self?.movieView.profile = profile
-                                    }
-                                  
-                                }
-                        }
-                }
-                
-                case .READY_TO_REMOVE : print("Initiating remove from watchlist" )
-                    if let request = WMRequest.getUpdateWatchlistRequest() {
-                            request.updateWatchlist(with: strongMovie, status: .REMOVE) {
-                                success in
-                                if success {
-                                    self.updateWatchlistInDb(withMovie: strongMovie , action: .REMOVE, newProfile: .READY_TO_ADD)
-                                } else {
-                                    print("Failed to remove movie from watchlist(network failure) ")
-                                    DispatchQueue.main.async { [ weak self ] in
-                                        self?.movieView.profile = profile
-                                    }
-                                }
-                    }
-                }
-            }
-        }
     }
 }
 
