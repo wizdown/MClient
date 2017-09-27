@@ -25,6 +25,7 @@
 		0F4A17081F6ACC5300E93B3F /* UpcomingViewController+NSFRCDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4A17071F6ACC5300E93B3F /* UpcomingViewController+NSFRCDelegate.swift */; };
 		0F4A170A1F6BB9C400E93B3F /* NowPlayingViewController+NSFRCDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4A17091F6BB9C400E93B3F /* NowPlayingViewController+NSFRCDelegate.swift */; };
 		0F76697A1F7A28D7009511C3 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7669791F7A28D7009511C3 /* NetworkManager.swift */; };
+		0F7669A01F7BAFE8009511C3 /* DbManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F76699F1F7BAFE8009511C3 /* DbManager.swift */; };
 		0FADE5AD1F71900A00DA33DB /* WatchlistDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FADE5AC1F71900A00DA33DB /* WatchlistDelegate.swift */; };
 		0FADE5B11F72CF2700DA33DB /* WatchlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FADE5B01F72CF2700DA33DB /* WatchlistViewController.swift */; };
 		0FB30E351F74F9020078B3CF /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB30E341F74F9020078B3CF /* UserProfileViewController.swift */; };
@@ -63,6 +64,7 @@
 		0F4A17071F6ACC5300E93B3F /* UpcomingViewController+NSFRCDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UpcomingViewController+NSFRCDelegate.swift"; sourceTree = "<group>"; };
 		0F4A17091F6BB9C400E93B3F /* NowPlayingViewController+NSFRCDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NowPlayingViewController+NSFRCDelegate.swift"; sourceTree = "<group>"; };
 		0F7669791F7A28D7009511C3 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		0F76699F1F7BAFE8009511C3 /* DbManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DbManager.swift; sourceTree = "<group>"; };
 		0FADE5AC1F71900A00DA33DB /* WatchlistDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchlistDelegate.swift; sourceTree = "<group>"; };
 		0FADE5B01F72CF2700DA33DB /* WatchlistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchlistViewController.swift; sourceTree = "<group>"; };
 		0FB30E341F74F9020078B3CF /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				0F431C301F67FCC8008DF236 /* mclient.xcdatamodeld */,
 				0F431C381F68F8A0008DF236 /* Movie.swift */,
 				0F431C3A1F68F8BE008DF236 /* Person.swift */,
+				0F76699F1F7BAFE8009511C3 /* DbManager.swift */,
 			);
 			name = CoreData;
 			sourceTree = "<group>";
@@ -374,6 +377,7 @@
 				0FB5C2D41F5E894B005708AA /* NowPlayingViewController.swift in Sources */,
 				0F431C321F67FCC8008DF236 /* mclient.xcdatamodeld in Sources */,
 				0F38FD4C1F60106B00F12834 /* MovieDetailsViewController.swift in Sources */,
+				0F7669A01F7BAFE8009511C3 /* DbManager.swift in Sources */,
 				0F38FD3A1F5FAC2E00F12834 /* UITabBarViewController.swift in Sources */,
 				0F38FD561F614E7600F12834 /* WCastPeople.swift in Sources */,
 				0FADE5B11F72CF2700DA33DB /* WatchlistViewController.swift in Sources */,

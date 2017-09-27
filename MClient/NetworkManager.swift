@@ -15,21 +15,27 @@ class NetworkManager {
     private var _previousRequest: WMRequest?
     
     func getNowPlayingMovies(action : RequestAction , completion: @escaping ([WMovie]) -> Void ) {
+        if _request == nil {
+            _request = WMRequest.nowPlayingMoviesRequest()
+        }
         switch action {
             case .INITIAL :
-                if _request == nil {
-                    _request = WMRequest.nowPlayingMoviesRequest()
-                    _request?.performRequest(completion: completion)
-                } else {
-                    if _request?.lastSuccessfulRequestNumber == 0 {
-                        _request?.performRequest(completion: completion)
+               if _request?.lastSuccessfulRequestNumber == 0 {
+                    _request?.performRequest() {
+                        movies in
+                        // These 3 tasks need to be done serially. on private queue
+                        DbManager.cleanup(preserve: movies)
+                        DbManager.saveNowPlayingMovies(movies)
+                        completion(movies)
                     }
                 }
-        case .MORE :
-            if _request == nil {
-                _request = WMRequest.nowPlayingMoviesRequest()
+            
+            case .MORE :
+                _request?.performRequest() {
+                    movies in
+                    DbManager.saveNowPlayingMovies(movies)
+                    completion(movies)
             }
-            _request?.performRequest(completion: completion)
             
         }
     }
