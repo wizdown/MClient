@@ -108,24 +108,13 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     }
     
-    private func updateDb(_ movies: [WMovie]) {
-        if let context = container?.viewContext {
-                for current_movie in movies {
-                _ = try? Movie.findOrCreateMovie(matching: current_movie, in: context)
-                try? context.save()
-                }
-        }
-    }
-    
     private func loadMore() {
         getResults()
         
     }
     
     private func completionHandler(_ movies : [WMovie] ) {
-        DispatchQueue.main.async {
-            self.updateDb(movies)
-        }
+       print("Movies found : \(movies.count)")
     }
     
      private func getResults() {

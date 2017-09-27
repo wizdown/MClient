@@ -42,7 +42,11 @@ class NetworkManager {
     
     func getUpcomingMovies(afterDate date : Date , completion: @escaping ([WMovie]) -> Void  ) {
         _request = WMRequest.upcomingMoviesRequest(forDateAfterThis: date)
-        _request?.performRequest(completion: completion)
+        _request?.performRequest() {
+            movies in
+            DbManager.saveUpcomingMovies(movies)
+            completion(movies)
+        }
     }
     
     func getSearchResults(for keyword : String, action : RequestAction,  completion: @escaping ([WMovie]) -> Void ) {

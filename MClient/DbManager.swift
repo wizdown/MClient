@@ -15,11 +15,14 @@ class DbManager {
     private static var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     
+    
     static func cleanup(preserve movies : [WMovie]) {
         // Both these methods need to work synchronously . Ensure that
         updateOldMovies(except : movies)
         deleteOldCast()
     }
+    
+    
     
     static func saveNowPlayingMovies(_ movies : [WMovie]) {
         if let context = self.container?.viewContext {
@@ -30,6 +33,21 @@ class DbManager {
             }
         }
     }
+    
+    static func saveUpcomingMovies( _ movies : [WMovie]) {
+        if let context = container?.viewContext {
+            for current_movie in movies {
+                _ = try? Movie.findOrCreateMovie(matching: current_movie, in: context)
+                try? context.save()
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    /* The following methods are to be used by NowPlaying */
     
     private static func updateOldMovies(except movies : [WMovie]) {
         // Deletes or retains old movies as needed
