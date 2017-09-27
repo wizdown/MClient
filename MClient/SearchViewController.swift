@@ -15,7 +15,9 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     private let networkManager = NetworkManager()
     
-    var _results = [[WMovie]]()
+    private let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+    
+    private var _results = [[WMovie]]()
 
     @IBOutlet  var collectionView: UICollectionView!
    
@@ -32,6 +34,9 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
             searchBar.resignFirstResponder()
             _results.removeAll()
             didSearchReturnNoResults = false
+            spinner.startAnimating()
+            spinner.center = view.center
+            view.addSubview(spinner)
             getResults(.INITIAL)
             collectionView.reloadData()
         }
@@ -104,6 +109,10 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     private func completionHandler(_ movies : [WMovie]) {
         if movies.count == 0 {
             self.didSearchReturnNoResults = true
+        }
+        DispatchQueue.main.async { [weak self ] in
+            self?.spinner.stopAnimating()
+            self?.spinner.removeFromSuperview()
         }
         self.insertMovies(movies)
     }
