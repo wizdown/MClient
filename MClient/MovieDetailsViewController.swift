@@ -125,7 +125,7 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
     
     private func getAndDisplayCastFromNetwork(forMovie movie : WMovie) {
         print("Getting Cast from Network")
-        networkManager.getMovieCast(forMovie: movie, completion: movieCastCompletionHandler(_:))
+        networkManager.getMovieCast(forMovieId : movie.id , completion: movieCastCompletionHandler(_:))
         
     }
     

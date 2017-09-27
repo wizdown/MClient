@@ -11,6 +11,8 @@ import CoreData
 
 class CastDetailViewController: UIViewController, UICollectionViewDelegate , UICollectionViewDataSource  {
     
+    private let networkManager = NetworkManager()
+    
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     var needsPersistence: NeedPersistence = NeedPersistence(isNeeded: false)
@@ -38,17 +40,12 @@ class CastDetailViewController: UIViewController, UICollectionViewDelegate , UIC
         castView.clearDefaults()
         if let contents = _cast {
             spinner.startAnimating()
-            container?.performBackgroundTask{ [weak self] context in
+            if let context = container?.viewContext {
                 if let db_person = try? Person.findOrCreatePerson(matching: contents, in: context)
                 {
-                    if (self?.needsPersistence.required)! {
-                        try? context.save()
-                        print("Attempting to save cast to DB")
-                    }
-                    self?.getAndDisplayCastAndMovieCredits(forDbPerson: db_person , context: context)
+                    getAndDisplayCastAndMovieCredits(forPerson: WCastPeople(person: db_person))
                 }
             }
-            
         }
     }
     
@@ -58,77 +55,72 @@ class CastDetailViewController: UIViewController, UICollectionViewDelegate , UIC
         
     }
     
-    private func getAndDisplayCastAndMovieCredits(forDbPerson db_person : Person , context: NSManagedObjectContext){
-        if db_person.hasCompleteInfo {
+    private func getAndDisplayCastAndMovieCredits(forPerson person : WCastPeople){
+        if person.hasCompleteInfo {
             // Found full cast details(yet to check for movie credits) in DB
             print("Full cast details in DB")
-            let temp_cast = WCastPeople(person: db_person)
             DispatchQueue.main.async { [ weak self ] in
                 self?.stopAndRemoveSpinner()
-                self?.updateCast(cast: temp_cast)
+                self?.updateCast(cast: person)
             }
-            self.getAndDisplayMovieCreditsFromNetwork(forDbPerson : db_person, context : context)
+            self.getAndDisplayMovieCreditsFromNetwork()
         }
         else {
-            getAndDisplayCastFromNetwork(forDbPerson: db_person, context: context)
+            getAndDisplayCastFromNetwork(forPerson: person)
             // Above method calls getMovieCreditsFromNetwork to synchronously fetch them
         }
     }
     
-    private func getAndDisplayCastFromNetwork(forDbPerson db_person : Person , context: NSManagedObjectContext) {
-        context.perform {
-            print("Getting Cast Details from network")
-            let temp_cast = WCastPeople(person: db_person)
-            if let id = self._cast?.id {
-                let request = WMRequest.castDetailsRequest(castId: id)
-                request?.performGetCastDetailsRequest{
-                    (person: WCastPeople?) in
-                    if person == nil {
-                        print("Unable to fetch cast details from network")
-                        // Request For castDetails Failed. Do something here
-                        DispatchQueue.main.async{ [weak self ] in
-                            self?.stopAndRemoveSpinner()
-                            // Add some sort of displayError here
-                            self?.updateCast(cast: temp_cast)
-                        }
-                    } else {
-                        print("Cast details fetched from network")
-                        DispatchQueue.main.async { [weak self ] in
-                            self?.stopAndRemoveSpinner()
-                            self?.updateCast(cast: person)
-                        }
-                        self.updateCompleteCastInDb(forPerson: person!, context: context)
-                        self.getAndDisplayMovieCreditsFromNetwork(forDbPerson : db_person, context : context)
-                    }
-                }
+    private func CastCompletionHandler(_ person : WCastPeople? ) {
+        if let contents = _cast {
+            var new_person: WCastPeople = contents
+            
+            if person == nil {
+                print("Unable to fetch cast details from network")
+                
+            } else {
+                print("Cast details fetched from network")
+                new_person = person!
+                
+                self.updateCompleteCastInDb(forPerson: person!)
+                self.getAndDisplayMovieCreditsFromNetwork()
+            }
+            DispatchQueue.main.async { [weak self ] in
+                self?.stopAndRemoveSpinner()
+                self?.updateCast(cast: new_person)
             }
         }
     }
     
+    private func getAndDisplayCastFromNetwork(forPerson person : WCastPeople) {
+        networkManager.getPersonDetails(for: person, completion: CastCompletionHandler(_:))
+    }
     
-    private func getAndDisplayMovieCreditsFromNetwork(forDbPerson db_person: Person, context: NSManagedObjectContext ) {
+    private func MovieCreditsCompletionHandler(_ movieCredits : [WMovie] ) {
+        if movieCredits.count > 0 {
+            print("MovieCredits Fetched from Network")
+            DispatchQueue.main.async { [weak self ] in
+                self?.updateMovieCreditsInView(movies: movieCredits)  // done
+            }
+        }else {
+            print("Unable to fetch movie credits from network")
+            // Perform tasks for failure of movie CreditsRequest
+            DispatchQueue.main.async { [weak self ] in
+                self?.updateMovieCreditsFromDb() // make
+            }
+        }
+    }
+    
+    private func getAndDisplayMovieCreditsFromNetwork() {
         if let id = _cast?.id {
             print("Fetching Movie Credits from Network")
-            let request = WMRequest.movieCreditsRequest(castId: id)
-            request?.performMovieCreditsRequest() { [weak self ]
-                (movieCredits: [WMovie]) in
-                    if movieCredits.count > 0{
-                        print("MovieCredits Fetched from Network")
-                         DispatchQueue.main.async { [weak self ] in
-                            self?.updateMovieCreditsInView(movies: movieCredits)  // done
-                        }
-                    }else {
-                        print("Unable to fetch movie credits from network")
-                            // Perform tasks for failure of movie CreditsRequest
-                        self?.updateMovieCreditsFromDb(forDbPerson : db_person , context: context) // make
-                }
-                
-            }
+            networkManager.getMovieCredits(forPersonId: id, completion: MovieCreditsCompletionHandler(_:))
         }
     }
 
-    private func updateCompleteCastInDb(forPerson person: WCastPeople, context: NSManagedObjectContext) {
-        if (needsPersistence.required) {
+    private func updateCompleteCastInDb(forPerson person: WCastPeople) {
+        if (needsPersistence.required) ,
+            let context = container?.viewContext {
             context.perform {
                 print("Updating cast details in DB")
                 do {
@@ -150,18 +142,19 @@ class CastDetailViewController: UIViewController, UICollectionViewDelegate , UIC
         print("Load ==> Movie Credits Found : \(movies.count)")
     }
 
-    private func updateMovieCreditsFromDb(forDbPerson db_person: Person , context: NSManagedObjectContext )
+    private func updateMovieCreditsFromDb()
     {
-        context.perform {
-            print("Updating Movie Credits from DB")
-            if let db_movie_credits = db_person.movieCredits?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Movie] {
-                var temp_movie_credits = [WMovie]()
-                for current_movie_credit in db_movie_credits {
-                    temp_movie_credits.append(WMovie(credit: current_movie_credit))
-                }
-                DispatchQueue.main.async { [weak self] in
-                    self?.updateMovieCreditsInView(movies: temp_movie_credits)
-                }
+        if let contents = _cast ,
+            let context = container?.viewContext,
+            let db_person = try? Person.findOrCreatePerson(matching: contents, in: context) ,
+            let db_movie_credits = db_person.movieCredits?.sortedArray(using: [NSSortDescriptor(key: "id", ascending: true)]) as? [Movie]
+        {
+            var temp_movie_credits = [WMovie]()
+            for current_movie_credit in db_movie_credits {
+                temp_movie_credits.append(WMovie(credit: current_movie_credit))
+            }
+            DispatchQueue.main.async { [weak self] in
+                self?.updateMovieCreditsInView(movies: temp_movie_credits)
             }
         }
     }
