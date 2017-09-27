@@ -165,7 +165,7 @@ class WMRequest : NSObject {
         let release_date = URLQueryItem(name: Constants.queryParameter.primary_release_date_gte.rawValue,value: required_date.description.components(separatedBy: " ")[0])
         
         urlComponents.queryItems = [ api_key , language , sort_by, adult_content, include_video, release_date]
-        let request: WMRequest = WMRequest(urlComponents: urlComponents , require_paging : false , autoIncrPageNo: false , require_blocking : true)
+        let request: WMRequest = WMRequest(urlComponents: urlComponents , require_paging : true , autoIncrPageNo: false , require_blocking : true)
         
         return request
     }
@@ -247,7 +247,7 @@ class WMRequest : NSObject {
                         if let jsonArr = json!["results"] as? [[String: Any]] {
                             for case let result in jsonArr {
                                 //                            print("Movie \(count)")
-                                //                            print(result)
+//                                                            print(result)
                                 count = count + 1
                                 if let movie = WMovie(json: result) {
                                     movies.append(movie)

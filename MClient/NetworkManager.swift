@@ -41,7 +41,11 @@ class NetworkManager {
     }
     
     func getUpcomingMovies(afterDate date : Date , completion: @escaping ([WMovie]) -> Void  ) {
-        _request = WMRequest.upcomingMoviesRequest(forDateAfterThis: date)
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yyyy-MM-dd"
+//        let release_date = dateFormatter.date(from:"2020-01-01")
+
+        _request = WMRequest.upcomingMoviesRequest(forDateAfterThis: date )
         _request?.performRequest() {
             movies in
             DbManager.saveUpcomingMovies(movies)

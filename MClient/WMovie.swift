@@ -99,6 +99,8 @@ extension WMovie {
 //        print(json["releaseDate"])
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
+         dateFormatter.timeZone = TimeZone(abbreviation: "GMT+0:00")
+
         if let release_date_string = json["release_date"] as? String ,
             release_date_string.characters.count > 0 ,
             let release_date = dateFormatter.date(from:release_date_string) {
