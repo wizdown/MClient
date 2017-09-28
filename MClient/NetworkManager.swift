@@ -44,9 +44,6 @@ class NetworkManager {
     }
     
     func getUpcomingMovies(afterDate date : Date , completion: @escaping ([WMovie]) -> Void  ) {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-MM-dd"
-//        let release_date = dateFormatter.date(from:"2020-01-01")
 
         _request = WMRequest.upcomingMoviesRequest(forDateAfterThis: date )
         _request?.performRequest() {
@@ -103,7 +100,13 @@ class NetworkManager {
     func getPersonDetails(for person : WCastPeople , completion : @escaping (WCastPeople?) -> Void ) {
         // This fn needs something to decide whether to save the data(person) or not
         _request = WMRequest.castDetailsRequest(castId: person.id)
-        _request?.performGetCastDetailsRequest(completion: completion)
+        _request?.performGetCastDetailsRequest() {
+            (person : WCastPeople?) in
+            if person != nil {
+                DbManager.saveAdditionalPersonDetails(person!)
+            }
+            completion(person)
+        }
     }
     
     func getMovieCredits(forPersonId id : Int , completion : @escaping ([WMovie]) -> Void ) {

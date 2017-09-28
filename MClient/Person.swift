@@ -131,12 +131,12 @@ class Person: NSManagedObject {
     }
     
 
-    static func addAditionalDetails(_ person: WCastPeople, in context: NSManagedObjectContext) throws -> Person? {
+    static func addAditionalDetails(_ person: WCastPeople, in context: NSManagedObjectContext)  -> Person? {
         // This fn saves extra details of the person that weren't saved in its previous call
-        var _person: Person? = Person.find(id: person.id, in: context)
-        if _person == nil {
-            _person = Person.create(matching: person, in: context)
-        }
+        let _person: Person? = Person.find(id: person.id, in: context)
+//        if _person == nil {
+//            _person = Person.create(matching: person, in: context)
+//        }
         if _person != nil {
             _person!.date_of_birth = person.date_of_birth as NSDate?
             _person!.biography = person.biography

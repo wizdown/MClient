@@ -36,8 +36,6 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
         welcomeLabel.text = welcomeMessage
     }
     
-   
-    
     private func setUpNSFRC() {
         
         collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)

@@ -15,6 +15,59 @@ class DbManager {
     private static var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     
+    // The following merhods are to be used by CastDetailsViewController
+    
+    static func getMovieCredits(forPersonWithId id : Int ) -> [WMovie] {
+        var temp_movie_credits : [WMovie] = []
+        if let context = container?.viewContext {
+            context.perform {
+                let db_person = Person.find(id : id , in : context)
+                if let db_movie_credits = db_person?.movieCredits?.sortedArray(using:[NSSortDescriptor(key: "id", ascending: true)]) as? [Movie] {
+                    for current_movie in db_movie_credits {
+                        temp_movie_credits.append(WMovie(credit: current_movie))
+                    }
+                }
+
+            }
+        }
+        return temp_movie_credits
+    }
+    
+    static func getPerson(withId id : Int) -> WCastPeople? {
+        var person: WCastPeople?
+        if let context = container?.viewContext {
+            context.performAndWait {
+                let db_person = Person.find(id: id, in: context)
+                if db_person != nil {
+                    person = WCastPeople(person: db_person!)
+                }
+            }
+        }
+        return person
+    }
+    
+    static func saveAdditionalPersonDetails(_ person : WCastPeople){
+        // The function saves the additional details only if person already
+        // has partial details in DB
+        if let context = container?.viewContext {
+            context.perform {
+                let db_person = Person.addAditionalDetails(person, in: context)
+                do {
+                    try context.save()
+                    if db_person != nil {
+                        print("Additional person details updated")
+                    } else {
+                        print("Unable to update additional person details")
+                    }
+                } catch {
+                    print("Error while saving additional person details")
+                    print(error.localizedDescription)
+                }
+               
+            }
+        }
+    }
+    
     // The following merhods are to be used by WatchlistViewController
     static func synchronizeWatchlistInDb(with movies : [WMovie]) {
         if let context = container?.viewContext {
@@ -76,6 +129,7 @@ class DbManager {
                 {
                     do {
                         try context.save()
+                        print("Movie Cast saved to Db")
                     } catch {
                         print("Error while saving MovieCast")
                         print(error.localizedDescription)
