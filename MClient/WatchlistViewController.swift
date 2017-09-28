@@ -16,6 +16,8 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
     
     @IBOutlet weak var welcomeLabel: UILabel!
     
+    private let networkManager = NetworkManager()
+    
     var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     
@@ -24,11 +26,6 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
     var _watchlistRequest: WMRequest?
     
     private func updateUserDataInUI() {
-//        userImage.layer.borderWidth = 1
-//        userImage.layer.masksToBounds = false
-//        userImage.layer.borderColor = UIColor.white.cgColor
-//        userImage.layer.cornerRadius = userImage.frame.height/2
-//        userImage.clipsToBounds = true
         
         var welcomeMessage = ""
         let username = UserDefaults.standard.string(forKey: Constants.key_username)
@@ -70,35 +67,6 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
             collectionView.reloadData()
         }
     }
-    
-    private func updateWatchlistInDb(movies: [WMovie]) {
-        if let context = container?.viewContext {
-            for current_movie in movies {
-                let _ = Movie.updateWatchlistInDb(with: current_movie, action: .ADD , in: context)
-                try? context.save()
-                
-            }
-        }
-//        container?.performBackgroundTask{ context in
-//            for current_movie in movies {
-//                let _ = Movie.updateWatchlistInDb(with: current_movie, action: .ADD , in: context)
-//                try? context.save()
-//
-//            }
-//        }
-    }
-    
-    private func getData() {
-        _watchlistRequest?.performRequest() {
-            (movies : [WMovie]) in
-            if movies.count > 0 {
-                self.updateWatchlistInDb(movies: movies)
-                self.getData()
-            } else {
-                print("Watchlist: Refresh ends!")
-            }
-        }
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,9 +86,7 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
 //        })
         
         _watchlistRequest = WMRequest.getWatchlistRequest()
-        
-        getData()
-        
+        networkManager.synchronizeWatchlist()
     }
     
     override func viewWillAppear(_ animated: Bool) {

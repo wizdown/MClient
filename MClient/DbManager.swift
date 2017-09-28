@@ -15,32 +15,34 @@ class DbManager {
     private static var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     
- 
-    static func saveNowPlayingMovies(_ movies : [WMovie]) {
-        if let context = self.container?.viewContext {
-            for current_movie in movies {
-                let db_movie = Movie.create(using: current_movie, in: context)
-                db_movie?.isPlaying = true
-                try? context.save()
+    // The following merhods are to be used by WatchlistViewController
+    static func synchronizeWatchlistInDb(with movies : [WMovie]) {
+        if let context = container?.viewContext {
+            context.perform {
+                for current_movie in movies {
+                    let _ = Movie.updateWatchlistInDb(with: current_movie, action: .ADD, in : context)
+                    try? context.save()
+                }
             }
         }
     }
     
-    static func cleanup(preserve movies : [WMovie]) {
-        // Both these methods need to work synchronously . Ensure that
-        updateOldMovies(except : movies)
-        deleteOldCast()
-    }
-    
-    
+
+    // The following merhods are to be used by UpcomingViewController
+
     static func saveUpcomingMovies( _ movies : [WMovie]) {
         if let context = container?.viewContext {
-            for current_movie in movies {
-                let _ = Movie.create(using: current_movie, in: context)
-                try? context.save()
+            context.perform {
+                for current_movie in movies {
+                    let _ = Movie.create(using: current_movie, in: context)
+                    try? context.save()
+                }
             }
+           
         }
     }
+    
+    // The following merhods are to be used by MovieDetailsViewController
     
     static func isMovieAvailableInWatchlist(id : Int ) -> Bool {
         if let context = container?.viewContext ,
@@ -68,34 +70,40 @@ class DbManager {
     
     
     static func saveMovieCast( _ cast : [WCastPeople] , forMovieWithId id : Int ) {
-        if let context = container?.viewContext ,
-            let _ = Movie.addCast(cast, forMovieWithId:  id , in : context )
-        {
-            do {
-                try context.save()
-            } catch {
-                print("Error while saving MovieCast")
-                print(error.localizedDescription)
+        if let context = container?.viewContext {
+            context.perform {
+                if let _ = Movie.addCast(cast, forMovieWithId:  id , in : context )
+                {
+                    do {
+                        try context.save()
+                    } catch {
+                        print("Error while saving MovieCast")
+                        print(error.localizedDescription)
+                    }
+                }
+                
             }
         }
+        
     }
     
-    static func updateMovieInWatchlist(_ movie : WMovie , action : WatchlistAction )
+    static func updateWatchlist(with movie : WMovie , action : WatchlistAction )
     {
         if let context = container?.viewContext {
-           let db_movie = Movie.updateWatchlistInDb(with: movie, action: action , in : context)
-            do {
-                try context.save()
-                if db_movie != nil {
-                    print("Watchlist : Movie updation in DB succeeded")
-                } else {
-                    print("Watchlist : Movie updation in DB Failed")
+            context.perform {
+                let db_movie = Movie.updateWatchlistInDb(with: movie, action: action , in : context)
+                do {
+                    try context.save()
+                    if db_movie != nil {
+                        print("Watchlist : Movie updation in DB succeeded")
+                    } else {
+                        print("Watchlist : Movie updation in DB Failed")
+                    }
+                } catch {
+                    print("WAtchlist updation in Db Failed")
+                    print(error.localizedDescription)
                 }
-            } catch {
-                print("WAtchlist updation in Db Failed")
-                print(error.localizedDescription)
             }
-           
         }
     }
     
@@ -104,29 +112,52 @@ class DbManager {
 
     /* The following methods are to be used by NowPlaying */
     
+    
+    static func saveNowPlayingMovies(_ movies : [WMovie]) {
+        if let context = self.container?.viewContext {
+            context.perform {
+                for current_movie in movies {
+                    let db_movie = Movie.create(using: current_movie, in: context)
+                    db_movie?.isPlaying = true
+                    try? context.save()
+                }
+
+            }
+        }
+    }
+    
+    static func cleanup(preserve movies : [WMovie]) {
+        // Both these methods need to work synchronously . Ensure that
+        updateOldMovies(except : movies)
+        deleteOldCast()
+    }
+    
+    
     private static func updateOldMovies(except movies : [WMovie]) {
         // Deletes or retains old movies as needed
         if let context = container?.viewContext {
-            let request: NSFetchRequest<Movie> = Movie.fetchRequest()
-            let release_date_predicate =  NSPredicate(format: "release_date <= %@", Date() as NSDate)
-            let not_in_watchlist_predicate = NSPredicate(format: "isInWatchlist = %@", false as CVarArg)
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [release_date_predicate, not_in_watchlist_predicate])
-            // ADd predicate
-            do {
-                var delete_count : Int = 0
-                let matches = try context.fetch(request)
-                if matches.count > 0 {
-                    for current_match in matches {
-                        if !doNetworkQueryResults(movies, contain: current_match) {
-                            context.delete(current_match)
-                            try context.save()
-                            delete_count = delete_count + 1
+            context.perform {
+                let request: NSFetchRequest<Movie> = Movie.fetchRequest()
+                let release_date_predicate =  NSPredicate(format: "release_date <= %@", Date() as NSDate)
+                let not_in_watchlist_predicate = NSPredicate(format: "isInWatchlist = %@", false as CVarArg)
+                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [release_date_predicate, not_in_watchlist_predicate])
+                // ADd predicate
+                do {
+                    var delete_count : Int = 0
+                    let matches = try context.fetch(request)
+                    if matches.count > 0 {
+                        for current_match in matches {
+                            if !doNetworkQueryResults(movies, contain: current_match) {
+                                context.delete(current_match)
+                                try context.save()
+                                delete_count = delete_count + 1
+                            }
                         }
                     }
+                    print("Removed \(delete_count) old movies")
+                } catch {
+                    print(error.localizedDescription)
                 }
-                print("Removed \(delete_count) old movies")
-            } catch {
-                print(error.localizedDescription)
             }
         }
         

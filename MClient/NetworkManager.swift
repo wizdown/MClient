@@ -91,7 +91,7 @@ class NetworkManager {
         _request?.updateWatchlist(withMovie: movie, status: action) {
             (success , movie, action ) in
             if success {
-                DbManager.updateMovieInWatchlist(movie, action: action)
+                DbManager.updateWatchlist(with : movie, action: action)
             }
             completion(success,movie,action)
 
@@ -110,6 +110,20 @@ class NetworkManager {
         // This fn never saves to CoreData
         _request = WMRequest.movieCreditsRequest(castId: id)
         _request?.performMovieCreditsRequest(completion: completion)
+    }
+    
+    func synchronizeWatchlist() {
+        if _request == nil {
+            _request = WMRequest.getWatchlistRequest()
+        }
+        
+        _request?.performRequest(){
+            ( movies : [WMovie] ) in
+            if movies.count > 0 {
+                DbManager.synchronizeWatchlistInDb(with : movies)
+                self.synchronizeWatchlist()
+            }
+        }
     }
 
     

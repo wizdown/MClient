@@ -180,12 +180,19 @@ class Movie: NSManagedObject {
         }
         
         if _movie != nil {
+            var newValue : Bool
+
             switch action {
             case .ADD :
-                _movie!.isInWatchlist = true
+                newValue = true
             case .REMOVE :
-                _movie!.isInWatchlist = false
+                newValue = false
             }
+            
+            if _movie!.isInWatchlist != newValue {
+                _movie!.isInWatchlist = newValue
+            }
+
             
         }
         return _movie

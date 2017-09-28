@@ -39,18 +39,6 @@ class Person: NSManagedObject {
         
         return _person
     }
-    
-    var hasCompleteInfo : Bool {
-        if self.date_of_birth == nil ,
-            self.biography == Constants.notFound,
-            self.place_of_birth == Constants.notFound
-        {
-            
-            return false
-        }
-        return true
-    }
-    
    
     static func addAditionalPersonDetails(matching person: WCastPeople, in context: NSManagedObjectContext) throws -> Person {
        // This fn saves extra details of the person that weren't saved in its previous call
@@ -131,32 +119,32 @@ class Person: NSManagedObject {
         return _person
     }
     
-//    var hasCompleteInfo : Bool {
-//        if self.date_of_birth == nil ,
-//            self.biography == Constants.notFound,
-//            self.place_of_birth == Constants.notFound
-//        {
-//            
-//            return false
-//        }
-//        return true
-//    }
-//    
-//    
-//    static func addAditionalDetails(_ person: WCastPeople, in context: NSManagedObjectContext) throws -> Person? {
-//        // This fn saves extra details of the person that weren't saved in its previous call
-//        var _person: Person? = Person.find(matching: person, in: context)
-//        if _person == nil {
-//            _person = Person.create(matching: person, in: context)
-//        }
-//        if _person != nil {
-//            _person!.date_of_birth = person.date_of_birth as NSDate?
-//            _person!.biography = person.biography
-//            _person!.place_of_birth = person.place_of_birth
-//        }
-//        return _person
-//    }
-//    
+    var hasCompleteInfo : Bool {
+        if self.date_of_birth == nil ,
+            self.biography == Constants.notFound,
+            self.place_of_birth == Constants.notFound
+        {
+            
+            return false
+        }
+        return true
+    }
+    
+
+    static func addAditionalDetails(_ person: WCastPeople, in context: NSManagedObjectContext) throws -> Person? {
+        // This fn saves extra details of the person that weren't saved in its previous call
+        var _person: Person? = Person.find(id: person.id, in: context)
+        if _person == nil {
+            _person = Person.create(matching: person, in: context)
+        }
+        if _person != nil {
+            _person!.date_of_birth = person.date_of_birth as NSDate?
+            _person!.biography = person.biography
+            _person!.place_of_birth = person.place_of_birth
+        }
+        return _person
+    }
+    
 //    static func addMovieCredits(_ movies : [WMovie] , matching person : WCastPeople , in context : NSManagedObjectContext) -> Person? {
 //        
 //        let _person  = Person.find(matching: person, in: context)
