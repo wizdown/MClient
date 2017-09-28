@@ -19,7 +19,7 @@ class DbManager {
     static func saveNowPlayingMovies(_ movies : [WMovie]) {
         if let context = self.container?.viewContext {
             for current_movie in movies {
-                let db_movie = try? Movie.findOrCreateMovie(matching: current_movie, in: context)
+                let db_movie = Movie.create(using: current_movie, in: context)
                 db_movie?.isPlaying = true
                 try? context.save()
             }
@@ -36,13 +36,72 @@ class DbManager {
     static func saveUpcomingMovies( _ movies : [WMovie]) {
         if let context = container?.viewContext {
             for current_movie in movies {
-                _ = try? Movie.findOrCreateMovie(matching: current_movie, in: context)
+                let _ = Movie.create(using: current_movie, in: context)
                 try? context.save()
             }
         }
     }
     
+    static func isMovieAvailableInWatchlist(id : Int ) -> Bool {
+        if let context = container?.viewContext ,
+           let db_movie = Movie.find(id: id, in: context) ,
+            db_movie.isInWatchlist
+        {
+            return true
+        }
+        return false
+    }
     
+    static func getMovieCast(movieId id : Int ) -> [WCastPeople] {
+        // This needs to run on main thread
+        var temp_cast = [WCastPeople]()
+        if let context = container?.viewContext {
+            let db_movie = Movie.find(id : id , in : context)
+            if let db_cast = db_movie?.cast?.sortedArray(using:[NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
+                for current_person in db_cast {
+                    temp_cast.append(WCastPeople(person: current_person))
+                }
+            }
+        }
+        return temp_cast
+    }
+    
+    
+    static func saveMovieCast( _ cast : [WCastPeople] , forMovieWithId id : Int ) {
+        if let context = container?.viewContext ,
+            let _ = Movie.addCast(cast, forMovieWithId:  id , in : context )
+        {
+            do {
+                try context.save()
+            } catch {
+                print("Error while saving MovieCast")
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    static func updateMovieInWatchlist(_ movie : WMovie , action : WatchlistAction )
+    {
+        if let context = container?.viewContext {
+           let db_movie = Movie.updateWatchlistInDb(with: movie, action: action , in : context)
+            do {
+                try context.save()
+                if db_movie != nil {
+                    print("Watchlist : Movie updation in DB succeeded")
+                } else {
+                    print("Watchlist : Movie updation in DB Failed")
+                }
+            } catch {
+                print("WAtchlist updation in Db Failed")
+                print(error.localizedDescription)
+            }
+           
+        }
+    }
+    
+   
+    
+
     /* The following methods are to be used by NowPlaying */
     
     private static func updateOldMovies(except movies : [WMovie]) {

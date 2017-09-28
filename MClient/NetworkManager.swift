@@ -24,6 +24,9 @@ class NetworkManager {
                     _request?.performRequest() {
                         movies in
                         // These 3 tasks need to be done serially. on private queue
+                        //This saving needs to be moved to background queue.
+                        //Currently its being invoked from bg queue and using main context
+                        //Fix this
                         DbManager.cleanup(preserve: movies)
                         DbManager.saveNowPlayingMovies(movies)
                         completion(movies)
@@ -74,12 +77,25 @@ class NetworkManager {
     func getMovieCast(forMovieId id : Int , completion: @escaping ([WCastPeople]) -> Void  ) {
          // Persist cast only if movie is already in DB
         _request = WMRequest.castForMovieRequest(movieId: id)
-        _request?.performGetCastForAMovieRequest(completion: completion)
+        _request?.performGetCastForAMovieRequest(){
+            cast in
+            if cast.count > 0 {
+                DbManager.saveMovieCast(cast, forMovieWithId: id)
+            }
+            completion(cast)
+        }
     }
     
     func updateWatchlist(withMovie movie : WMovie , action : WatchlistAction , completion: @escaping (Bool, WMovie, WatchlistAction) -> Void){
         _request = WMRequest.getUpdateWatchlistRequest()
-        _request?.updateWatchlist(withMovie: movie, status: action, completion: completion)
+        _request?.updateWatchlist(withMovie: movie, status: action) {
+            (success , movie, action ) in
+            if success {
+                DbManager.updateMovieInWatchlist(movie, action: action)
+            }
+            completion(success,movie,action)
+
+        }
     }
     
     // Following two methods are to be used in CastDetailsViewController

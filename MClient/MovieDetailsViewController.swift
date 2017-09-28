@@ -18,9 +18,6 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
     
     private let networkManager = NetworkManager()
     
-    var container: NSPersistentContainer? =
-        (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-    
     var needsPersistence: NeedPersistence = NeedPersistence(isNeeded: false)
     
     
@@ -48,21 +45,13 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
             let _ = UserDefaults.standard.string(forKey: Constants.key_session_id),
             let contents = movie
         {
-            if let context = container?.viewContext {
-                if let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context) {
-                    if db_movie.isInWatchlist {
-                        DispatchQueue.main.async { [weak self] in
-                            self?.movieView.profile = .READY_TO_REMOVE
-                        }
-                    } else {
-                        DispatchQueue.main.async { [weak self] in
-                            self?.movieView.profile = .READY_TO_ADD
-                        }
-                    }
-                } else {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.movieView.profile = .DISABLED
-                    }
+            if DbManager.isMovieAvailableInWatchlist(id: contents.id) {
+                DispatchQueue.main.async { [weak self] in
+                    self?.movieView.profile = .READY_TO_REMOVE
+                }
+            } else {
+                DispatchQueue.main.async { [weak self] in
+                    self?.movieView.profile = .READY_TO_ADD
                 }
             }
         }
@@ -80,28 +69,17 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
     
     private func getCast() {
         
-        /// There is an issue here
-        // Replace findOrCreate with find and initiate getCastFromNetwork if cast is not in DB
-        
-        
-        
         if let contents = movie {
-//            setWatchlistButtonInitialProfile()
             movieView.movie = contents
             
-            if let context = container?.viewContext {
-                if let db_movie = try? Movie.findOrCreateMovie(matching: contents, in: context) {
-                    if needsPersistence.required {  // Why did xcode force me to unwrap this ?
-                        try? context.save()
-                        print("Attempting to save Movie to DB")
-                    }
-                    if let db_cast = db_movie.cast,
-                        db_cast.count > 0 {
-                        displayCastUsingDb(forDbMovie: db_movie)
-                    } else {
-                        getAndDisplayCastFromNetwork(forMovie: contents)
-                    }
+            let temp_cast = DbManager.getMovieCast(movieId: contents.id)
+            if temp_cast.count > 0 {
+                DispatchQueue.main.async { [weak self ] in
+                    self?.insertCast(temp_cast)
                 }
+            } else {
+                print("Getting Cast from Network")
+                networkManager.getMovieCast(forMovieId : contents.id , completion: movieCastCompletionHandler(_:))
             }
         }
     }
@@ -110,46 +88,10 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
     private func movieCastCompletionHandler(_ cast : [WCastPeople]) {
         if cast.count == 0 {
             print("Cast Not Found!")
-            //                    self?.displayCastUsingDb(forDbMovie: db_movie, context: context)
         } else {
             print("\(cast.count) cast found")
             DispatchQueue.main.async { [weak self] in
-//                self?.saveCastToDb(cast: cast, forMovie: WMovie(credit:db_movie))
                 self?.insertCast(cast)
-                if let strongMovie = self?.movie {
-                    self?.saveCastToDb(cast: cast, forMovie: strongMovie)
-                }
-            }
-        }
-    }
-    
-    private func getAndDisplayCastFromNetwork(forMovie movie : WMovie) {
-        print("Getting Cast from Network")
-        networkManager.getMovieCast(forMovieId : movie.id , completion: movieCastCompletionHandler(_:))
-        
-    }
-    
-    private func saveCastToDb(cast : [WCastPeople] ,forMovie movie : WMovie){
-        if needsPersistence.required {
-            print("Saving Cast to DB")
-            if let context = container?.viewContext {
-                _ = try? Movie.findOrCreateCast(matching: movie, cast: cast, in: context)
-                try? context.save()
-            }
-        }
-    }
-    
-    private func displayCastUsingDb(forDbMovie db_movie: Movie) {
-        if let _ = container?.viewContext {
-            print("Displaying Cast from DB")
-            if let db_cast = db_movie.cast?.sortedArray(using:[NSSortDescriptor(key: "id", ascending: true)]) as? [Person] {
-                var temp_cast = [WCastPeople]()
-                for current_person in db_cast {
-                    temp_cast.append(WCastPeople(person: current_person))
-                }
-                DispatchQueue.main.async { [weak self ] in
-                    self?.insertCast(temp_cast)
-                }
             }
         }
     }
@@ -163,23 +105,10 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         
     }
     
-    private func updateWatchlistInDb(withMovie movie : WMovie , action: WatchlistAction) {
-        
-        if let context = container?.viewContext {
-            let _ = Movie.updateWatchlistInDb(with: movie, action: action, in: context)
-                do {
-                    try context.save()
-                }catch {
-                    print("Error while adding movie to watchlist in DB")
-                    print(error.localizedDescription)
-                }
-        }
-    }
-    
     private func watchlistHandler(success : Bool , movie : WMovie , action : WatchlistAction) {
         var newProfile : WatchListButtonProfile
         if success {
-            self.updateWatchlistInDb(withMovie: movie, action: action)
+//            self.updateWatchlistInDb(withMovie: movie, action: action)
             // Need to remove it here
             switch action {
                 case .ADD : newProfile = .READY_TO_REMOVE
