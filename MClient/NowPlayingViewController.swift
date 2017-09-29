@@ -19,21 +19,18 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
 
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var container: NSPersistentContainer? =
-        (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-    
     var fetchedResultsController: NSFetchedResultsController<Movie>?
     
     private func setUpNSFRC() {
-        if let context = container?.viewContext {
-            
+//        if let context = container?.viewContext {
+        
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
             request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
             request.predicate = NSPredicate(format: "isPlaying = %@", true as CVarArg)
             
             fetchedResultsController = NSFetchedResultsController<Movie>(
                 fetchRequest: request,
-                managedObjectContext: context,
+                managedObjectContext: DbManager.mainContext,
                 sectionNameKeyPath: nil,
                 cacheName: nil
             )
@@ -46,7 +43,7 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
                 print(error.localizedDescription)
             }
             collectionView.reloadData()
-        }
+//        }
     }
     
   

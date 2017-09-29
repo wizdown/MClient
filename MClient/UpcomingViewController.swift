@@ -27,8 +27,8 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     private func setUpNSFRC() {
         
-        if let context = container?.viewContext {
-            
+//        if let context = container?.viewContext {
+        
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
             request.sortDescriptors = [NSSortDescriptor(key: "release_date", ascending: true)]
             
@@ -40,7 +40,7 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
 
             fetchedResultsController = NSFetchedResultsController<Movie>(
                 fetchRequest: request,
-                managedObjectContext: context,
+                managedObjectContext: DbManager.mainContext,
                 sectionNameKeyPath: nil,
                 cacheName: nil
             )
@@ -54,7 +54,7 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
             }
             collectionView.reloadData()
             
-        }
+//        }
         
     }
     
@@ -107,13 +107,20 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let context = container?.viewContext{
-            let latest_date = Movie.getLatestDate(in: context)
-            if latest_date <= Date() {
-                getResults()
-            }
+        
+        let latest_date = DbManager.getLatestDate()
+        if latest_date <= Date() {
+            getResults()
         }
         collectionView?.collectionViewLayout.invalidateLayout()
+
+//        if let context = container?.viewContext{
+//            let latest_date = Movie.getLatestDate(in: context)
+//            if latest_date <= Date() {
+//                getResults()
+//            }
+//        }
+//        collectionView?.collectionViewLayout.invalidateLayout()
 
     }
     
@@ -127,12 +134,14 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
     
      private func getResults() {
+        networkManager.getUpcomingMovies(afterDate: DbManager.getLatestDate(), completion : completionHandler)
+
         
-        if let context = container?.viewContext {
-            let date = Movie.getLatestDate(in: context)
-            networkManager.getUpcomingMovies(afterDate: date, completion : completionHandler)
-           
-        }
+//        if let context = container?.viewContext {
+//            let date = Movie.getLatestDate(in: context)
+//            networkManager.getUpcomingMovies(afterDate: date, completion : completionHandler)
+//           
+//        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

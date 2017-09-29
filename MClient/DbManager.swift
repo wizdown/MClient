@@ -196,6 +196,14 @@ class DbManager {
 //        }
     }
     
+    static func getLatestDate() -> Date {
+        var date = Date()
+        mainContext.performAndWait {
+            date =  Movie.getLatestDate(in: mainContext)
+        }
+        return date
+    }
+    
 
     /* The following methods are to be used by NowPlaying */
     
