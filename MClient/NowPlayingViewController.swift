@@ -67,13 +67,15 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
         super.viewDidLoad()
         title = "Now Playing"
         _segueIdentifierForMovieDetails = "NowPlayingToMovieDetailSegue"
-        
+        collectionView.alwaysBounceVertical = true
+
         
         collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
         setUpNSFRC()
-
+        
+       
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -101,7 +103,7 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
+//        print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
         performSegue(withIdentifier: _segueIdentifierForMovieDetails!, sender: indexPath )
     }
     

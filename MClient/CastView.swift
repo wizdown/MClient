@@ -52,7 +52,7 @@ class CastView: UIView {
     
     var cast : WCastPeople? {
         didSet{
-            setNeedsDisplay()
+            updateUI()
         }
     }
     
@@ -106,8 +106,8 @@ class CastView: UIView {
         }
     }
     
-    override func draw(_ rect: CGRect) {
-        updateUI()
-    }
+//    override func draw(_ rect: CGRect) {
+//        updateUI()
+//    }
 
 }

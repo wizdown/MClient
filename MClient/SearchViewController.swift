@@ -204,7 +204,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
+//        print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
         performSegue(withIdentifier: _segueIdentifierForMovieDetails!, sender: indexPath )
     }
     

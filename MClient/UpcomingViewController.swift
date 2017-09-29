@@ -84,16 +84,25 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
         collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.alwaysBounceVertical = true
         setUpNSFRC()
         
-        // Adding check here so that it does not fetch movies that are coming in next 180 days in the initial request
-        let max_required_date = (NSCalendar.current.date(byAdding: Calendar.Component.day, value: 180, to: Date() as Date))!
-        if let context = container?.viewContext {
-            let latest_date = Movie.getLatestDate(in: context)
-            if latest_date <= max_required_date {
-                getResults()
-            }
-        }
+//        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: DbManager.privateContext, queue: nil, using: {
+//            notification in
+////            print(notification.userInfo)
+////            DbManager.mainContext.mergeChanges(fromContextDidSave: notification)
+//            try? DbManager.mainContext.save()
+//        })
+        
+        
+//        // Adding check here so that it does not fetch movies that are coming in next 180 days in the initial request
+//        let max_required_date = (NSCalendar.current.date(byAdding: Calendar.Component.day, value: 180, to: Date() as Date))!
+//        if let context = container?.viewContext {
+//            let latest_date = Movie.getLatestDate(in: context)
+//            if latest_date <= max_required_date {
+//                getResults()
+//            }
+//        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -127,7 +136,7 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
+//        print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
         performSegue(withIdentifier: _segueIdentifierForMovieDetails!, sender: indexPath )
     }
     

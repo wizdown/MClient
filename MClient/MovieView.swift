@@ -14,7 +14,6 @@ enum WatchListButtonProfile {
     case READY_TO_REMOVE
 }
 
-
 class MovieView: UIView {
     
     var delegate : WatchlistDelegate?

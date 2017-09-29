@@ -33,26 +33,32 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
     
     private var _cast = [[WCastPeople]]()
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        if movie != nil {
+            setWatchlistButtonProfile()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        movieView.castCollectionView.register(UINib(nibName: "NewCastCell", bundle: nil), forCellWithReuseIdentifier: Constants.castCellReuseIdentifier)
-        
+         movieView.castCollectionView.register(UINib(nibName: "NewCastCell", bundle: nil), forCellWithReuseIdentifier: Constants.castCellReuseIdentifier)
+//        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: DbManager.privateContext, queue: nil, using: {
+//            notification in
+//            try? DbManager.mainContext.save()
+//        })
         getCast()
     }
 
-    private func setWatchlistButtonInitialProfile() {
+    private func setWatchlistButtonProfile() {
         if let _ = UserDefaults.standard.string(forKey: Constants.key_account_id) ,
             let _ = UserDefaults.standard.string(forKey: Constants.key_session_id),
             let contents = movie
         {
             if DbManager.isMovieAvailableInWatchlist(id: contents.id) {
-                DispatchQueue.main.async { [weak self] in
-                    self?.movieView.profile = .READY_TO_REMOVE
-                }
+                movieView.profile = .READY_TO_REMOVE
             } else {
-                DispatchQueue.main.async { [weak self] in
-                    self?.movieView.profile = .READY_TO_ADD
-                }
+                movieView.profile = .READY_TO_ADD
             }
         }
         else {
@@ -60,26 +66,17 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-        if movie != nil {
-            setWatchlistButtonInitialProfile()
-        }
-    }
-    
+   
     private func getCast() {
-        
         if let contents = movie {
             movieView.movie = contents
             
             let temp_cast = DbManager.getMovieCast(movieId: contents.id)
             if temp_cast.count > 0 {
-                DispatchQueue.main.async { [weak self ] in
-                    self?.insertCast(temp_cast)
-                }
+                self.insertCast(temp_cast)
             } else {
                 print("Getting Cast from Network")
-                networkManager.getMovieCast(forMovieId : contents.id , completion: movieCastCompletionHandler(_:))
+                self.networkManager.getMovieCast(forMovieId : contents.id , completion: self.movieCastCompletionHandler(_:))
             }
         }
     }
@@ -90,16 +87,16 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
             print("Cast Not Found!")
         } else {
             print("\(cast.count) cast found")
-            DispatchQueue.main.async { [weak self] in
-                self?.insertCast(cast)
-            }
+            self.insertCast(cast)
         }
     }
     
-    private func insertCast(_ cast: [WCastPeople]) {
+    private func insertCast(_ cast: [WCastPeople]){
         self._cast.removeAll()
         self._cast.insert(cast,at : 0) //2
-        movieView.castCollectionView.reloadData()
+        DispatchQueue.main.async { [ weak self ] in
+            self?.movieView.castCollectionView.reloadData()
+        }
 //        movieView.castCollectionView.insertSections([0])
         print("Load ==> Cast Count Found : \(cast.count)")
         

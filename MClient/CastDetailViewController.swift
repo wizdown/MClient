@@ -30,6 +30,10 @@ class CastDetailViewController: UIViewController, UICollectionViewDelegate , UIC
         
         castView.collectionView.delegate = self
         castView.collectionView.dataSource = self
+//        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: DbManager.privateContext, queue: nil, using: {
+//            notification in
+//            try? DbManager.mainContext.save()
+//        })
         getCastAndMovieCredits()
     }
     
@@ -86,17 +90,13 @@ class CastDetailViewController: UIViewController, UICollectionViewDelegate , UIC
     private func MovieCreditsCompletionHandler(_ movieCredits : [WMovie] ) {
         if movieCredits.count > 0 {
             print("MovieCredits Fetched from Network")
-            DispatchQueue.main.async { [weak self ] in
-                self?.updateMovieCreditsInView(movies: movieCredits)  // done
-            }
+            self.updateMovieCreditsInView(movies: movieCredits)  // done
         }else {
             print("Fetching Movie Credits from Network")
             // Perform tasks for failure of movie CreditsRequest
             if let contents = _cast {
                 let temp_movie_credits = DbManager.getMovieCredits(forPersonWithId: contents.id)
-                DispatchQueue.main.async { [weak self ] in
-                    self?.updateMovieCreditsInView(movies: temp_movie_credits)  // done
-                }
+                self.updateMovieCreditsInView(movies: temp_movie_credits)  // done
             }
             
         }
@@ -112,7 +112,9 @@ class CastDetailViewController: UIViewController, UICollectionViewDelegate , UIC
     private func updateMovieCreditsInView(movies: [WMovie]){
         self._movies.removeAll()
         self._movies.insert(movies,at : 0)
-        castView.collectionView.reloadData()
+        DispatchQueue.main.async { [weak self ] in
+            self?.castView.collectionView.reloadData()
+        }
         print("Load ==> Movie Credits Found : \(movies.count)")
     }
     

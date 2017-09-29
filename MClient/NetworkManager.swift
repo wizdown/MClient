@@ -27,8 +27,11 @@ class NetworkManager {
                         //This saving needs to be moved to background queue.
                         //Currently its being invoked from bg queue and using main context
                         //Fix this
-                        DbManager.cleanup(preserve: movies)
-                        DbManager.saveNowPlayingMovies(movies)
+                        DbManager.privateContext.performAndWait {
+                            DbManager.cleanup(preserve: movies)
+                            DbManager.saveNowPlayingMovies(movies)
+                        }
+                      
                         completion(movies)
                     }
                 }
