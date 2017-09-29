@@ -17,8 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    let pContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+    let wContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
     
+    let rContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+    
+    let sContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         print("url: \(url)")
@@ -55,7 +58,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
 //        pContext.persistentStoreCoordinator = persistentContainer.persistentStoreCoordinator
-        pContext.parent = DbManager.mainContext
+        wContext.parent = rContext
+        rContext.parent = sContext
+        sContext.persistentStoreCoordinator = persistentContainer.persistentStoreCoordinator
 
         
         let session_id  = UserDefaults.standard.string(forKey: Constants.key_session_id)

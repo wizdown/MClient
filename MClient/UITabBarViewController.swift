@@ -13,13 +13,16 @@ class UITabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: DbManager.privateContext, queue: nil, using: {
+        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: DbManager.writeContext, queue: nil, using: {
             notification in
-            try? DbManager.mainContext.save()
+            do {
+                try DbManager.readContext.save()
+                try DbManager.saveContext.save()
+            } catch {
+                print(error.localizedDescription)
+            }
             //            DbManager.mainContext.mergeChanges(fromContextDidSave: notification)
         })
-
-        // Do any additional setup after loading the view.
     }
 
 }

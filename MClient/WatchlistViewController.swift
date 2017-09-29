@@ -18,12 +18,7 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
     
     private let networkManager = NetworkManager()
     
-    var container: NSPersistentContainer? =
-        (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-    
     var fetchedResultsController: NSFetchedResultsController<Movie>?
-    
-    var _watchlistRequest: WMRequest?
     
     private func updateUserDataInUI() {
         
@@ -42,28 +37,27 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        if let context = container?.viewContext {
-            
-            let request: NSFetchRequest<Movie> = Movie.fetchRequest()
-            request.predicate = NSPredicate(format: "isInWatchlist = %@", true as CVarArg)
-            request.sortDescriptors = [NSSortDescriptor(key : "timestamp" , ascending: true )]
-            fetchedResultsController = NSFetchedResultsController<Movie>(
-                fetchRequest: request,
-                managedObjectContext: context,
-                sectionNameKeyPath: nil,
-                cacheName: nil
-            )
-            
-            fetchedResultsController?.delegate = self
-            
-            do {
-                try fetchedResultsController?.performFetch()
-                //                print("Fetch request success")
-            } catch {
-                print(error.localizedDescription)
-            }
-            collectionView.reloadData()
+        
+        let request: NSFetchRequest<Movie> = Movie.fetchRequest()
+        request.predicate = NSPredicate(format: "isInWatchlist = %@", true as CVarArg)
+        request.sortDescriptors = [NSSortDescriptor(key : "timestamp" , ascending: true )]
+        fetchedResultsController = NSFetchedResultsController<Movie>(
+            fetchRequest: request,
+            managedObjectContext: DbManager.readContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        
+        fetchedResultsController?.delegate = self
+        
+        do {
+            try fetchedResultsController?.performFetch()
+            //                print("Fetch request success")
+        } catch {
+            print(error.localizedDescription)
         }
+        collectionView.reloadData()
+        
     }
 
     override func viewDidLoad() {
@@ -80,8 +74,6 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
 //            notification in
 //            try? DbManager.mainContext.save()
 //        })
-        
-        _watchlistRequest = WMRequest.getWatchlistRequest()
         networkManager.synchronizeWatchlist()
     }
     

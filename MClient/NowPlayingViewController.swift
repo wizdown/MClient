@@ -30,7 +30,7 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
             
             fetchedResultsController = NSFetchedResultsController<Movie>(
                 fetchRequest: request,
-                managedObjectContext: DbManager.mainContext,
+                managedObjectContext: DbManager.readContext,
                 sectionNameKeyPath: nil,
                 cacheName: nil
             )

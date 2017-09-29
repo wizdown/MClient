@@ -40,7 +40,7 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
 
             fetchedResultsController = NSFetchedResultsController<Movie>(
                 fetchRequest: request,
-                managedObjectContext: DbManager.mainContext,
+                managedObjectContext: DbManager.readContext,
                 sectionNameKeyPath: nil,
                 cacheName: nil
             )
