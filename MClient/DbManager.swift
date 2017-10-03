@@ -16,6 +16,9 @@ class DbManager {
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     
     static let readContext : NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).rContext
+    
+//    static let readContext : NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
     static let saveContext : NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).sContext
 
     static let writeContext : NSManagedObjectContext =  (UIApplication.shared.delegate as! AppDelegate).wContext
@@ -80,8 +83,9 @@ class DbManager {
         // Do work on background thread
         writeContext.perform {
             for current_movie in movies {
-                let _ = Movie.updateWatchlistInDb(with: current_movie, action: .ADD, in : writeContext)
-                try? writeContext.save()
+                if let _ = Movie.updateWatchlistInDb(with: current_movie, action: .ADD, in : writeContext) {
+                    try? writeContext.save()
+                }
             }
         }
         
@@ -166,8 +170,9 @@ class DbManager {
     static func saveUpcomingMovies( _ movies : [WMovie]) {
         writeContext.perform {
             for current_movie in movies {
-                let _ = Movie.create(using: current_movie, in: writeContext)
-                try? writeContext.save()
+                if let _ = Movie.create(using: current_movie, in: writeContext) {
+                    try? writeContext.save()
+                }
             }
         }
 
@@ -189,9 +194,13 @@ class DbManager {
         
         writeContext.perform {
             for current_movie in movies {
-                let db_movie = Movie.create(using: current_movie, in: writeContext)
-                db_movie?.isPlaying = true
-                try? writeContext.save()
+                if let  db_movie = Movie.create(using: current_movie, in: writeContext)
+                {
+                    if !db_movie.isPlaying{
+                        db_movie.isPlaying = true
+                        try? writeContext.save()
+                    }
+                }
             }
             
         }

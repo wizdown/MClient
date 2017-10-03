@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        print(application.applicationState)
         
         
-//        pContext.persistentStoreCoordinator = persistentContainer.persistentStoreCoordinator
+//        wContext.persistentStoreCoordinator = DbManager.readContext.persistentStoreCoordinator
         wContext.parent = rContext
         rContext.parent = sContext
         sContext.persistentStoreCoordinator = persistentContainer.persistentStoreCoordinator

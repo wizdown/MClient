@@ -16,6 +16,7 @@ class UITabBarViewController: UITabBarController {
         NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: DbManager.writeContext, queue: nil, using: {
             notification in
             do {
+                print("Changes : \(notification.userInfo?.keys)")
                 try DbManager.readContext.save()
                 try DbManager.saveContext.save()
             } catch {
@@ -24,5 +25,4 @@ class UITabBarViewController: UITabBarController {
             //            DbManager.mainContext.mergeChanges(fromContextDidSave: notification)
         })
     }
-
 }
