@@ -24,7 +24,7 @@ class DbManager {
     static let writeContext : NSManagedObjectContext =  (UIApplication.shared.delegate as! AppDelegate).wContext
     
     
-    // The following merhods are to be used by CastDetailsViewController
+    // The following methods are to be used by CastDetailsViewController
     
     static func getMovieCredits(forPersonWithId id : Int ) -> [WMovie] {
         // Do work on main thread

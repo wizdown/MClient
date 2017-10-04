@@ -81,17 +81,7 @@ class WMRequest : NSObject {
             }
         }
     }
-    
-    static func requestTokenRequest() -> WMRequest? {
-        var urlComponents = URLComponents()
-        urlComponents.scheme = Constants.url_scheme
-        urlComponents.host = Constants.base_url
-        urlComponents.path = Constants.requestType.authentication_token.rawValue
-        
-        urlComponents.queryItems = [URLQueryItem(name: Constants.queryParameter.api_key.rawValue, value: Constants.api_key)]
-        
-        return WMRequest(urlComponents: urlComponents, require_paging: false , autoIncrPageNo: false)
-    }
+
     
     static func castDetailsRequest(castId: Int ) -> WMRequest? {
         
@@ -236,6 +226,44 @@ class WMRequest : NSObject {
         let request : WMRequest = WMRequest(urlComponents: urlComponents, require_paging: true, autoIncrPageNo: true)
         return request
         
+    }
+    
+    
+    static func requestTokenRequest() -> WMRequest? {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = Constants.url_scheme
+        urlComponents.host = Constants.base_url
+        urlComponents.path = Constants.requestType.authentication_token.rawValue
+        
+        urlComponents.queryItems = [URLQueryItem(name: Constants.queryParameter.api_key.rawValue, value: Constants.api_key)]
+        
+        return WMRequest(urlComponents: urlComponents, require_paging: false , autoIncrPageNo: false)
+    }
+    
+    static func SessionRequest(usingToken token : String ) -> WMRequest? {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = Constants.url_scheme
+        urlComponents.host = Constants.base_url
+        urlComponents.path = Constants.requestType.session.rawValue
+        
+        urlComponents.queryItems = [ URLQueryItem(name: Constants.queryParameter.api_key.rawValue, value: Constants.api_key),
+                                     URLQueryItem(name: Constants.queryParameter.request_token.rawValue, value: token) ]
+        
+        return WMRequest(urlComponents: urlComponents, require_paging: false, autoIncrPageNo: false )
+        
+    }
+    
+    static func AccountDetailsRequest(usingSessionId id : String) -> WMRequest? {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = Constants.url_scheme
+        urlComponents.host = Constants.base_url
+        urlComponents.path = Constants.requestType.account.rawValue
+        
+        urlComponents.queryItems = [ URLQueryItem(name: Constants.queryParameter.api_key.rawValue, value: Constants.api_key),
+                                     URLQueryItem(name: Constants.queryParameter.session_id.rawValue, value: id ) ]
+        
+        return WMRequest(urlComponents: urlComponents, require_paging: false, autoIncrPageNo: false )
+
     }
     
      func performRequest(completion: @escaping ([WMovie]) -> Void ){
@@ -443,5 +471,55 @@ class WMRequest : NSObject {
         }
         
         task.resume()
+    }
+    
+    func getSessionId(completion: @escaping (String?)-> Void ) {
+        var sessionId : String?
+        
+        let url: URL = self.url!
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+            } else {
+                
+                if let data = data ,
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                    let id = json?["session_id"] as? String
+                {
+                    sessionId = id
+                    print("SessionId : \(id)")
+                }
+            }
+            completion(sessionId)
+        }
+        
+        task.resume()
+    }
+    
+    func getAccountId(completion: @escaping (String?, String?)-> Void) {
+        var _account_id : String?
+        var _username : String?
+        
+        let url: URL = self.url!
+        let task = URLSession.shared.dataTask(with: url){ (data , response , error ) in
+            if error != nil {
+                print("Error during account_id call")
+                print(error!.localizedDescription)
+            } else {
+                if let data = data,
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] ,
+                    let account_id = json?["id"] as? Int,
+                    let user_name = json?["username"] as? String {
+                    _account_id = String(account_id)
+                    _username = user_name
+                    print("Username : \(user_name)")
+                    print("AccountId : \(account_id)")
+                }
+            }
+            completion(_account_id, _username)
+        }
+        task.resume()
+
+        
     }
 }

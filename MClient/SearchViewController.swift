@@ -43,7 +43,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
+        super.viewWillAppear(animated)
         collectionView?.collectionViewLayout.invalidateLayout()
 
     }

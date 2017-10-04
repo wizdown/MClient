@@ -106,6 +106,8 @@ class Constants {
         case discoverMovie = "/3/discover/movie"
         case castDetails = "/3/person/"
         case authentication_token = "/3/authentication/token/new"
+        case session = "/3/authentication/session/new"
+        case account = "/3/account"
         
     }
     enum queryParameter : String {
@@ -118,6 +120,7 @@ class Constants {
         case primary_release_date_gte = "primary_release_date.gte"
         case sort_by = "sort_by"
         case session_id = "session_id"
+        case request_token = "request_token"
     }
     
 }

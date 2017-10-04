@@ -67,11 +67,6 @@ class WatchlistViewController: NSFRCViewController, UICollectionViewDelegate, UI
         collectionView.alwaysBounceVertical = true
         setUpNSFRC()
 
-        
-//        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: DbManager.privateContext, queue: nil, using: {
-//            notification in
-//            try? DbManager.mainContext.save()
-//        })
         networkManager.synchronizeWatchlist()
     }
     

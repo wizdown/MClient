@@ -43,10 +43,6 @@ class MovieDetailsViewController: UIViewController, UICollectionViewDelegate , U
     override func viewDidLoad() {
         super.viewDidLoad()
          movieView.castCollectionView.register(UINib(nibName: "NewCastCell", bundle: nil), forCellWithReuseIdentifier: Constants.castCellReuseIdentifier)
-//        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: DbManager.privateContext, queue: nil, using: {
-//            notification in
-//            try? DbManager.mainContext.save()
-//        })
         getCast()
     }
 

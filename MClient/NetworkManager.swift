@@ -139,6 +139,37 @@ class NetworkManager {
         _request?.getNewRequestToken(completion: completion)
     }
     
+    // Following methods are used by StartupViewController
+    
+    // The following fn gets the sessionId and accountId
+    // serially and then saves them in UserDefaults
+    func login( withToken token : String , success: @escaping () -> Void , failure: @escaping () -> Void) {
+        
+        
+        WMRequest.SessionRequest(usingToken: token)?.getSessionId() {
+            (sessionId : String?) in
+            if sessionId == nil {
+                failure()
+            } else {
+                UserDefaults.standard.set(sessionId!, forKey: Constants.key_session_id)
+                WMRequest.AccountDetailsRequest(usingSessionId: sessionId!)?.getAccountId(){
+                   ( account_id: String? , username: String? ) in
+                    if let temp_account_id = account_id ,
+                        let temp_username = username {
+                        UserDefaults.standard.set(temp_account_id, forKey: Constants.key_account_id)
+                        UserDefaults.standard.set(temp_username, forKey: Constants.key_username)
+                        UserDefaults.standard.synchronize()
+                        success()
+                    } else {
+                        failure()
+                    }
+                    
+                }
+            }
+        }
+    }
+    
+    
     
 }
 

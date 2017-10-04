@@ -9,9 +9,6 @@
 import UIKit
 import CoreData
 
-
-
-// UIScrollViewDelegate and UICollectionViewDelegate are inherited from the superclass.
 class NowPlayingViewController: NSFRCViewController, UICollectionViewDelegate, UICollectionViewDataSource    {
     var cleanupRequired : Bool = true
     private let networkManager = NetworkManager()

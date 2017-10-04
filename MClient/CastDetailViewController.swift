@@ -30,10 +30,7 @@ class CastDetailViewController: UIViewController, UICollectionViewDelegate , UIC
         
         castView.collectionView.delegate = self
         castView.collectionView.dataSource = self
-//        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: DbManager.privateContext, queue: nil, using: {
-//            notification in
-//            try? DbManager.mainContext.save()
-//        })
+
         getCastAndMovieCredits()
     }
     

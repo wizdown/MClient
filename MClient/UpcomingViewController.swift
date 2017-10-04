@@ -16,21 +16,15 @@ class UpcomingViewController: NSFRCViewController, UICollectionViewDelegate, UIC
     
     private let networkManager : NetworkManager = NetworkManager()
     private var _segueIdentifierForMovieDetails: String?
-    
-    
-//    var container: NSPersistentContainer? =
-//        (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-////        { didSet{ updateUI() } }
+
     
     var fetchedResultsController: NSFetchedResultsController<Movie>?
     
     private func setUpNSFRC() {
         
-//        if let context = container?.viewContext {
-        
-            let request: NSFetchRequest<Movie> = Movie.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: "release_date", ascending: true)]
-        
+        let request: NSFetchRequest<Movie> = Movie.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "release_date", ascending: true)]
+    
 //            let release_date_string = Date().description.components(separatedBy: " ")[0]
 //        
 //            let dateFormatter = DateFormatter()
@@ -41,27 +35,26 @@ class UpcomingViewController: NSFRCViewController, UICollectionViewDelegate, UIC
 //        
 //             let required_date = (NSCalendar.current.date(byAdding: Calendar.Component.day, value: 1, to: date!))
 //            print("Required Date : \(required_date)")
+    
         
-            
-            request.predicate = NSPredicate(format: "release_date > %@", Date() as NSDate)
+        request.predicate = NSPredicate(format: "release_date > %@", Date() as NSDate)
 
-            fetchedResultsController = NSFetchedResultsController<Movie>(
-                fetchRequest: request,
-                managedObjectContext: DbManager.readContext,
-                sectionNameKeyPath: nil,
-                cacheName: nil
-            )
+        fetchedResultsController = NSFetchedResultsController<Movie>(
+            fetchRequest: request,
+            managedObjectContext: DbManager.readContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        
+        fetchedResultsController?.delegate = self as NSFRCViewController
+        
+        do {
+            try fetchedResultsController?.performFetch()
+        } catch {
+            print(error.localizedDescription)
+        }
+        collectionView.reloadData()
             
-            fetchedResultsController?.delegate = self as NSFRCViewController
-            
-            do {
-                try fetchedResultsController?.performFetch()
-            } catch {
-                print(error.localizedDescription)
-            }
-            collectionView.reloadData()
-            
-//        }
         
     }
     
@@ -124,14 +117,6 @@ class UpcomingViewController: NSFRCViewController, UICollectionViewDelegate, UIC
         }
         collectionView?.collectionViewLayout.invalidateLayout()
 
-//        if let context = container?.viewContext{
-//            let latest_date = Movie.getLatestDate(in: context)
-//            if latest_date <= Date() {
-//                getResults()
-//            }
-//        }
-//        collectionView?.collectionViewLayout.invalidateLayout()
-
     }
     
     private func loadMore() {
@@ -145,17 +130,9 @@ class UpcomingViewController: NSFRCViewController, UICollectionViewDelegate, UIC
     
      private func getResults() {
         networkManager.getUpcomingMovies(afterDate: DbManager.getLatestDate(), completion : completionHandler)
-
-        
-//        if let context = container?.viewContext {
-//            let date = Movie.getLatestDate(in: context)
-//            networkManager.getUpcomingMovies(afterDate: date, completion : completionHandler)
-//           
-//        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        print("Item clicked ( \(indexPath.section) , \(indexPath.row) )")
         performSegue(withIdentifier: _segueIdentifierForMovieDetails!, sender: indexPath )
     }
     

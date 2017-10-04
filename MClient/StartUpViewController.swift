@@ -16,7 +16,7 @@ import UIKit
 
 struct Auth {
     let authFailed: Bool
-    var _authToken: String?
+    private var _authToken: String?
     var authToken: String? {
         get{
             if authFailed == false {
@@ -29,7 +29,6 @@ struct Auth {
             //          self.authToken = newValue
             _authToken = newValue
         }
-        
     }
     
     init(authFailed: Bool, authToken: String?) {
@@ -40,7 +39,6 @@ struct Auth {
     init( authFailed: Bool){
         self.authFailed = authFailed
     }
-    
 }
 
 class StartUpViewController: UIViewController {
@@ -48,31 +46,33 @@ class StartUpViewController: UIViewController {
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var skipButton: UIButton!
     
+    private let networkManager = NetworkManager()
+    
     var auth: Auth?
     var activityIndicator = UIActivityIndicatorView()
     var strLabel = UILabel()
     var effectView: UIVisualEffectView?
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         if let authOb = auth {
             loginButton.isEnabled = false
             skipButton.isEnabled = false
             // Disable Buttons Here
             displayMessageLoader(message: "Signing In", addSpinner: true)
+            
             if let token = authOb.authToken {
-                
-                getSessionId(token: token) { id in
-                    DispatchQueue.main.async { [weak self ] in
-                        if let sessionId = id {
-                            self?.saveSessionIdAndGetAccountId(id: sessionId)
-                        } else {
-                            self?.showError()
-                        }
+                networkManager.login(withToken: token, success: {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.removeMessageLoader()
+                        self?.performSegue(withIdentifier: "startupToTabSegue", sender: nil)                    }
+                }, failure: {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.showError()
                     }
-                }
-                
+                })
             } else {
                 showError()
             }
@@ -80,83 +80,9 @@ class StartUpViewController: UIViewController {
     }
 
     
-    @IBAction func performSkip(_ sender: Any) { 
+    @IBAction func performSkip(_ sender: Any) {
         performSegue(withIdentifier: "startupToTabSegue" , sender: nil )
     }
-    
-    private func getSessionId(token : String , completion: @escaping (String?) -> Void) {
-        var sessionId: String? = nil
-        
-        var urlString: String = "https://api.themoviedb.org/3/authentication/session/new?api_key="
-        urlString.append(Constants.api_key)
-        urlString.append("&request_token=")
-        urlString.append(token)
-        
-        let url: URL = URL(string: urlString)!
-        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
-            if error != nil {
-                print(error!.localizedDescription)
-            } else {
-                
-                if let data = data ,
-                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                    let id = json?["session_id"] as? String
-                {
-                    sessionId = id
-                    print("SessionId : \(id)")
-                }
-            }
-            completion(sessionId)
-        }
-        
-        task.resume()
-        
-        // get SessionId Here
-        // Call completion after procedure irrespective of result
-    }
-    
-    private func saveSessionIdAndGetAccountId(id: String) {
-        
-        // Save Id here in CoreData here
-        UserDefaults.standard.set(id, forKey: Constants.key_session_id)
-        
-        var urlString: String = "https://api.themoviedb.org/3/account?api_key="
-        urlString.append(Constants.api_key)
-        urlString.append("&session_id=")
-        urlString.append(id)
-        
-        let url = URL(string: urlString)!
-        let task = URLSession.shared.dataTask(with: url){ (data , response , error ) in
-            if error != nil {
-                print("Error during account_id call")
-                print(error!.localizedDescription)
-                DispatchQueue.main.async { [weak self] in
-                    self?.showError()
-                }
-            } else {
-                if let data = data,
-                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] ,
-                    let account_id = json?["id"] as? Int,
-                    let user_name = json?["username"] as? String {
-                    UserDefaults.standard.set(String(account_id), forKey: Constants.key_account_id)
-                    UserDefaults.standard.set(user_name, forKey: Constants.key_username)
-                    print("Username : \(user_name)")
-                    print("AccountId : \(account_id)")
-                    DispatchQueue.main.async { [weak self ] in
-                        self?.removeMessageLoader()
-                        self?.performSegue(withIdentifier: "startupToTabSegue", sender: nil)
-                    }
-                }
-                else {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.showError()
-                    }
-                }
-            }
-        }
-        task.resume()
-    }
-    
     
     private func showError() {
         removeMessageLoader()
@@ -193,6 +119,4 @@ class StartUpViewController: UIViewController {
         effectView?.removeFromSuperview()
     }
     
-
-
 }
