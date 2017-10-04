@@ -131,7 +131,14 @@ class NetworkManager {
             }
         }
     }
-
+    
+    //Following methods are to be used for login purposes
+    
+    func getNewRequestToken(completion : @escaping (String?) -> Void){
+        _request = WMRequest.requestTokenRequest()
+        _request?.getNewRequestToken(completion: completion)
+    }
+    
     
 }
 

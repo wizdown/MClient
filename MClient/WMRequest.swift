@@ -82,6 +82,17 @@ class WMRequest : NSObject {
         }
     }
     
+    static func requestTokenRequest() -> WMRequest? {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = Constants.url_scheme
+        urlComponents.host = Constants.base_url
+        urlComponents.path = Constants.requestType.authentication_token.rawValue
+        
+        urlComponents.queryItems = [URLQueryItem(name: Constants.queryParameter.api_key.rawValue, value: Constants.api_key)]
+        
+        return WMRequest(urlComponents: urlComponents, require_paging: false , autoIncrPageNo: false)
+    }
+    
     static func castDetailsRequest(castId: Int ) -> WMRequest? {
         
         var url_path = Constants.requestType.castDetails.rawValue
@@ -408,6 +419,29 @@ class WMRequest : NSObject {
         }
         
         // put handler here
+        task.resume()
+    }
+    
+    func getNewRequestToken( completion: @escaping (String?) -> Void) {
+        var token: String?
+        
+        let url: URL = self.url!
+        
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+            } else {
+                
+                if let data = data ,
+                    let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                    let request_token = json?["request_token"] as? String
+                {
+                    token = request_token
+                }
+            }
+            completion(token)
+        }
+        
         task.resume()
     }
 }

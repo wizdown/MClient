@@ -105,6 +105,7 @@ class Constants {
         case upcoming = "/3/movie/upcoming"
         case discoverMovie = "/3/discover/movie"
         case castDetails = "/3/person/"
+        case authentication_token = "/3/authentication/token/new"
         
     }
     enum queryParameter : String {

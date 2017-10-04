@@ -80,7 +80,7 @@ class StartUpViewController: UIViewController {
     }
 
     
-    @IBAction func performSkip(_ sender: Any) {
+    @IBAction func performSkip(_ sender: Any) { 
         performSegue(withIdentifier: "startupToTabSegue" , sender: nil )
     }
     
