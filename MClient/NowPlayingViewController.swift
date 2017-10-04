@@ -12,7 +12,7 @@ import CoreData
 
 
 // UIScrollViewDelegate and UICollectionViewDelegate are inherited from the superclass.
-class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource    {
+class NowPlayingViewController: NSFRCViewController, UICollectionViewDelegate, UICollectionViewDataSource    {
     var cleanupRequired : Bool = true
     private let networkManager = NetworkManager()
     private var _segueIdentifierForMovieDetails: String?
@@ -35,7 +35,7 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
                 cacheName: nil
             )
             
-            fetchedResultsController?.delegate = self
+            fetchedResultsController?.delegate = self as NSFetchedResultsControllerDelegate
             
             do {
                 try fetchedResultsController?.performFetch()
@@ -51,7 +51,6 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        getResults(.INITIAL)
         collectionView?.collectionViewLayout.invalidateLayout()
 
     }
@@ -62,6 +61,9 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        _collectionView = collectionView
+        
         title = "Now Playing"
         _segueIdentifierForMovieDetails = "NowPlayingToMovieDetailSegue"
         collectionView.alwaysBounceVertical = true
@@ -71,6 +73,8 @@ class NowPlayingViewController: UIViewController, UICollectionViewDelegate, UICo
         collectionView.delegate = self
         collectionView.dataSource = self
         setUpNSFRC()
+        
+        getResults(.INITIAL)
         
        
     }

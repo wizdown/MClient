@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 
-class UpcomingViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class UpcomingViewController: NSFRCViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -52,7 +52,7 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
                 cacheName: nil
             )
             
-            fetchedResultsController?.delegate = self
+            fetchedResultsController?.delegate = self as NSFRCViewController
             
             do {
                 try fetchedResultsController?.performFetch()
@@ -84,6 +84,9 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        _collectionView = collectionView
+        
         title = "Upcoming Movies"
         _segueIdentifierForMovieDetails = "UpcomingToMovieDetailSegue"
         

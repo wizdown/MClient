@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 
-class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource , NSFetchedResultsControllerDelegate{
+class WatchlistViewController: NSFRCViewController, UICollectionViewDelegate, UICollectionViewDataSource{
 
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -42,7 +42,7 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
             cacheName: nil
         )
         
-        fetchedResultsController?.delegate = self
+        fetchedResultsController?.delegate = self as NSFRCViewController
         
         do {
             try fetchedResultsController?.performFetch()
@@ -56,6 +56,8 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        _collectionView = collectionView
         
         updateUserDataInUI()
          collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
@@ -96,41 +98,6 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
             
             movieViewController.needsPersistence = persistence
         }
-    }
-    
-    public func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        //        print("Content about to change")
-        //        _collectionView?.reloadData()
-    }
-    
-    
-    public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        switch type {
-        case .insert: collectionView.insertSections([sectionIndex])
-        case .delete: collectionView.deleteSections([sectionIndex])
-        default: break
-        }
-    }
-    
-    public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            collectionView.insertItems(at: [newIndexPath!])
-        case .delete:
-            collectionView.deleteItems(at: [indexPath!])
-        case .update:
-            collectionView.reloadItems(at: [indexPath!])
-        case .move:
-//            collectionView.deleteItems(at: [indexPath!])
-//            collectionView?.insertItems(at: [newIndexPath!])
-            collectionView.moveItem(at: indexPath!, to: newIndexPath!)
-
-        }
-    }
-    
-    public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        //        print("Content Updated")
-        //        _collectionView?.reloadData()
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
