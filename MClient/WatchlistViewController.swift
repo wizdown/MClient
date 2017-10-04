@@ -32,12 +32,6 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     private func setUpNSFRC() {
-        
-        collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        
-        
         let request: NSFetchRequest<Movie> = Movie.fetchRequest()
         request.predicate = NSPredicate(format: "isInWatchlist = %@", true as CVarArg)
         request.sortDescriptors = [NSSortDescriptor(key : "timestamp" , ascending: true )]
@@ -64,11 +58,13 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
         super.viewDidLoad()
         
         updateUserDataInUI()
+         collectionView.register(UINib(nibName: "newMovieCell", bundle: nil), forCellWithReuseIdentifier: Constants.movieCellReuseIdentifier)
         
-        setUpNSFRC()
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.alwaysBounceVertical = true
+        setUpNSFRC()
+
         
 //        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: DbManager.privateContext, queue: nil, using: {
 //            notification in
@@ -125,8 +121,10 @@ class WatchlistViewController: UIViewController, UICollectionViewDelegate, UICol
         case .update:
             collectionView.reloadItems(at: [indexPath!])
         case .move:
-            collectionView.deleteItems(at: [indexPath!])
-            collectionView?.insertItems(at: [newIndexPath!])
+//            collectionView.deleteItems(at: [indexPath!])
+//            collectionView?.insertItems(at: [newIndexPath!])
+            collectionView.moveItem(at: indexPath!, to: newIndexPath!)
+
         }
     }
     

@@ -15,11 +15,11 @@ class DbManager {
     private static var container: NSPersistentContainer? =
         (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     
-    static let readContext : NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).rContext
+//    static let readContext : NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).rContext
     
-//    static let readContext : NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    static let readContext : NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    static let saveContext : NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).sContext
+//    static let saveContext : NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).sContext
 
     static let writeContext : NSManagedObjectContext =  (UIApplication.shared.delegate as! AppDelegate).wContext
     
@@ -73,9 +73,7 @@ class DbManager {
                 print("Error while saving additional person details")
                 print(error.localizedDescription)
             }
-            
         }
-        
     }
     
     // The following merhods are to be used by WatchlistViewController
@@ -83,12 +81,11 @@ class DbManager {
         // Do work on background thread
         writeContext.perform {
             for current_movie in movies {
-                if let _ = Movie.updateWatchlistInDb(with: current_movie, action: .ADD, in : writeContext) {
-                    try? writeContext.save()
-                }
+                let _ = Movie.updateWatchlistInDb(with: current_movie, action: .ADD, in : writeContext)
+                try? writeContext.save()
+//                print("Saving watchlist movie : \(current_movie.title) , id : \(current_movie.id)")
             }
         }
-        
     }
     
     // The following merhods are to be used by MovieDetailsViewController
@@ -149,14 +146,11 @@ class DbManager {
     {
         // This needs to run on background thread
         writeContext.perform {
-            let db_movie = Movie.updateWatchlistInDb(with: movie, action: action , in : writeContext)
+            let _ = Movie.updateWatchlistInDb(with: movie, action: action , in : writeContext)
             do {
                 try writeContext.save()
-                if db_movie != nil {
-                    print("Watchlist : Movie updation in DB succeeded")
-                } else {
-                    print("Watchlist : Movie updation in DB Failed")
-                }
+                print("Watchlist : Movie updation in DB succeeded")
+               
             } catch {
                 print("WAtchlist updation in Db Failed")
                 print(error.localizedDescription)
@@ -170,9 +164,8 @@ class DbManager {
     static func saveUpcomingMovies( _ movies : [WMovie]) {
         writeContext.perform {
             for current_movie in movies {
-                if let _ = Movie.create(using: current_movie, in: writeContext) {
-                    try? writeContext.save()
-                }
+                let _ = Movie.create(using: current_movie, in: writeContext)
+                try? writeContext.save()
             }
         }
 
@@ -194,17 +187,11 @@ class DbManager {
         
         writeContext.perform {
             for current_movie in movies {
-                if let  db_movie = Movie.create(using: current_movie, in: writeContext)
-                {
-                    if !db_movie.isPlaying{
-                        db_movie.isPlaying = true
-                        try? writeContext.save()
-                    }
-                }
+                let db_movie = Movie.create(using: current_movie, in: writeContext)
+                db_movie?.isPlaying = true
+                try? writeContext.save()
             }
-            
         }
-//
     }
     
     static func cleanup(preserve movies : [WMovie]) {

@@ -17,7 +17,6 @@ extension UpcomingViewController: NSFetchedResultsControllerDelegate {
 //        _collectionView?.reloadData()
     }
     
-   
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch type {
         case .insert: collectionView.insertSections([sectionIndex])
@@ -35,14 +34,15 @@ extension UpcomingViewController: NSFetchedResultsControllerDelegate {
         case .update:
             collectionView.reloadItems(at: [indexPath!])
         case .move:
-            collectionView.deleteItems(at: [indexPath!])
-            collectionView.insertItems(at: [newIndexPath!])
+//            collectionView.deleteItems(at: [indexPath!])
+//            collectionView.insertItems(at: [newIndexPath!])
+            collectionView.moveItem(at: indexPath!, to: newIndexPath!)
         }
     }
     
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        print("Content Updated")
-//        _collectionView?.reloadData()
+
+//        }
     }
     
     

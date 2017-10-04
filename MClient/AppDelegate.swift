@@ -19,9 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     let wContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
     
-    let rContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+//    let rContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
     
-    let sContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+//    let sContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         print("url: \(url)")
@@ -57,10 +57,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        print(application.applicationState)
         
         
-//        wContext.persistentStoreCoordinator = DbManager.readContext.persistentStoreCoordinator
-        wContext.parent = rContext
-        rContext.parent = sContext
-        sContext.persistentStoreCoordinator = persistentContainer.persistentStoreCoordinator
+        wContext.persistentStoreCoordinator = DbManager.readContext.persistentStoreCoordinator
+        DbManager.readContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        DbManager.readContext.automaticallyMergesChangesFromParent = true
+        
+//        wContext.parent = rContext
+//        rContext.parent = sContext
+//        sContext.persistentStoreCoordinator = persistentContainer.persistentStoreCoordinator
 
         
         let session_id  = UserDefaults.standard.string(forKey: Constants.key_session_id)

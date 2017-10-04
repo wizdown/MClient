@@ -179,20 +179,29 @@ class Movie: NSManagedObject {
             _movie = Movie.create(using: movie, in: context)
         }
         
+//        if _movie != nil {
+//            var newValue : Bool
+//
+//            switch action {
+//            case .ADD :
+//                newValue = true
+//            case .REMOVE :
+//                newValue = false
+//            }
+//            
+//            if _movie!.isInWatchlist != newValue {
+//                _movie!.isInWatchlist = newValue
+//            }
+//
+//            
+//        }
         if _movie != nil {
-            var newValue : Bool
-
             switch action {
             case .ADD :
-                newValue = true
+                _movie!.isInWatchlist = true
             case .REMOVE :
-                newValue = false
+                _movie!.isInWatchlist = false
             }
-            
-            if _movie!.isInWatchlist != newValue {
-                _movie!.isInWatchlist = newValue
-            }
-
             
         }
         return _movie

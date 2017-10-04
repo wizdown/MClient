@@ -18,12 +18,11 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var _segueIdentifierForMovieDetails: String?
     
     
-    var container: NSPersistentContainer? =
-        (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-//        { didSet{ updateUI() } }
+//    var container: NSPersistentContainer? =
+//        (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+////        { didSet{ updateUI() } }
     
     var fetchedResultsController: NSFetchedResultsController<Movie>?
-    
     
     private func setUpNSFRC() {
         
@@ -31,12 +30,20 @@ class UpcomingViewController: UIViewController, UICollectionViewDelegate, UIColl
         
             let request: NSFetchRequest<Movie> = Movie.fetchRequest()
             request.sortDescriptors = [NSSortDescriptor(key: "release_date", ascending: true)]
+        
+//            let release_date_string = Date().description.components(separatedBy: " ")[0]
+//        
+//            let dateFormatter = DateFormatter()
+//            dateFormatter.dateFormat = "yyyy-MM-dd"
+//            dateFormatter.timeZone = TimeZone(abbreviation: "GMT+0:00")
+//        
+//            let date = dateFormatter.date(from: release_date_string)
+//        
+//             let required_date = (NSCalendar.current.date(byAdding: Calendar.Component.day, value: 1, to: date!))
+//            print("Required Date : \(required_date)")
+        
             
-             let required_date = (NSCalendar.current.date(byAdding: Calendar.Component.day, value: 1, to: Date()))
-            
-            
-            request.predicate = NSPredicate(format: "release_date >= %@", required_date! as NSDate)
-            collectionView?.collectionViewLayout.invalidateLayout()
+            request.predicate = NSPredicate(format: "release_date > %@", Date() as NSDate)
 
             fetchedResultsController = NSFetchedResultsController<Movie>(
                 fetchRequest: request,
